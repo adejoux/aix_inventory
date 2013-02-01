@@ -1,0 +1,40 @@
+= form_for @user, :html => { :class => 'form-horizontal' } do |f|
+  .control-group
+    = f.label :username, :class => 'control-label'
+    .controls
+      = f.text_field :username, :autofocus => true, :class => 'text_field'
+  .control-group
+    = f.label :email, :class => 'control-label'
+    .controls
+      = f.text_field :email, :class => 'text_field'
+  .control_group
+    .control-label
+      customer
+    .controls
+      =f.collection_select :customer_scope, Server.group(:customer).select("customer"), :customer, :customer, :prompt => true, :include_blank => true
+  .control-group
+    .control-label
+      Approval
+    .controls
+      = f.check_box :approved, :class => 'checkbox'
+      Approved
+  - if current_user.role  == "admin"
+    .control-group
+      .control-label
+        Role
+      .controls
+        = f.collection_select :role, User::ROLES, :to_s, :humanize
+  
+  - if @current_method == "new" 
+    .control-group
+      = f.label :password, :class => 'control-label'
+      .controls
+        = f.password_field :password 
+    .control-group
+      = f.label :password_confirmation, :class => 'control-label'
+      .controls
+        = f.password_field :password_confirmation
+
+  .form-actions
+    = f.submit nil, :class => 'btn btn-primary'
+    = link_to t('.cancel', :default => t("helpers.links.cancel")), users_path, :class => 'btn'

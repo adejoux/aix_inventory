@@ -1,0 +1,34 @@
+# Place all the behaviors and hooks related to the matching controller here.
+# All this logic will automatically be available in application.js.
+# You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
+<% url = AixInventory::Application.routes.url_helpers %>
+
+jQuery ->
+  $('#datatable1').dataTable
+    bJQueryUI: true
+    sPaginationType: "bootstrap"
+    bStateSave: true
+    sDom: 'T<"clear"><"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix"lfr>t<"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"ip>'
+    bProcessing: true
+    bServerSide: true
+    fnRowCallback: (nRow, aData, iDisplayIndex, iDisplayIndexFull) -> 
+                     $('td:eq(0)', nRow).html( '<a href="<%= url.quick_search_servers_path %>?type=customer&search=' + aData[0]  + '">' + aData[0] + '</a>' )
+                     $('td:eq(1)', nRow).html( '<a href="<%= url.quick_search_servers_path %>?type=hostname&search=' + aData[1]  + '">' + aData[1] + '</a>' )
+                     $('td:eq(2)', nRow).html( '<a href="<%= url.quick_search_servers_path %>?type=os_version&search=' + aData[2]  + '">' + aData[2] + '</a>' )
+                     $('td:eq(3)', nRow).html( '<a href="<%= url.quick_search_servers_path %>?type=os_type&search=' + aData[3]  + '">' + aData[3] + '</a>' )
+                     $('td:eq(4)', nRow).html( '<a href="<%= url.quick_search_servers_path %>?type=global_image&search=' + aData[4]  + '">' + aData[4] + '</a>' )
+                     $('td:eq(6)', nRow).html( '<a href="<%= url.quick_search_servers_path %>?type=sys_model&search=' + aData[6]  + '">' + aData[6] + '</a>' )
+                     $('td:eq(7)', nRow).html( '<a href="<%= url.quick_search_servers_path %>?type=sys_serial&search=' + aData[7]  + '">' + aData[7] + '</a>' )
+                     $('td:eq(8)', nRow).html( '<a href="<%= url.quick_search_servers_path %>?type=sys_fwversion&search=' + aData[8]  + '">' + aData[8] + '</a>' )
+    sAjaxSource: $('#datatable1').data('source')
+
+jQuery -> 
+  $('form').on 'click', '.remove_fields', (event) ->
+    $(this).closest('.field').remove()
+    event.preventDefault()
+
+  $('form').on 'click', '.add_fields', (event) ->
+    time = new Date().getTime()
+    regexp = new RegExp($(this).data('id'), 'g')
+    $(this).before($(this).data('fields').replace(regexp, time))
+    event.preventDefault()

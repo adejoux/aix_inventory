@@ -1,0 +1,30 @@
+.row
+  .span12
+    .page-header
+      %h1 SAN
+
+.row
+  .span3.bs-docs-sidebar
+    %h2 Views
+    %ul.nav.nav-list.bs-docs-sidenav
+      %li=link_to 'switchs', servers_path
+  .span9
+    %h2 Advanced search
+    = search_form_for @search, :url=> search_switch_ports_path, :html => {:class => "form-inline"}, method: :post do |f|
+      = f.condition_fields do |c|
+        = render "condition_fields", f: c
+      = link_to_add_fields "Add Conditions", f, :condition
+      .form-actions
+        = f.submit "Search", :class => "btn btn-success"
+        = link_to "Reset", switch_ports_path({:clear => 'yes'}), :class => "btn btn-primary"
+.row
+  .span12        
+    %table{ :id => "san_datatable", :class => "table table-striped", :data => { :source => "#{ switch_ports_url(format: "json") }" } }
+      %thead
+        %tr
+          %th fabric
+          %th domain
+          %th port
+          %th port alias
+          %th wwpn  
+      %tbody

@@ -1,0 +1,6 @@
+test:
+  web_root: /               # define scope for routes
+development:
+  web_root: /               # define scope for routes
+production:
+  web_root: /aix_inventory  # define scope for routes. Used to allow subdirectory access

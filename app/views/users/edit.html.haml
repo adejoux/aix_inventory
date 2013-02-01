@@ -1,0 +1,8 @@
+- model_class = User
+.row
+  .span6.offset4
+    .page-header
+      %h1= "Edit #{resource_name.to_s.humanize}"
+.row
+  .span6.offset4
+    = render :partial => "form"

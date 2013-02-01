@@ -1,0 +1,155 @@
+- model_class = Server
+
+%div.hero-unit
+  .page-header
+    %h1=t '.title', :default => model_class.model_name.human + ' ' + @server.hostname
+
+%div.row
+  %div.span4
+    %h2 release
+    %table.table.table-bordered
+      %tbody
+        %tr
+          %td
+            %span.label.label-info customer
+          %td
+            %strong= @server.customer
+        %tr  
+          %td
+            %span.label.label-info operating system
+          %td  
+            %strong= @server.os_type
+        %tr
+          %td
+            %span.label.label-info version
+          %td
+            %strong= @server.os_version
+        %tr  
+          %td
+            %span.label.label-info installation date
+          %td
+            %strong= @server.install_date
+        %tr
+          %td
+            %span.label.label-info global image
+          %td
+            %strong= @server.global_image
+  %div.span4.offset4
+    %h2 lpar
+    - unless @server.lparstat.nil? 
+      %table.table.table-bordered
+        %tbody
+          %tr
+            %td
+              type
+            %td
+              = @server.lparstat.lpar_type
+          %tr
+            %td
+              partition name
+            %td
+              = @server.lparstat.partition_name
+          %tr
+            %td
+              virtual cpu
+            %td
+              = @server.lparstat.online_virtual_cpus
+          %tr
+            %td
+              entitled capacity
+            %td
+              = @server.lparstat.entitled_capacity
+          %tr
+            %td
+              memory
+            %td
+              = @server.lparstat.online_memory
+          
+            
+%div.row
+  %div.span4
+    %h2 software
+    %h3 system
+    %table.table.table-bordered.table-striped
+      %thead
+        %tr
+          %th software
+          %th version
+      %tbody
+        - @server.softwares.each do |software|
+          %tr
+            %td= software.name
+            %td= software.version
+  %div.span4
+    %h2 hardware
+    %h3 system
+    %table.table.table-bordered.table-striped
+      %thead
+        %tr
+          %th model
+          %th serial number
+          %th firmware
+      %tbody
+        %tr
+          %td= @server.sys_model
+          %td= @server.sys_serial
+          %td= @server.sys_fwversion
+  %div.span4
+    %h2 SAN Information
+    %h3 fibre channel adapters
+    - unless @server.aix_ports.empty?
+      %table.table.table-bordered.table-striped
+        %thead
+          %tr
+            %th port
+            %th wwpn
+            %th fabric
+            %th switch port alias
+        %tbody
+          - @server.aix_ports.each do |aix_port|
+            %tr
+              %td= aix_port.port
+              %td= aix_port.wwpn
+              - if aix_port.switch_port.nil?
+                %td Not Found
+                %td Not Found
+              - else
+                %td= aix_port.switch_port.fabric
+                %td= aix_port.switch_port.port_alias
+    - else
+      No aix ports informations
+    %h3 san paths
+    - unless @server.aix_paths.empty?
+      %table.table.table-bordered.table-striped
+        %thead
+          %tr
+            %th path id
+            %th adapter
+            %th state
+            %th mode
+        %tbody
+          - @server.aix_paths.each do |aix_path|
+            %tr
+              %td= aix_path.path
+              %td= aix_path.adapter
+              %td= aix_path.state
+              %td= aix_path.mode
+    - else
+      No aix paths informations
+      
+%div.row
+  %div.span12
+    %h2 Health Check
+    %table.table.table-bordered.table-striped
+      %thead
+        %tr
+          %th check
+          %th status
+      %tbody
+        - @server.healthchecks.each do |check|
+          %tr
+            %td= check.check
+            %td= check.status    
+%div.row
+  %div.span12.page-footer
+    = link_to 'back', servers_path, :class => "btn btn-primary"
