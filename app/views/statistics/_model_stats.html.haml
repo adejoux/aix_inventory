@@ -1,0 +1,14 @@
+%h2 models statistics
+= content_tag :div, "", id: "models_chart", data: {models: models_chart_data}
+
+%table{ :id => "model_datatable", :class => "table table-striped table-bordered" }
+  %thead
+    %tr
+      %th models
+      %th models #
+    %tbody
+      - models_table_data.each do |entry|
+        %tr
+          %td= entry.sys_model
+          %td= entry.count_sys_serial
+

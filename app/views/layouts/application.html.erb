@@ -25,62 +25,70 @@
 
       <div class="nav-collapse">
         <ul class="nav">
-        <% if user_signed_in?  %>
-           <li class="dropdown <%= 'active' if ( current_page?(servers_path) or current_page?(hardwares_path) or current_page?(lparstats_path) )%>">
-             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Servers<b class="caret"></b></a>
-               <ul class="dropdown-menu">
+          <% if user_signed_in?  %>
+            <li class="dropdown <%= 'active' if (current_page?(statistics_general_path) or current_page?(statistics_customer_path) ) %>">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Statistics<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                 <li><%= link_to "General", statistics_general_path %></li>
+                 <li><%= link_to "Customer", statistics_customer_path %></li>
+              </ul>
+            </li>  
+            <li class="dropdown <%= 'active' if ( current_page?(servers_path) or current_page?(hardwares_path) or current_page?(lparstats_path) )%>">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Servers<b class="caret"></b></a>
+              <ul class="dropdown-menu">
                  <li><%= link_to "Servers", servers_path %></li>
                  <li><%= link_to "Hardwares", hardwares_path %></li>
                  <li><%= link_to "Partitions", lparstats_path %></li>
-               </ul>
-           </li>
-           <li class="dropdown <%= 'active' if current_page?(switch_ports_path) %>">
-             <a href="#" class="dropdown-toggle" data-toggle="dropdown">SAN<b class="caret"></b></a>
-               <ul class="dropdown-menu">
+              </ul>
+            </li>
+            <li class="dropdown <%= 'active' if current_page?(switch_ports_path) %>">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">SAN<b class="caret"></b></a>
+              <ul class="dropdown-menu">
                  <li><%= link_to "Switchs", switch_ports_path %></li>
-               </ul>
-           </li>
-           <%end %>
-           <% if user_signed_in? and ( current_user.role == "admin" or current_user.role == "editor" )%>
+              </ul>
+            </li>
+
+            
+            <% if current_user.role == "admin" or current_user.role == "editor" %>
               <li class="dropdown <%= 'active' if current_page?(firmwares_path) %>">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Config<b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li><%= link_to "Firmwares", firmwares_path %></li>
                 </ul>
               </li>  
-          <% end %>      
-          <% if user_signed_in? and current_user.role == "admin" %>
-            <li class="dropdown <%= 'active' if current_page?(users_path) %>">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
+            <% end %>      
+            <% if current_user.role == "admin" %>
+              <li class="dropdown <%= 'active' if current_page?(users_path) %>">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li class="nav-header">Access</li>
                   <li><%= link_to "Users", users_path %></li>
                   <li class="divider"></li>
                 </ul>
               </li>
-          <%end %>
-          <li class="<%= 'active' if current_page?(contacts_path) %>"><%= link_to "About", contacts_path %></li>
-        </ul>
-          <% if user_signed_in? and current_user.customer_scope.present?  %>
+            <%end %>
+            <li class="<%= 'active' if current_page?(contacts_path) %>"><%= link_to "About", contacts_path %></li>
+          </ul>
+            <% if current_user.customer_scope.present?  %>
               <%= link_to "scope : #{current_user.customer_scope}", edit_user_registration_path, :class => "btn btn-inverse" %>
-              <% else %>
+            <% else %>
               <%= link_to "Full customer scope", edit_user_registration_path, :class => "btn btn-inverse" %>
-           <% end %>
-                
+            <% end %>
+          
             <div class="nav pull-right">
-                      <% if user_signed_in? %>
-                           	<%= link_to current_user.username, edit_user_registration_path, :class => "btn btn-warning" %>
-                <%= link_to 'Logout', destroy_user_session_path, :method=>'delete', :class => "btn btn-inverse" %>
+              <%= link_to current_user.username, edit_user_registration_path, :class => "btn btn-warning" %>
+              <%= link_to 'Logout', destroy_user_session_path, :method=>'delete', :class => "btn btn-inverse" %>
             </div>
           <% else %>
-              <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :class =>"navbar-form pull-right" } ) do |f| %>
+          </div>
+          <div class="nav pull-right">
+            <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :class =>"navbar-form pull-right" } ) do |f| %>
                 <input class="span2" id="user_username" name="user[username]" type="text" placeholder="Username">
                 <input class="span2" id="user_password" name="user[password]" type="password" placeholder="Password">
                 <button type="submit" class="btn btn-warning">Sign in</button>
-                <%= link_to 'Sign up', new_user_registration_path, :class => "btn btn-inverse" %>
-              <% end %>
+              <%= link_to 'Sign up', new_user_registration_path, :class => "btn btn-inverse" %>
+            <% end %>
           <% end %>
-
       </div>
     </div>
   </div>

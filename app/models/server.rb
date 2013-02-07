@@ -41,4 +41,16 @@ class Server < ActiveRecord::Base
   def self.ransackable_attributes auth_object = nil
     (column_names - UNRANSACKABLE_ATTRIBUTES) + _ransackers.keys
   end
+  
+  def self.customers_data
+      group(:customer).order("count_hostname DESC").count(:hostname)
+  end
+  
+  def self.releases_data
+    group(:os_version).where(:os_type => "AIX").order("count_hostname DESC").count(:hostname)
+  end
+  
+  def self.sys_models_data
+    select("sys_model, count(distinct sys_serial) as count_sys_serial").group(:sys_model).order("count_sys_serial DESC")
+  end
 end

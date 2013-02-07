@@ -1,0 +1,72 @@
+# Place all the behaviors and hooks related to the matching controller here.
+# All this logic will automatically be available in application.js.
+# You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
+<% url = AixInventory::Application.routes.url_helpers %>
+
+window.Global ||= {}
+
+Global.DisplayStats = ->
+  jQuery ->
+    if $('#customers_chart').length
+      Morris.Bar
+        element: 'customers_chart'
+        data: $('#customers_chart').data('customers')
+        xkey: 'customer'
+        ykeys: ['servers_count']
+        labels: ['Partitions']
+        
+    if $('#releases_chart').length    
+      Morris.Bar
+        element: 'releases_chart'
+        data: $('#releases_chart').data('releases')
+        xkey: 'release'
+        ykeys: ['servers_count']
+        labels: ['Partitions']
+     
+    if $('#models_chart').length    
+      Morris.Bar
+        element: 'models_chart'
+        data: $('#models_chart').data('models')
+        xkey: 'sys_model'
+        ykeys: ['count_sys_serial']
+        labels: ['Servers']
+    
+    if $('#customer_models_chart').length    
+      Morris.Donut
+        element: 'customer_models_chart'
+        data: $('#customer_models_chart').data('customer-models')
+        formatter: (y, data) ->
+          return  y + ' servers'  
+    
+    if $('#customer_releases_chart').length     
+      Morris.Donut
+        element: 'customer_releases_chart'
+        data: $('#customer_releases_chart').data('customer-releases')
+        formatter: (y, data) ->
+          return  y + ' partitions'  
+        
+    $('#customer_datatable').dataTable
+      bJQueryUI: true
+      sPaginationType: "bootstrap"
+      sDom: 'T<"clear"><"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix"lfr>t<"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"ip>'
+      aaSorting: [[1, "desc"]]
+      fnRowCallback: (nRow, aData, iDisplayIndex, iDisplayIndexFull) -> 
+          $('td:eq(0)', nRow).html( '<a href="<%= url.quick_search_servers_path %>?type=customer&search=' + aData[0]  + '">' + aData[0] + '</a>' )
+
+    $('#release_datatable').dataTable
+      bJQueryUI: true
+      sPaginationType: "bootstrap"
+      sDom: 'T<"clear"><"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix"lfr>t<"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"ip>'
+      aaSorting: [[1, "desc"]]
+      fnRowCallback: (nRow, aData, iDisplayIndex, iDisplayIndexFull) -> 
+          $('td:eq(0)', nRow).html( '<a href="<%= url.quick_search_servers_path %>?type=os_version&search=' + aData[0]  + '">' + aData[0] + '</a>' )
+          
+    $('#model_datatable').dataTable
+      bJQueryUI: true
+      sPaginationType: "bootstrap"
+      sDom: 'T<"clear"><"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix"lfr>t<"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"ip>'
+      aaSorting: [[1, "desc"]]
+      fnRowCallback: (nRow, aData, iDisplayIndex, iDisplayIndexFull) -> 
+          $('td:eq(0)', nRow).html( '<a href="<%= url.quick_search_servers_path %>?type=sys_models&search=' + aData[0]  + '">' + aData[0] + '</a>' )
+          
+Global.DisplayStats()

@@ -60,29 +60,6 @@ class ServersController < ApplicationController
     end
   end
 
-  def quick_search
-    if params[:type] == "hostname"
-end
-
-    @servers = @servers.order("#{sort_column} #{sort_direction}")
-    @search.build_condition
-
-    if params[:export].present?
-      redirect_to '/servers.xlsx' 
-      return
-    end 
-    
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { 
-        @secho = params[:sEcho].to_i
-        @total_display_records = @servers.count
-        @data = datatable_data
-        }
-      format.xlsx
-    end
-  end
-
   # GET /servers/1
   # GET /servers/1.json
   def show
@@ -101,7 +78,27 @@ end
       redirect_to servers_path( :q => {"c" => {"0" =>{"a" =>{"0" =>{"name"=> params[:type] }}, "p"=>"eq", "v" =>{"0"=>{"value" => params[:search] }}}}})
     end
   end
-private
+  
+  # GET /servers/1/edit
+  def edit
+    @server = Server.find(params[:id])
+  end
+  # PUT /servers/1
+  # PUT /servers/1.json
+  def update
+    @server = Server.find(params[:id])
+
+    respond_to do |format|
+      if @server.update_attributes(params[:server])
+        format.html { redirect_to @server, notice: 'Server was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @server.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+  private
   def datatable_data
     @servers.page(page).per_page(per_page).map do |server|
       [

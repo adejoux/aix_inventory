@@ -1,0 +1,14 @@
+- if current_user.customer_scope.present?
+  .row
+    .span6.offset4
+      %h1= "#{current_user.customer_scope} customer statistics"
+      =link_to "releases", { :action => "render_stats", :stats => "customer_release_stats"}, :remote => true, :class => "btn btn-primary"
+      =link_to "models", { :action => "render_stats", :stats => "customer_model_stats"}, :remote => true, :class => "btn btn-primary"
+  .row
+    .span6.offset4
+      .stats
+        = render "customer_release_stats"
+- else
+  %h1 select a specific customer
+
+

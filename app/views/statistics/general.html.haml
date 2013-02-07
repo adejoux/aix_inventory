@@ -1,0 +1,10 @@
+.row
+  .span6.offset4
+    %h1 General statistics
+    =link_to "customers", { :action => "render_stats", :stats => "customer_stats"}, :remote => true, :class => "btn btn-primary"
+    =link_to "releases", { :action => "render_stats", :stats => "release_stats"}, :remote => true, :class => "btn btn-primary"
+    =link_to "models", { :action => "render_stats", :stats => "model_stats"}, :remote => true, :class => "btn btn-primary"
+.row
+  .span12
+    .stats
+      = render "customer_stats"

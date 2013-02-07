@@ -10,11 +10,17 @@ AixInventory::Application.routes.draw do
   
     get "hardwares/index"
   
-    get "statistics/index"
+    get "statistics/general"
+    
+    get "statistics/customer"
+    
+    get "statistics/render_stats"
+    
     get :contacts, to: "contacts#index"
   
     resources :servers, :only => [:index] 
   
+    
     resources :servers, :only => [:show] do
       collection do
         post :search, to: 'servers#index' 
@@ -40,7 +46,7 @@ AixInventory::Application.routes.draw do
       end
     end
   
-    root to: 'servers#index'
+    root to: 'statistics#general'
   end
   # The priority is based upon order of creation:
   # first created -> highest priority.

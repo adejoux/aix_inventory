@@ -1,0 +1,13 @@
+%h2 customer statistics
+= content_tag :div, "", id: "customers_chart", data: {customers: customers_chart_data}
+
+%table{ :id => "customer_datatable", :class => "table table-striped table-bordered" }
+  %thead
+    %tr
+      %th customer
+      %th partitions #
+    %tbody
+      - customers_table_data.map do |entry|
+        %tr
+          %td= entry[0]
+          %td= entry[1]
