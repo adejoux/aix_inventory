@@ -14,7 +14,7 @@ wb.add_worksheet(name: 'servers') do |sheet|
   sheet.add_row
   sheet.add_row [ 'Servers list' ], :style => title
   sheet.add_row
-  sheet.add_row [ 'customer', 'hostname', 'os_version', 'os_type','global_image','install_date','model','serial', 'firmware' ], 
+  sheet.add_row [ 'customer', 'hostname', 'os_version', 'os_type','global_image','nim','install_date','model','serial', 'firmware' ], 
                 :style => header
   @servers.each do |server|
     sheet.add_row [server.customer,
@@ -22,6 +22,7 @@ wb.add_worksheet(name: 'servers') do |sheet|
                   server.os_version,
                   server.os_type,
                   server.global_image, 
+                  server.nim,
                   server.install_date,
                   server.sys_model,
                   server.sys_serial,

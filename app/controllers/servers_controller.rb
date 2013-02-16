@@ -107,6 +107,7 @@ class ServersController < ApplicationController
         server.os_version,
         server.os_type,
         server.global_image,
+        server.nim,
         server.install_date,
         server.sys_model,
         server.sys_serial,
@@ -116,12 +117,12 @@ class ServersController < ApplicationController
   end
 
   def datatable_search
-    @servers.where("hostname like :search or customer like :search or os_version like :search or sys_model like :search or sys_serial like :search or sys_fwversion like :search", 
+    @servers.where("hostname like :search or customer like :search or os_version like :search or sys_model like :search or nim like :search or sys_serial like :search or sys_fwversion like :search", 
     search: "%#{params[:sSearch]}%")
   end
 
   def sort_column
-    columns = %w[customer hostname os_version os_type global_image install_date sys_model sys_serial sys_fwversion]
+    columns = %w[customer hostname os_version os_type global_image nim install_date sys_model sys_serial sys_fwversion]
     columns[params[:iSortCol_0].to_i]
   end
 end

@@ -1,9 +1,4 @@
 .row
-  .span12
-    .page-header
-      %h1 SERVERS
-
-.row
   .span3.bs-docs-sidebar
     %h2 Views
     %ul.nav.nav-list.bs-docs-sidenav
@@ -25,6 +20,7 @@
     %table{ :id => "hw_datatable", :class => "table table-striped", :data => { :source => "#{ hardwares_url(format: "json") }" } }
       %thead
         %tr
+          %th customer
           %th model
           %th firmware
           %th recommended firmware

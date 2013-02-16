@@ -1,0 +1,32 @@
+- model_class = AixAlert
+.row
+  .span12
+    .page-header
+      %h1 AIX ALERTS
+
+.row
+  .span9.offset2
+    %table.table.table-striped.table-bordered
+      %thead
+        %tr
+          %th= model_class.human_attribute_name(:alert_type)
+          %th= model_class.human_attribute_name(:check)
+          %th= model_class.human_attribute_name(:valid_status)
+          - if can? :manage, AixAlert
+            %th=t '.actions', :default => t("helpers.actions")
+      %tbody
+        - @aix_alerts.each do |aix_alert|
+          %tr
+            %td= aix_alert.alert_type
+            %td= aix_alert.check
+            %td= aix_alert.valid_status
+            - if can? :manage, AixAlert
+              %td
+                = link_to t('.edit', :default => t("helpers.links.edit")), edit_aix_alert_path(aix_alert), :class => 'btn btn-mini'
+                = link_to t('.destroy', :default => t("helpers.links.destroy")), aix_alert_path(aix_alert), :method => :delete, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, :class => 'btn btn-mini btn-danger'
+
+    - if can? :manage, AixAlert
+      = link_to t('.new', :default => t("helpers.links.new")), new_aix_alert_path, :class => 'btn btn-primary'
+
+
+

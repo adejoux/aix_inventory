@@ -1,4 +1,4 @@
-# -*- encoding : utf-8 -*-
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,7 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130125131115) do
+ActiveRecord::Schema.define(:version => 20130212113121) do
+
+  create_table "aix_alerts", :force => true do |t|
+    t.string   "alert_type"
+    t.string   "check"
+    t.string   "valid_status"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
 
   create_table "aix_paths", :force => true do |t|
     t.string   "adapter"
@@ -102,6 +110,14 @@ ActiveRecord::Schema.define(:version => 20130125131115) do
     t.string   "lpar_type"
   end
 
+  create_table "san_alerts", :force => true do |t|
+    t.string   "alert_type"
+    t.string   "fabric1"
+    t.string   "fabric2"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "servers", :force => true do |t|
     t.string   "customer"
     t.string   "hostname"
@@ -115,6 +131,7 @@ ActiveRecord::Schema.define(:version => 20130125131115) do
     t.string   "global_image"
     t.string   "install_date"
     t.date     "run_date"
+    t.string   "nim"
   end
 
   create_table "software_deployments", :force => true do |t|

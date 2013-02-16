@@ -32,7 +32,8 @@ class HardwaresController < ApplicationController
       @servers = datatable_search
     end
 
-    @servers = @search.result.group( :sys_model, :sys_fwversion, :sys_serial)
+    @customer_hash ||= customer_hash
+    @servers = @servers.group( :sys_model, :sys_fwversion, :sys_serial)
     @search.build_condition
     
     respond_to do |format|
@@ -51,6 +52,7 @@ private
      @servers.limit(per_page).offset((page - 1)*per_page).count(:hostname).map do |entry|
      	     next if  entry.nil? or entry[0][0].nil?
         [
+          @customer_hash[entry[0][2]].to_sentence,
           entry[0][0],
           entry[0][1],
           recommended_firmware(entry[0][0]),
@@ -60,12 +62,12 @@ private
      end
   end
   def datatable_search
-     @servers.where(" sys_model like :search or sys_serial like :search or sys_fwversion like :search", search: "%#{params[:sSearch]}%")
+     @servers.where(" customer like :search or sys_model like :search or sys_serial like :search or sys_fwversion like :search", search: "%#{params[:sSearch]}%")
   end
   
-  def sort_column
-    columns = %w[ sys_model sys_fwversion sys_serial]
-    columns[params[:iSortCol_0].to_i]
+  def customer_hash
+    cust_hash = Hash.new {|h,k| h[k] = [] }
+    Server.select("customer, sys_serial").uniq.map {  |entry| cust_hash[entry.sys_serial] << entry.customer }
+    cust_hash
   end
-
 end

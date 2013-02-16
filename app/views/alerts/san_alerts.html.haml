@@ -1,0 +1,25 @@
+.row
+  .span12
+    .page-header
+      %h1 SAN ALERTS
+
+.row
+  .span12        
+    %table{ :id => "alert_datatable", :class => "table table-striped", :data => { :source => "#{ servers_url(format: "json") }" } }
+      %thead
+        %tr
+          %th customer
+          %th hostname
+          %th missing fabric
+      %tbody  
+        - @alerts.each do |alert|
+          - fabric_alerts(alert.fabric1, alert.fabric2).each do |server|
+            %tr
+              %td= server.customer
+              %td= server.hostname
+              %td.alert-error= alert.fabric2
+          - fabric_alerts(alert.fabric2, alert.fabric1).each do |server|
+            %tr
+              %td= server.customer
+              %td= server.hostname
+              %td.alert-error= alert.fabric1

@@ -20,7 +20,15 @@ module ApplicationHelper
   def resource_name
     :user
   end
- 
+   
+  def recommended_firmware(model)
+    unless Firmware.find_by_model(model).nil?
+      Firmware.find_by_model(model).recommended 
+    else
+      "Not found"
+    end
+  end
+  
   def resource
     @resource ||= User.new
   end

@@ -1,0 +1,23 @@
+= form_for @server, :html => { :class => 'form-horizontal' } do |f|
+  - if @server.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@server.errors.count, "error")} prohibited this server from being saved:"
+      %ul
+        - @server.errors.full_messages.each do |msg|
+          %li= msg
+  .control-group
+    = f.label :hostname, :class => 'control-label'
+    .controls
+      = f.text_field :hostname, :class => 'text_field'
+  .control-group
+    = f.label :customer, :class => 'control-label'
+    .controls
+      = f.text_field :customer, :class => 'text_field'
+  .control-group
+    = f.label :os_version, :class => 'control-label'
+    .controls
+      = f.text_field :os_version, :class => 'text_field'
+  .form-actions
+    = f.submit nil, :class => 'btn btn-primary'
+    = link_to t('.cancel', :default => t("helpers.links.cancel")), san_alerts_path, :class => 'btn btn-inverse'
+

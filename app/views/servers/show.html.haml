@@ -1,7 +1,7 @@
 - model_class = Server
 
-%div.hero-unit
-  .page-header
+%div.row
+  %div.span6.offset4
     %h1=t '.title', :default => model_class.model_name.human + ' ' + @server.hostname
 
 %div.row
@@ -153,3 +153,6 @@
 %div.row
   %div.span12.page-footer
     = link_to 'back', servers_path, :class => "btn btn-primary"
+    - if current_user.role == "admin"
+      = link_to 'edit', edit_server_path(@server), :class => "btn btn-danger"     
+

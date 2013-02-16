@@ -1,0 +1,15 @@
+.row
+  .span12
+    .page-header
+      %h1 AIX ALERTS
+
+.row
+  .span12        
+    %table{ :id => "aix_alerts_datatable", :class => "table table-striped", :data => { :source => "#{ alerts_aix_alerts_url(format: "json") }" } }
+      %thead
+        %tr
+          %th customer
+          %th hostname
+          %th check
+          %th status
+      %tbody

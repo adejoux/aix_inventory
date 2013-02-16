@@ -10,9 +10,11 @@ platforms :ruby do
   gem 'mysql2'
   gem 'libv8'
   gem "therubyracer"
+  gem 'thin'
   
   group :development do
     gem 'binding_of_caller'
+    gem 'quiet_assets'
   end
 
 end
@@ -20,6 +22,7 @@ end
 platforms :jruby do
   gem "therubyrhino", group: :assets
   gem "trinidad", require: false
+  gem 'trinidad_daemon_extension', require: false
   gem 'jruby-openssl'
   gem 'activerecord-jdbcsqlite3-adapter'
   gem 'activerecord-jdbcmysql-adapter'
@@ -33,6 +36,7 @@ gem 'axlsx_rails'
 gem 'devise'
 gem 'cancan'
 gem 'annotate'
+#gem 'rack-mini-profiler'
 
 # Gems used only for assets and not required
 # in production environments by default.

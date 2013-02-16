@@ -3,6 +3,18 @@ class Import < Thor
   require './config/environment'
   require 'smarter_csv'
   
+  desc "clear", "clear csv data from csv file"
+  def clear
+      Server.delete_all
+      Lparstat.delete_all
+      Healthcheck.delete_all
+      SwitchPort.delete_all
+      AixPort.delete_all
+      AixPath.delete_all
+      Software.delete_all
+      SoftwareDeployment.delete_all
+  end
+ 
   desc "san_csv", "upload switch ports from csv file"
   def san_csv(filename)
      total_chunks = SmarterCSV.process(filename, :chunk_size => 500, :col_sep => ";") do |chunk|
@@ -77,6 +89,7 @@ class Import < Thor
           new_server.sys_model = entry[:sys_model]
           new_server.global_image = entry[:global_image]
           new_server.install_date = entry[:aix_install_date]
+          new_server.nim = entry[:nim]
           new_server.run_date = entry[:run_date]
 
           unless entry[:lparstat].nil?
@@ -86,7 +99,7 @@ class Import < Thor
               entry[:lparstat].split("|").each do |lpar_entry|
                 lpar_info, lpar_value = lpar_entry.split(':')
                # lparhash[lpar_info.gsub(/CPU/, 'Cpu').gsub( /[A-Z]/){ ' ' + $& }.parameterize.underscore] =  lpar_value
-                unless lpar_value.empty?
+                unless lpar_value.nil?  or lpar_value.empty? 
                   lparhash[lparstat_to_sym(lpar_info)] =  lpar_value
                 else
                   lparhash[lparstat_to_sym(lpar_info)] = nil
@@ -140,6 +153,7 @@ class Import < Thor
           end   
           
           unless entry[:wwpn].nil? 
+            entry[:wwpn].gsub(/.*found. /, '')
             entry[:wwpn].split("|").each do |aix_port|
               fc_card = aix_port.split(":")
               unless fc_card[1].nil?

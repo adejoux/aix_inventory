@@ -1,3 +1,4 @@
+
 wb = xlsx_package.workbook
 
 styles = wb.styles
@@ -18,7 +19,7 @@ wb.add_worksheet(name: 'hardwares') do |sheet|
   sheet.add_row [ 'customer', 'model', 'firmware', 'recommended firmware','serial','partition count' ], 
                 :style => header
   @hardwares.map do |entry|
-    sheet.add_row [entry[0][0], entry[0][1], entry[0][2], recommended_firmware(entry[0][1]), entry[0][2], entry[1] ]
+    sheet.add_row [@customer_hash[entry[0][2]].to_sentence, entry[0][0], entry[0][1], recommended_firmware(entry[0][0]), entry[0][2], entry[1] ]
   end
   sheet.column_widths 16, 16, 16, 16, 16, 16, 16, 16, 16
   sheet.merge_cells "A2:F2"

@@ -1,0 +1,21 @@
+- model_class = SanAlert
+.row
+  .span6.offset4
+    .page-header
+      %h1=t '.title', :default => model_class.model_name.human
+    %p
+      %strong= model_class.human_attribute_name(:alert_type) + ':'
+      %br
+      = @san_alert.alert_type
+    %p
+      %strong= model_class.human_attribute_name(:fabric1) + ':'
+      %br
+      = @san_alert.fabric1
+    %p
+      %strong= model_class.human_attribute_name(:fabric2) + ':'
+      %br
+      = @san_alert.fabric2
+    .form-actions
+      = link_to t('.back', :default => t("helpers.links.back")), san_alerts_path, :class => 'btn'
+      = link_to t('.edit', :default => t("helpers.links.edit")), edit_san_alert_path(@san_alert), :class => 'btn'
+      = link_to t('.destroy', :default => t("helpers.links.destroy")), san_alert_path(@san_alert), :method => "delete", :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, :class => 'btn btn-danger'

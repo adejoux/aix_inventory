@@ -47,13 +47,21 @@
                  <li><%= link_to "Switchs", switch_ports_path %></li>
               </ul>
             </li>
-
+            <li class="dropdown <%= 'active' if current_page?(switch_ports_path) %>">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Alerts<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                 <li><%= link_to "SAN", alerts_san_alerts_path %></li>
+                 <li><%= link_to "AIX", alerts_aix_alerts_path %></li>
+              </ul>
+            </li>
             
             <% if current_user.role == "admin" or current_user.role == "editor" %>
               <li class="dropdown <%= 'active' if current_page?(firmwares_path) %>">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Config<b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li><%= link_to "Firmwares", firmwares_path %></li>
+                  <li><%= link_to "SAN Alerts", san_alerts_path %></li>
+                  <li><%= link_to "AIX Alerts", aix_alerts_path %></li>
                 </ul>
               </li>  
             <% end %>      
