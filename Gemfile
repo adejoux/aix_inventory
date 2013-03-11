@@ -7,7 +7,7 @@ gem 'haml-rails'
 
 platforms :ruby do
   gem 'sqlite3'
-  gem 'mysql2'
+#  gem 'mysql2'
   gem 'libv8'
   gem "therubyracer"
   gem 'thin'

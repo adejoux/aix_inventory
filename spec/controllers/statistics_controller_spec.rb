@@ -3,11 +3,22 @@ require 'spec_helper'
 
 describe StatisticsController do
 
-  describe "GET 'index'" do
+  before(:each) do
+    @request.env["devise.mapping"] = Devise.mappings[:statistics]
+    user = FactoryGirl.create(:user)
+    sign_in user
+  end
+
+  describe "GET 'general'" do
     it "returns http success" do
-      get 'index'
+      get 'general'
       response.should be_success
     end
   end
-
+  describe "GET 'customer'" do
+    it "returns http success" do
+      get 'customer'
+      response.should be_success
+    end
+  end
 end

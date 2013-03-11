@@ -8,10 +8,11 @@ FactoryGirl.define do
     f.customer "cust1" 
     f.os_version "6.1" 
     f.os_type "aix" 
-    f.sys_model "mma"
+    f.sys_model "9117-mma"
     f.sys_serial "012345"
     f.sys_fwversion "fw01"
     f.global_image "no global"
+    f.nim "client"
     f.install_date "01/01/2013"
   end
 end
