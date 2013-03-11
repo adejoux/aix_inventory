@@ -15,5 +15,6 @@
  *= require dataTables/jquery.dataTables.bootstrap
  *= require dataTables/extras/TableTools
  *= require dataTables/extras/TableTools_JUI
+ *= require jquery.fileupload-ui
  *= require_tree .
  */

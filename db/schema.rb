@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130212113121) do
+ActiveRecord::Schema.define(:version => 20130311205719) do
 
   create_table "aix_alerts", :force => true do |t|
     t.string   "alert_type"
@@ -164,6 +164,15 @@ ActiveRecord::Schema.define(:version => 20130212113121) do
 
   add_index "switch_ports", ["aix_port_id"], :name => "index_switch_ports_on_san_port_id"
   add_index "switch_ports", ["wwpn"], :name => "index_switch_ports_on_wwpn"
+
+  create_table "uploads", :force => true do |t|
+    t.string   "upload_file_name"
+    t.string   "upload_content_type"
+    t.integer  "upload_file_size"
+    t.string   "upload_updated_at"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+  end
 
   create_table "users", :force => true do |t|
     t.string   "email",                  :default => "",    :null => false

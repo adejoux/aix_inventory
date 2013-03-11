@@ -1,5 +1,7 @@
 # -*- encoding : utf-8 -*-
 AixInventory::Application.routes.draw do
+    
+    resources :uploads
 
     devise_for :users
   
