@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.11'
+gem 'rails', '3.2.12'
 gem 'haml-rails'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -53,6 +53,7 @@ group :assets do
   gem 'twitter-bootstrap-rails'
   gem 'jquery-datatables-rails'
   gem 'jquery-ui-rails'
+  gem 'jquery-fileupload-rails'
 end
 
 group :development, :test do
@@ -74,6 +75,7 @@ end
 gem 'jquery-rails'
 gem 'morrisjs-rails'
 gem 'raphael-rails'
+
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
