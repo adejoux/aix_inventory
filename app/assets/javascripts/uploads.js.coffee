@@ -1,9 +1,9 @@
 jQuery ->
-  $('#new_upload').fileupload
+  $('#fileupload').fileupload
     dataType: "script"
     add: (e, data) ->
-      data.context = $(tmpl("template-upload", data.files[0]))
-      $('#new_upload').append(data.context)
+      data.context = $(tmpl("template-upload", data.files[0]).trim())
+      $('#fileupload').append(data.context)
       data.submit()
     progress: (e, data) ->
       if data.context
