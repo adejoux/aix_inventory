@@ -1,6 +1,25 @@
 <script id="template-upload" type="text/x-tmpl">
 <div class="upload">
-  {%=o.name%}
-  <div class="progress"><div class="bar" style="width: 0%;"></div></div>
+  <table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th>file name</th>
+        <th>choose import type :</th>
+      </tr>
+    </thead>    
+    <tbody>
+      <tr>
+        <td>{%=o.name%}</td>
+        <td><%= select("upload", "import_type", Upload::TYPES, {}, :class => "btn btn-primary") %></td>
+      </tr>
+      <tr>
+        <td colspan=2>
+          upload status
+          <div class="progress progress-success progress-striped active"><div class="bar" style="width: 0%;"></div></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
 </div>
 </script>

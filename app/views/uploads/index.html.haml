@@ -1,28 +1,29 @@
+%br
 
-.row
-  .span10.offset2
-    %br
+.row.fileupload-buttonbar
+  .span7.offset3
     = form_for Upload.new, :html => { :multipart => true, :id => "fileupload"  } do |f|
-      .row.fileupload-buttonbar
-        .span7
-          %span.btn.btn-success.fileinput-button
-            %i.icon-plus.icon-white
-            %span Add files...
-            = f.file_field :upload
-          %button{ :type => "submit", :class => "btn btn-primary start"}
-            %i.icon-upload.icon-white
-            %span Start upload
-          %button{ :type => "reset", :class => "btn btn-warning cancel"}
-            %i.icon-ban-circle.icon-white
-            %span Cancel upload
-          %button{ :type => "button", :class => "btn btn-danger delete"}
-            %i.icon-trash.icon-white
-            %span Delete
-          %input{ :type => "checkbox", :class => "toggle"}
-          #files
-        .span5
-          =render 'upload_tmpl'
-        %br
-        %table.table.table-striped
-          %tbody{ :class => "files", :data => { :toggle => "modal-gallery", :target => "#modal-gallery"} }
+      %span.btn.btn-success.fileinput-button
+        %i.icon-plus.icon-white
+        %span Add files...
+        = f.file_field :upload
+      %button{ :type => "submit", :class => "btn btn-primary start", :id => "jfsubmit"}
+        %i.icon-upload.icon-white
+        %span Start upload
+      %button{ :type => "reset", :class => "btn btn-warning cancel"}
+        %i.icon-ban-circle.icon-white
+        %span Cancel upload
+      %button{ :type => "button", :class => "btn btn-danger delete"}
+        %i.icon-trash.icon-white
+        %span Delete
+      %input{ :type => "checkbox", :class => "toggle"}
+      %table.table.table-bordered.table-striped#files
+        %thead
+          %th file
+          %th import_type
+          %th action
+        %tbody
+          - @uploads.each do |upload|
+            = render(upload)
+      =render 'upload_tmpl'
 

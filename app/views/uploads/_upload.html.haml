@@ -1,2 +1,4 @@
-.upload
-  = link_to upload.upload_file_name, upload.upload.url(:original)
+%tr
+  %td= link_to upload.upload_file_name, upload.upload.url(:original)
+  %td= upload.import_type
+  %td= link_to t('.destroy', :default => t("helpers.links.destroy")), upload_path(upload), :method => :delete, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, :class => 'btn btn-mini btn-danger'

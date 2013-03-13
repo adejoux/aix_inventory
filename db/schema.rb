@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130311205719) do
+ActiveRecord::Schema.define(:version => 20130313001757) do
 
   create_table "aix_alerts", :force => true do |t|
     t.string   "alert_type"
@@ -172,6 +172,7 @@ ActiveRecord::Schema.define(:version => 20130311205719) do
     t.string   "upload_updated_at"
     t.datetime "created_at",          :null => false
     t.datetime "updated_at",          :null => false
+    t.string   "import_type"
   end
 
   create_table "users", :force => true do |t|

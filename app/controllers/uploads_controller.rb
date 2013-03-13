@@ -40,7 +40,11 @@ class UploadsController < ApplicationController
   # POST /uploads
   # POST /uploads.json
   def create
-    @upload = Upload.create(params[:upload])
+    
+    respond_to do |format|
+      format.html { redirect_to uploads_url, alert: "Nothing to upload" }
+      format.js  {@upload = Upload.create(params[:upload])}
+    end
   end
 
   # PUT /uploads/1
