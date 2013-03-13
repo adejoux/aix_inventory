@@ -36,6 +36,7 @@ gem 'axlsx_rails'
 gem 'devise'
 gem 'cancan'
 gem 'annotate'
+gem 'paper_trail'
 #gem 'rack-mini-profiler'
 
 # Gems used only for assets and not required

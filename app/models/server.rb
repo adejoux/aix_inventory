@@ -36,6 +36,7 @@ class Server < ActiveRecord::Base
   
   validates :hostname, uniqueness: { scope: :customer  }
   
+  has_paper_trail :class_name => 'ServerVersion', :ignore => [:run_date]
   
   UNRANSACKABLE_ATTRIBUTES = ["created_at", "updated_at", "id"]
   
