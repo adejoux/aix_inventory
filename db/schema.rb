@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130313230718) do
+ActiveRecord::Schema.define(:version => 20130314130314) do
 
   create_table "aix_alerts", :force => true do |t|
     t.string   "alert_type"
@@ -76,6 +76,14 @@ ActiveRecord::Schema.define(:version => 20130313230718) do
   end
 
   add_index "healthchecks", ["server_id"], :name => "index_healthchecks_on_server_id"
+
+  create_table "import_logs", :force => true do |t|
+    t.integer  "upload_id"
+    t.string   "result"
+    t.text     "content"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "lparstats", :force => true do |t|
     t.string   "node_name"

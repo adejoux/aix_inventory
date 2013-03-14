@@ -2,6 +2,7 @@ class Upload < ActiveRecord::Base
   include Workflow
   attr_accessible :upload, :import_type, :workflow_state
   has_attached_file :upload
+  has_many :import_logs
   
   TYPES = %w[server san sod]
 
@@ -34,6 +35,18 @@ class Upload < ActiveRecord::Base
   end
   
   def server_import
+    
+    import_log = self.import_logs.create
+
+    import_log.content = "starting importing #{self.upload_file_name}\n"
+    unless self.csv_file_content?
+      import_log.content << "ERROR: not a csv file\n"
+      import_log.result = failed
+      import_log.save
+      upload.failed!
+      return false
+    end
+
     total_chunks = SmarterCSV.process(self.upload.path, :chunk_size => 500, :col_sep => "\t", :key_mapping => { :scm_manager=> nil, :scm_alias => nil }) do |chunk|
       Server.transaction do
         chunk.each do |entry|
@@ -53,14 +66,15 @@ class Upload < ActiveRecord::Base
           begin 
             server.save!
           rescue  Exception => e
-            puts "ERROR: unable to save server : #{e.message}"
-            puts server.inspect
+            import_log.content << "ERROR: unable to save server : #{e.message}\n"
+            import_log.content << server.inspect
           end
         end
       end
     end
+    import_log.save
   end
-  handle_asynchronously :server_import
+  #handle_asynchronously :server_import
 
   def san_import
 
@@ -71,4 +85,13 @@ class Upload < ActiveRecord::Base
 
   end
   handle_asynchronously :sod_import  
+
+  def csv_file_content?
+    if upload_content_type.match(/csv/)
+      return true
+    else
+      return false
+    end
+  end
+
 end

@@ -14,7 +14,7 @@
 //= require jquery_ujs
 //= require raphael
 //= require morris
-//= require twitter/bootstrap
+//= require bootstrap
 //= require dataTables/jquery.dataTables
 //= require dataTables/jquery.dataTables.bootstrap
 //= require jquery-fileupload/basic

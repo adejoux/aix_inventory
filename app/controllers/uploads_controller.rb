@@ -70,6 +70,10 @@ class UploadsController < ApplicationController
     end
   end
 
+  def view_logs
+    @upload = Upload.find(params[:id])
+  end
+
   # DELETE /uploads/1
   # DELETE /uploads/1.json
   def destroy

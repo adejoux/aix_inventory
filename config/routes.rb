@@ -4,6 +4,7 @@ AixInventory::Application.routes.draw do
     resources :uploads do
       member do
         get :import
+        get :view_logs
       end
     end
 
