@@ -1,4 +1,4 @@
-class CreateVersions < ActiveRecord::Migration
+class CreateServerVersions < ActiveRecord::Migration
   def self.up
     create_table :server_versions do |t|
       t.string   :item_type, :null => false

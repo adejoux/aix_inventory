@@ -37,6 +37,13 @@ class UploadsController < ApplicationController
     @upload = Upload.find(params[:id])
   end
 
+  # GET/uploads/import/1
+  def import
+    @upload = Upload.find(params[:id])
+    @upload.processing!
+    redirect_to :uploads
+  end
+
   # POST /uploads
   # POST /uploads.json
   def create

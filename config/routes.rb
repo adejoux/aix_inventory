@@ -1,7 +1,11 @@
 # -*- encoding : utf-8 -*-
 AixInventory::Application.routes.draw do
     
-    resources :uploads
+    resources :uploads do
+      member do
+        get :import
+      end
+    end
 
     devise_for :users
   

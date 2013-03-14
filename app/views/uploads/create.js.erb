@@ -1,5 +1,6 @@
 <% if @upload.new_record? %>
   alert("Failed to upload file: <%= @upload.errors.full_messages.join(', ').html_safe %> ");
 <% else %>
+  <% @upload.uploading! %>
   $('#files').append("<%= j render(@upload) %>");
 <% end %>
