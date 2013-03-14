@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130314130314) do
+ActiveRecord::Schema.define(:version => 20130314190026) do
 
   create_table "aix_alerts", :force => true do |t|
     t.string   "alert_type"
@@ -81,8 +81,10 @@ ActiveRecord::Schema.define(:version => 20130314130314) do
     t.integer  "upload_id"
     t.string   "result"
     t.text     "content"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.integer  "success_count"
+    t.integer  "error_count"
   end
 
   create_table "lparstats", :force => true do |t|
@@ -143,12 +145,13 @@ ActiveRecord::Schema.define(:version => 20130314130314) do
   end
 
   create_table "server_versions", :force => true do |t|
-    t.string   "item_type",  :null => false
-    t.integer  "item_id",    :null => false
-    t.string   "event",      :null => false
+    t.string   "item_type",      :null => false
+    t.integer  "item_id",        :null => false
+    t.string   "event",          :null => false
     t.string   "whodunnit"
     t.text     "object"
     t.datetime "created_at"
+    t.text     "object_changes"
   end
 
   add_index "server_versions", ["item_type", "item_id"], :name => "index_server_versions_on_item_type_and_item_id"

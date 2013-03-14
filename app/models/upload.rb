@@ -2,7 +2,7 @@ class Upload < ActiveRecord::Base
   include Workflow
   attr_accessible :upload, :import_type, :workflow_state
   has_attached_file :upload
-  has_many :import_logs
+  has_one :import_log
   
   TYPES = %w[server san sod]
 
@@ -36,8 +36,10 @@ class Upload < ActiveRecord::Base
   
   def server_import
     
-    import_log = self.import_logs.create
-
+    import_log = self.build_import_log
+    import_log.success_count=0
+    import_log.error_count=0
+    import_log.save
     import_log.content = "starting importing #{self.upload_file_name}\n"
     unless self.csv_file_content?
       import_log.content << "ERROR: not a csv file\n"
@@ -57,7 +59,7 @@ class Upload < ActiveRecord::Base
           server.os_type = entry[:os_type]
           server.os_version = entry[:os_version]
           server.sys_fwversion = entry[:sys_fwversion]
-          server.sys_serial = entry[:sys_id]
+          server.sys_serial = entry[:sys_id].to_s
           server.sys_model = entry[:sys_model]
           server.global_image = entry[:global_image]
           server.install_date = entry[:aix_install_date]
@@ -66,15 +68,19 @@ class Upload < ActiveRecord::Base
           begin 
             server.save!
           rescue  Exception => e
-            import_log.content << "ERROR: unable to save server : #{e.message}\n"
-            import_log.content << server.inspect
+            import_log.error_count += 1
+            import_log.content << "SAVE ERROR: #{e.message}\n"
+            import_log.content << server.to_yaml
+          else
+            import_log.success_count += 1 
           end
         end
       end
     end
     import_log.save
+    upload.success!
   end
-  #handle_asynchronously :server_import
+  handle_asynchronously :server_import
 
   def san_import
 
