@@ -1,14 +1,17 @@
-%b number of lines imported successfully :
-= @upload.import_log.success_count
-%br
-%b number of lines with errors  :
-= @upload.import_log.error_count
-%br
-%b job started at : 
-= @upload.import_log.created_at.strftime('%Y/%m/%d %H:%M')
-%br
-%b job duration : 
-= (@upload.import_log.updated_at - @upload.import_log.created_at).to_i 
-seconds
-%h1 errors
-= simple_format @upload.import_log.content
+- if @upload.import_log.nil?
+  %b no log to display
+- else
+  %b number of lines imported successfully :
+  = @upload.import_log.success_count
+  %br
+  %b number of lines with errors  :
+  = @upload.import_log.error_count
+  %br
+  %b job started at : 
+  = @upload.import_log.created_at.strftime('%Y/%m/%d %H:%M')
+  %br
+  %b job duration : 
+  = (@upload.import_log.updated_at - @upload.import_log.created_at).to_i 
+  seconds
+  %h1 errors
+  = simple_format @upload.import_log.content

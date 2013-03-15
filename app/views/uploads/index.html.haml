@@ -6,23 +6,15 @@
       %span.btn.btn-success.fileinput-button
         %i.icon-plus.icon-white
         %span Add files...
-        = f.file_field :upload
-      %button{ :type => "submit", :class => "btn btn-primary start", :id => "jfsubmit"}
-        %i.icon-upload.icon-white
-        %span Start upload
-      %button{ :type => "reset", :class => "btn btn-warning cancel"}
-        %i.icon-ban-circle.icon-white
-        %span Cancel upload
-      %button{ :type => "button", :class => "btn btn-danger delete"}
-        %i.icon-trash.icon-white
-        %span Delete
-      %input{ :type => "checkbox", :class => "toggle"}
+        = f.file_field :upload      
+      =f.submit "Delete", :class => "btn btn-danger"        
       %table.table.table-bordered.table-striped#files
         %thead
           %th file
           %th import_type
           %th status
           %th action
+          %th select
         %tbody
           - @uploads.each do |upload|
             = render(upload)

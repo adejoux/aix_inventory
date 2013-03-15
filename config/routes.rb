@@ -10,7 +10,11 @@ AixInventory::Application.routes.draw do
 
     devise_for :users
   
-    resources :users
+  resources :users do
+    member do
+      get :customer
+    end
+  end
   
     resources :firmwares
     

@@ -3,7 +3,7 @@ class UploadsController < ApplicationController
   # GET /uploads.json
   def index
     @uploads = Upload.all
-
+  
     respond_to do |format|
       format.html # index.html.haml
       format.json { render json: @uploads.map{|upload| upload.to_jq_upload } }
@@ -47,7 +47,13 @@ class UploadsController < ApplicationController
   # POST /uploads
   # POST /uploads.json
   def create
-    
+    # TO DO: make it cleaner
+    if params[:commit] == "Delete"
+      logger.debug "ici toto"
+       Upload.destroy_all( {id: params[:upload_ids] } )
+      redirect_to uploads_url, :notice => "uploaded files deleted"
+      return
+    end
     respond_to do |format|
       format.html { redirect_to uploads_url, alert: "Nothing to upload" }
       format.js  {@upload = Upload.create(params[:upload])}
@@ -77,6 +83,11 @@ class UploadsController < ApplicationController
   # DELETE /uploads/1
   # DELETE /uploads/1.json
   def destroy
+    unless params[:upload_ids].nil? or params[:upload_ids].empty?
+      Upload.destroy_all( {id: params[:upload_ids] } )
+      redirect_to uploads_url, :notice => "uploaded files deleted"
+    end
+    
     @upload = Upload.find(params[:id])
     @upload.destroy
 

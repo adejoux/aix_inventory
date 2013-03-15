@@ -72,15 +72,17 @@
                   <li class="nav-header">Access</li>
                   <li><%= link_to "Users", users_path %></li>
                   <li class="divider"></li>
+                  <li class="nav-header">Manage</li>
+                  <li><%= link_to "Upload", uploads_path %></li>
                 </ul>
               </li>
             <%end %>
             <li class="<%= 'active' if current_page?(contacts_path) %>"><%= link_to "About", contacts_path %></li>
           </ul>
             <% if current_user.customer_scope.present?  %>
-              <%= link_to "scope : #{current_user.customer_scope}", edit_user_registration_path, :class => "btn btn-inverse" %>
+              <%= link_to "scope : #{current_user.customer_scope}", customer_user_path(current_user),:remote => true, :data => { :toggle => 'modal', :target => '#modal-customer'}, :class => "btn btn-inverse" %>
             <% else %>
-              <%= link_to "Full customer scope", edit_user_registration_path, :class => "btn btn-inverse" %>
+              <%= link_to "Full customer scope", customer_user_path(current_user), :remote => true, :data => { :toggle => 'modal', :target => '#modal-customer'}, :class => "btn btn-inverse" %>
             <% end %>
           
             <div class="nav pull-right">
@@ -109,6 +111,7 @@
       <%= msg  %>
     </div>
   <% end %>
+  <%= render 'layouts/modal-customer' %>
   <%= yield %>
 </div>
 </body>

@@ -39,7 +39,11 @@ class UsersController < ApplicationController
   def edit
     @user = User.find(params[:id])
   end
-
+  
+  def customer
+    @user = User.find(params[:id])
+  end
+  
   # POST /users
   # POST /users.xml
   def create
@@ -65,7 +69,7 @@ class UsersController < ApplicationController
     params[:user].delete(:role) unless current_user.role == "admin"
     respond_to do |format|
       if @user.update_attributes(params[:user])
-        format.html { redirect_to(@user, :notice => 'User was successfully updated.') }
+        format.html { redirect_to(request.referer, :notice => 'User was successfully updated.') }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
