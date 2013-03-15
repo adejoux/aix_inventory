@@ -23,4 +23,8 @@ class Healthcheck < ActiveRecord::Base
   def self.ransackable_attributes auth_object = nil
     (column_names - UNRANSACKABLE_ATTRIBUTES) + _ransackers.keys
   end
+
+  def self.find_by_server_and_check(server_id, check)
+    where('"server_id" = ? and "check" = ?', server_id, check).first
+  end
 end

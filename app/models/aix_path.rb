@@ -26,4 +26,8 @@ class AixPath < ActiveRecord::Base
   def self.ransackable_attributes auth_object = nil
     (column_names - UNRANSACKABLE_ATTRIBUTES) + _ransackers.keys
   end
+
+  def self.find_by_server_and_adapter(server_id, adapter)
+    where('"server_id" = ? and "adapter" = ?', server_id, adapter).first
+  end
 end

@@ -2,7 +2,7 @@ class Upload < ActiveRecord::Base
   include Workflow
   attr_accessible :upload, :import_type, :workflow_state
   has_attached_file :upload
-  has_one :import_log
+  has_one :import_log, :dependent => :destroy
   
   TYPES = %w[server san sod]
 
@@ -45,32 +45,25 @@ class Upload < ActiveRecord::Base
       import_log.content << "ERROR: not a csv file\n"
       import_log.result = failed
       import_log.save
-      upload.failed!
+      failed!
       return false
     end
 
     total_chunks = SmarterCSV.process(self.upload.path, :chunk_size => 500, :col_sep => "\t", :key_mapping => { :scm_manager=> nil, :scm_alias => nil }) do |chunk|
       Server.transaction do
         chunk.each do |entry|
+          if entry[:lparstat].nil?
+            import_log.error_count += 1
+            next
+          end
           next unless entry[:version] == "1.8".to_f
-          server = Server.find_by_customer_and_hostname(entry[:customer], entry[:hostname]) || Server.new
-          server.customer = entry[:customer]
-          server.hostname = entry[:hostname]
-          server.os_type = entry[:os_type]
-          server.os_version = entry[:os_version]
-          server.sys_fwversion = entry[:sys_fwversion]
-          server.sys_serial = entry[:sys_id].to_s
-          server.sys_model = entry[:sys_model]
-          server.global_image = entry[:global_image]
-          server.install_date = entry[:aix_install_date]
-          server.nim = entry[:nim]
-          server.run_date = entry[:run_date]
+          imported_server = ServerImport.new(entry)
           begin 
-            server.save!
+            imported_server.save!
           rescue  Exception => e
             import_log.error_count += 1
             import_log.content << "SAVE ERROR: #{e.message}\n"
-            import_log.content << server.to_yaml
+            import_log.content << imported_server.to_yaml
           else
             import_log.success_count += 1 
           end
@@ -78,7 +71,7 @@ class Upload < ActiveRecord::Base
       end
     end
     import_log.save
-    upload.success!
+    success!
   end
   handle_asynchronously :server_import
 
