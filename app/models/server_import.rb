@@ -30,8 +30,15 @@ class ServerImport
     @imported_server ||= load_imported_server
   end
 
+  def server
+    @server ||= get_server
+  end
+
+  def get_server
+    Server.find_by_customer_and_hostname(csv_line[:customer], csv_line[:hostname]) || Server.new
+  end
+
   def load_imported_server
-    server = Server.find_by_customer_and_hostname(csv_line[:customer], csv_line[:hostname]) || Server.new
     server.customer = csv_line[:customer]
     server.hostname = csv_line[:hostname]
     server.os_type = csv_line[:os_type]
@@ -126,7 +133,7 @@ class ServerImport
           path=aix_path.split("|")
           path.shift #first field empty in initial file
           unless path[2].nil?
-            aix_path = AixPath.find_by_server_and_adapter(server.id, path[1])
+            aix_path = AixPath.find_by_server_id_and_adapter(server.id, path[1])
             unless aix_path.nil? 
               aix_path.path=path[0]
               aix_path.adapter=path[1]
@@ -159,39 +166,42 @@ class ServerImport
     unless csv_line[:syslog].nil?
       update_or_build_healthcheck(server, "syslog", csv_line[:syslog])
     end  
-                    
-          # begin 
-          #   new_server.save!
-          # rescue  Exception => e
-          #   puts "ERROR: unable to save server : #{e.message}"
-          #   puts new_server.inspect
-          # end
-          # unless csv_line[:openssl].nil? 
-          #   if csv_line[:openssl] =~ /openssl/i
-          #     software=Software.find_or_create_by_name_and_version( :name => 'openssl', :version => csv_line[:openssl])
-          #     deployment=SoftwareDeployment.create!( :server_id => new_server.id, :software_id => software.id )
-          #   end
-          # end
-          # unless csv_line[:ssh_version].nil? 
-          #   if csv_line[:ssh_version] =~ /openssh/i
-          #     software=Software.find_or_create_by_name_and_version( :name => 'openssh', :version => csv_line[:ssh_version])
-          #     deployment=SoftwareDeployment.create!( :server_id => new_server.id, :software_id => software.id )
-          #   end
-          # end
-          # unless csv_line[:sudo_version].nil? 
-          #   if csv_line[:sudo_version] =~ /sudo/i
-          #     software=Software.find_or_create_by_name_and_version( :name => 'sudo', :version => csv_line[:sudo_version])
-          #     deployment=SoftwareDeployment.create!( :server_id => new_server.id, :software_id => software.id )
-          #   end
-          # end          
-          # unless csv_line[:sdd_driver].nil? 
-          #   unless csv_line[:sdd_driver] == "NF"
-          #     software=Software.find_or_create_by_name_and_version( :name => 'sdd driver', :version => csv_line[:sdd_driver])
-          #     deployment=SoftwareDeployment.create!( :server_id => new_server.id, :software_id => software.id )
-          #   end
-          # end 
     server
   end
+
+   def save_softwares!
+    unless csv_line[:openssl].nil? 
+      if csv_line[:openssl] =~ /openssl/i
+        set_software_deployment('openssl', csv_line[:openssl])
+      end
+    end
+    unless csv_line[:ssh_version].nil? 
+      if csv_line[:ssh_version] =~ /openssh/i
+        set_software_deployment( 'openssh',  csv_line[:ssh_version])
+      end
+    end
+    unless csv_line[:sudo_version].nil? 
+      if csv_line[:sudo_version] =~ /sudo/i
+        set_software_deployment( 'sudo', csv_line[:sudo_version])
+      end
+    end          
+    unless csv_line[:sdd_driver].nil? 
+      unless csv_line[:sdd_driver] == "NF"
+        set_software_deployment( 'sdd driver', csv_line[:sdd_driver])
+      end
+    end
+  end
+
+  def get_software(name, version)
+    Software.find_by_name_and_version(name, version) || Software.create(:name => name, :version => version)
+  end
+
+  def set_software_deployment(name, version)
+    software=get_software(name,version)
+    SoftwareDeployment.find_by_server_id_and_software_id(server.id, software.id) || SoftwareDeployment.create!( :server_id => server.id, :software_id => software.id )
+  end
+              
+
 private
   def lparstat_to_sym(stat)
   convert_name = {
@@ -246,7 +256,7 @@ private
   end
 
   def update_or_build_healthcheck(server, check, status)
-    hc = Healthcheck.find_by_server_and_check(server.id, check)
+    hc = Healthcheck.find_by_server_id_and_check(server.id, check)
     if hc.nil?
       server.healthchecks.build( :check => check, :status => status )
     else

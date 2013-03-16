@@ -18,6 +18,8 @@ class Healthcheck < ActiveRecord::Base
   #validations
   validates_presence_of :check, :status
   
+  has_paper_trail :class_name => 'HealthcheckVersion'
+
   UNRANSACKABLE_ATTRIBUTES = ["created_at", "updated_at", "id", "server_id"]
   
   def self.ransackable_attributes auth_object = nil

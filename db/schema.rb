@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130314220839) do
+ActiveRecord::Schema.define(:version => 20130316164615) do
 
   create_table "aix_alerts", :force => true do |t|
     t.string   "alert_type"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(:version => 20130314220839) do
     t.integer  "path"
   end
 
+  add_index "aix_paths", ["server_id", "adapter"], :name => "index_aix_paths_on_server_id_and_adapter", :unique => true
   add_index "aix_paths", ["server_id"], :name => "index_aix_paths_on_server_id"
 
   create_table "aix_ports", :force => true do |t|
@@ -41,6 +42,7 @@ ActiveRecord::Schema.define(:version => 20130314220839) do
     t.datetime "updated_at", :null => false
   end
 
+  add_index "aix_ports", ["port", "wwpn"], :name => "index_aix_ports_on_port_and_wwpn", :unique => true
   add_index "aix_ports", ["server_id"], :name => "index_aix_ports_on_server_id"
   add_index "aix_ports", ["wwpn"], :name => "index_aix_ports_on_wwpn"
 
@@ -67,6 +69,18 @@ ActiveRecord::Schema.define(:version => 20130314220839) do
     t.datetime "updated_at",  :null => false
   end
 
+  create_table "healthcheck_versions", :force => true do |t|
+    t.string   "item_type",      :null => false
+    t.integer  "item_id",        :null => false
+    t.string   "event",          :null => false
+    t.string   "whodunnit"
+    t.text     "object"
+    t.text     "object_changes"
+    t.datetime "created_at"
+  end
+
+  add_index "healthcheck_versions", ["item_type", "item_id"], :name => "index_healthcheck_versions_on_item_type_and_item_id"
+
   create_table "healthchecks", :force => true do |t|
     t.string   "check"
     t.string   "status"
@@ -75,6 +89,7 @@ ActiveRecord::Schema.define(:version => 20130314220839) do
     t.datetime "updated_at", :null => false
   end
 
+  add_index "healthchecks", ["server_id", "check"], :name => "index_healthchecks_on_server_id_and_check", :unique => true
   add_index "healthchecks", ["server_id"], :name => "index_healthchecks_on_server_id"
 
   create_table "import_logs", :force => true do |t|
@@ -183,6 +198,20 @@ ActiveRecord::Schema.define(:version => 20130314220839) do
     t.date     "run_date"
     t.string   "nim"
   end
+
+  add_index "servers", ["customer", "hostname"], :name => "index_servers_on_customer_and_hostname", :unique => true
+
+  create_table "software_deployment_versions", :force => true do |t|
+    t.string   "item_type",      :null => false
+    t.integer  "item_id",        :null => false
+    t.string   "event",          :null => false
+    t.string   "whodunnit"
+    t.text     "object"
+    t.text     "object_changes"
+    t.datetime "created_at"
+  end
+
+  add_index "software_deployment_versions", ["item_type", "item_id"], :name => "index_software_deployment_versions_on_item_type_and_item_id"
 
   create_table "software_deployments", :force => true do |t|
     t.integer  "software_id"

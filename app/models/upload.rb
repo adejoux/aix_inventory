@@ -35,7 +35,6 @@ class Upload < ActiveRecord::Base
   end
   
   def server_import
-    
     import_log = self.build_import_log
     import_log.success_count=0
     import_log.error_count=0
@@ -45,7 +44,6 @@ class Upload < ActiveRecord::Base
       import_log.content << "ERROR: not a csv file\n"
       import_log.result = failed
       import_log.save
-      failed!
       return false
     end
 
@@ -60,20 +58,30 @@ class Upload < ActiveRecord::Base
           imported_server = ServerImport.new(entry)
           begin 
             imported_server.save!
+            imported_server.save_softwares!
           rescue  Exception => e
             import_log.error_count += 1
             import_log.content << "SAVE ERROR: #{e.message}\n"
             import_log.content << imported_server.to_yaml
           else
-            import_log.success_count += 1 
+            import_log.success_count += 1
+          end
+
+          begin 
+            imported_server.save_softwares!
+          rescue  Exception => e
+            import_log.error_count += 1
+            import_log.content << "SOFT SAVE ERROR: #{e.message}\n"
+            import_log.content << imported_server.softwares.to_yaml
+          else
+            import_log.success_count += 1
           end
         end
       end
     end
     import_log.save
-    success!
   end
-  handle_asynchronously :server_import
+  #handle_asynchronously :server_import
 
   def san_import
 
