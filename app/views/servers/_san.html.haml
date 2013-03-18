@@ -1,0 +1,41 @@
+%h2 SAN Information
+%h3 fibre channel adapters
+- unless @server.aix_ports.empty?
+  %table.table.table-bordered.table-striped
+    %thead
+      %tr
+        %th port
+        %th wwpn
+        %th fabric
+        %th switch port alias
+    %tbody
+      - @server.aix_ports.each do |aix_port|
+        %tr
+          %td= aix_port.port
+          %td= aix_port.wwpn
+          - if aix_port.switch_port.nil?
+            %td Not Found
+            %td Not Found
+          - else
+            %td= aix_port.switch_port.fabric
+            %td= aix_port.switch_port.port_alias
+- else
+  No aix ports informations
+%h3 san paths
+- unless @server.aix_paths.empty?
+  %table.table.table-bordered.table-striped
+    %thead
+      %tr
+        %th path id
+        %th adapter
+        %th state
+        %th mode
+    %tbody
+      - @server.aix_paths.each do |aix_path|
+        %tr
+          %td= aix_path.path
+          %td= aix_path.adapter
+          %td= aix_path.state
+          %td= aix_path.mode
+- else
+  No aix paths informations

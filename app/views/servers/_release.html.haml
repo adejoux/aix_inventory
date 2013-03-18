@@ -1,0 +1,28 @@
+%h2 release
+%table.table.table-bordered
+  %tbody
+    %tr
+      %td
+        %span.label.label-info customer
+      %td
+        %strong= @server.customer
+    %tr  
+      %td
+        %span.label.label-info operating system
+      %td  
+        %strong= @server.os_type
+    %tr
+      %td
+        %span.label.label-info version
+      %td
+        %strong= @server.os_version
+    %tr  
+      %td
+        %span.label.label-info installation date
+      %td
+        %strong= @server.install_date
+    %tr
+      %td
+        %span.label.label-info global image
+      %td
+        %strong= @server.global_image
