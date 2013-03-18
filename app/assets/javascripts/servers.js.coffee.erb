@@ -21,14 +21,3 @@ jQuery ->
                      $('td:eq(8)', nRow).html( '<a href="<%= web_root + url.quick_search_servers_path %>?type=sys_serial&search=' + aData[8]  + '">' + aData[8] + '</a>' )
                      $('td:eq(9)', nRow).html( '<a href="<%= web_root + url.quick_search_servers_path %>?type=sys_fwversion&search=' + aData[9]  + '">' + aData[9] + '</a>' )
     sAjaxSource: $('#datatable1').data('source')
-
-jQuery -> 
-  $('form').on 'click', '.remove_fields', (event) ->
-    $(this).closest('.field').remove()
-    event.preventDefault()
-
-  $('form').on 'click', '.add_fields', (event) ->
-    time = new Date().getTime()
-    regexp = new RegExp($(this).data('id'), 'g')
-    $(this).before($(this).data('fields').replace(regexp, time))
-    event.preventDefault()

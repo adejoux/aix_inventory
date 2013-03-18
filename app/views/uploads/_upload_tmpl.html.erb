@@ -5,16 +5,18 @@
       <tr>
         <th>file name</th>
         <th>choose import type :</th>
+        <th>Action</th>
       </tr>
     </thead>    
     <tbody>
       <tr>
         <td>{%=o.name%}</td>
-        <td><%= select("upload", "import_type", Upload::TYPES, {}, :class => "btn btn-primary") %></td>
+        <td><%= select("upload", "import_type", Upload::TYPES) %></td>
+        <td><%= link_to "upload", '#', :class => "btn btn-primary upload" %></td>
       </tr>
       <tr>
-        <td colspan=2>
-          upload status
+        <td colspan=3>
+          <b>upload status</b>
           <div class="progress progress-success progress-striped active"><div class="bar" style="width: 0%;"></div></div>
         </td>
       </tr>

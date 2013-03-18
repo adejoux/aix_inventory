@@ -4,7 +4,7 @@ jQuery ->
     add: (e, data) ->
       data.context = $(tmpl("template-upload", data.files[0]).trim())
         .appendTo('#fileupload')
-        .click () ->
+        .on 'click', '.upload', (event) ->
           data.submit()
           return false
     progress: (e, data) ->
