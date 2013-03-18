@@ -3,10 +3,12 @@ class UploadsController < ApplicationController
   # GET /uploads.json
   def index
     @uploads = Upload.all
-  
+    Upload.imported_state.each do |upl|
+      upl.analyze_result
+    end
+    
     respond_to do |format|
       format.html # index.html.haml
-      format.json { render json: @uploads.map{|upload| upload.to_jq_upload } }
     end
   end
 
@@ -49,7 +51,6 @@ class UploadsController < ApplicationController
   def create
     # TO DO: make it cleaner
     if params[:commit] == "Delete"
-      logger.debug "ici toto"
        Upload.destroy_all( {id: params[:upload_ids] } )
       redirect_to uploads_url, :notice => "uploaded files deleted"
       return

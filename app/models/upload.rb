@@ -31,10 +31,12 @@ class Upload < ActiveRecord::Base
 
     state :imported do
       event :success, :transition_to => :processed
+      event :partial, :transition_to => :partially
       event :error, :transition_to => :failed
     end
 
     state :processed
+    state :partially
     state :failed
   end
 
@@ -57,7 +59,7 @@ class Upload < ActiveRecord::Base
     import_log.content = "starting importing #{self.upload_file_name}\n"
     unless self.csv_file_content?
       import_log.content << "ERROR: not a csv file\n"
-      import_log.result = failed
+      import_log.result = "failed"
       import_log.save
       return false
     end
@@ -138,5 +140,18 @@ class Upload < ActiveRecord::Base
       return false
     end
   end
-
+  
+  def self.imported_state
+    where('workflow_state = "imported"')
+  end
+  
+  def analyze_result
+    if import_log.success_count = 0
+      error!
+    elsif import_log.error_count > 0
+      partial!
+    else
+      success!
+    end
+  end
 end
