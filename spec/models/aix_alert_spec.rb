@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: aix_alerts
+#
+#  id           :integer          not null, primary key
+#  alert_type   :string(255)
+#  check        :string(255)
+#  valid_status :string(255)
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#
+
 require 'spec_helper'
 
 describe AixAlert do

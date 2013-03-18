@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 # == Schema Information
 #
 # Table name: servers
@@ -16,8 +15,10 @@
 #  global_image  :string(255)
 #  install_date  :string(255)
 #  run_date      :date
+#  nim           :string(255)
 #
 
+# -*- encoding : utf-8 -*-
 class Server < ActiveRecord::Base
   has_many :aix_ports, :dependent => :destroy, :autosave => true
   has_many :aix_paths, :dependent => :destroy, :autosave => true

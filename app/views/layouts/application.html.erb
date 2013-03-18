@@ -41,10 +41,10 @@
                  <li><%= link_to "Partitions", lparstats_path %></li>
               </ul>
             </li>
-            <li class="dropdown <%= 'active' if current_page?(switch_ports_path) %>">
+            <li class="dropdown <%= 'active' if current_page?(san_infras_path) %>">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">SAN<b class="caret"></b></a>
               <ul class="dropdown-menu">
-                 <li><%= link_to "Switchs", switch_ports_path %></li>
+                <li><%= link_to "SAN", san_infras_path %></li>
               </ul>
             </li>
             <li class="dropdown <%= 'active' if current_page?(switch_ports_path) %>">

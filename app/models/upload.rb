@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: uploads
+#
+#  id                  :integer          not null, primary key
+#  upload_file_name    :string(255)
+#  upload_content_type :string(255)
+#  upload_file_size    :integer
+#  upload_updated_at   :string(255)
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  import_type         :string(255)
+#  workflow_state      :string(255)
+#
+
 class Upload < ActiveRecord::Base
   include Workflow
   attr_accessible :upload, :import_type, :workflow_state
@@ -11,10 +26,10 @@ class Upload < ActiveRecord::Base
       event :uploading, :transition_to => :uploaded
     end
     state :uploaded do
-      event :processing, :transition_to => :importing
+      event :importing, :transition_to => :imported
     end
 
-    state :importing do
+    state :imported do
       event :success, :transition_to => :processed
       event :error, :transition_to => :failed
     end
@@ -23,7 +38,7 @@ class Upload < ActiveRecord::Base
     state :failed
   end
 
-  def processing
+  def importing
     case import_type
       when 'server'
         server_import
@@ -66,16 +81,6 @@ class Upload < ActiveRecord::Base
           else
             import_log.success_count += 1
           end
-
-          begin 
-            imported_server.save_softwares!
-          rescue  Exception => e
-            import_log.error_count += 1
-            import_log.content << "SOFT SAVE ERROR: #{e.message}\n"
-            import_log.content << imported_server.softwares.to_yaml
-          else
-            import_log.success_count += 1
-          end
         end
       end
     end
@@ -84,9 +89,41 @@ class Upload < ActiveRecord::Base
   #handle_asynchronously :server_import
 
   def san_import
+    import_log = self.build_import_log
+    import_log.success_count=0
+    import_log.error_count=0
+    import_log.save
+    import_log.content = "starting importing #{self.upload_file_name}\n"
+    unless self.csv_file_content?
+      import_log.content << "ERROR: not a csv file\n"
+      import_log.result = "failed"
+      import_log.save
+      return false
+    end
 
+    total_chunks = SmarterCSV.process(self.upload.path, :chunk_size => 500, :col_sep => ":", :key_mapping => { :scm_manager=> nil, :scm_alias => nil }) do |chunk|
+      SanInfra.transaction do
+        chunk.each do |entry|
+          if entry[:mode].nil?
+            import_log.error_count += 1
+            next
+          end
+          imported_san_infra = SanInfraImport.new(entry)
+          begin 
+            imported_san_infra.save!
+          rescue  Exception => e
+            import_log.error_count += 1
+            import_log.content << "SAVE ERROR: #{e.message}\n"
+            import_log.content << imported_san_infra.to_yaml
+          else
+            import_log.success_count += 1
+          end
+        end
+      end
+    end
+    import_log.save
   end
-  handle_asynchronously :san_import
+  #handle_asynchronously :san_import
 
   def sod_import
 

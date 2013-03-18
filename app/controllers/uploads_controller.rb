@@ -40,7 +40,7 @@ class UploadsController < ApplicationController
   # GET/uploads/import/1
   def import
     @upload = Upload.find(params[:id])
-    @upload.processing!
+    @upload.importing!
     redirect_to :uploads
   end
 
