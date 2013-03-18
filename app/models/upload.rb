@@ -111,6 +111,7 @@ class Upload < ActiveRecord::Base
           imported_san_infra = SanInfraImport.new(entry)
           begin 
             imported_san_infra.save!
+            imported_san_infra.save_wwpns!
           rescue  Exception => e
             import_log.error_count += 1
             import_log.content << "SAVE ERROR: #{e.message}\n"

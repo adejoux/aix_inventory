@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130317174934) do
+ActiveRecord::Schema.define(:version => 20130318130111) do
 
   create_table "aix_alerts", :force => true do |t|
     t.string   "alert_type"
@@ -301,5 +301,14 @@ ActiveRecord::Schema.define(:version => 20130317174934) do
   end
 
   add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
+
+  create_table "wwpns", :force => true do |t|
+    t.integer  "server_id"
+    t.integer  "san_infra_id"
+    t.integer  "sod_infra_id"
+    t.string   "wwpn"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
 
 end

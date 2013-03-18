@@ -19,6 +19,11 @@ class SanInfra < ActiveRecord::Base
 
   validates_presence_of :fabric, :infra, :mode, :port, :portname, :speed, :status, :switch
   validates :port, uniqueness: { scope: :switch  }
+  has_many :wwpns
 
   UNRANSACKABLE_ATTRIBUTES = ["created_at", "updated_at", "id"]
+
+  def self.ransackable_attributes auth_object = nil
+    (column_names - UNRANSACKABLE_ATTRIBUTES) + _ransackers.keys
+  end
 end

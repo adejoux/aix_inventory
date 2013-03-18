@@ -49,4 +49,20 @@ class SanInfraImport
     san_infra.mode = csv_line[:mode]
     san_infra
   end
+
+  def save_wwpns!
+    csv_line[:wwpn].to_s.split(',').each do |wwpn_id|
+      update_or_create_wwpn(wwpn_id.to_s.upcase)
+    end
+  end
+
+  def update_or_create_wwpn(wwpn_id)
+    wwpn = Wwpn.find_by_wwpn(wwpn_id)
+    if wwpn.nil?
+      san_infra.wwpns.create!( :wwpn => wwpn_id )
+    else
+      wwpn.san_infra_id=san_infra.id
+      wwpn.save!
+    end
+  end
 end

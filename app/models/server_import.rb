@@ -255,7 +255,7 @@ private
     end
   end
 
-  def update_or_build_healthcheck(server, check, status)
+  def update_or_build_healthcheck(check, status)
     hc = Healthcheck.find_by_server_id_and_check(server.id, check)
     if hc.nil?
       server.healthchecks.build( :check => check, :status => status )
