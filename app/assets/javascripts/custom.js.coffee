@@ -1,4 +1,4 @@
-jQuery -> 
+ready =-> 
   $('form').on 'click', '.remove_fields', (event) ->
     $(this).closest('.field').remove()
     event.preventDefault()
@@ -8,3 +8,6 @@ jQuery ->
     regexp = new RegExp($(this).data('id'), 'g')
     $(this).before($(this).data('fields').replace(regexp, time))
     event.preventDefault()
+
+$(document).ready(ready)
+$(document).on('page:load', ready)

@@ -4,7 +4,7 @@
 <% url = AixInventory::Application.routes.url_helpers %>
 <%web_root = APP_CONFIG['web_root'] %>
 
-jQuery ->
+ready =->
   $('#lpar_datatable').dataTable
     bJQueryUI: true
     sPaginationType: "bootstrap"
@@ -16,3 +16,6 @@ jQuery ->
                      $('td:eq(1)', nRow).html( '<a href="<%= web_root + url.quick_search_servers_path %>?type=sys_model&search=' + aData[1]  + '">' + aData[1] + '</a>' )
                      $('td:eq(2)', nRow).html( '<a href="<%= web_root + url.quick_search_servers_path %>?type=sys_serial&search=' + aData[2]  + '">' + aData[2] + '</a>' )
     sAjaxSource: $('#lpar_datatable').data('source')
+
+$(document).ready(ready)
+$(document).on('page:load', ready)

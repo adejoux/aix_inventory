@@ -5,8 +5,7 @@
 <%web_root = APP_CONFIG['web_root'] %>
 window.Global ||= {}
 
-Global.DisplayStats = ->
-  jQuery ->
+Global.DisplayStats =->
     if $('#customers_chart').length
       Morris.Bar
         element: 'customers_chart'
@@ -68,5 +67,9 @@ Global.DisplayStats = ->
       aaSorting: [[1, "desc"]]
       fnRowCallback: (nRow, aData, iDisplayIndex, iDisplayIndexFull) -> 
           $('td:eq(0)', nRow).html( '<a href="<%= web_root + url.quick_search_servers_path %>?type=sys_model&search=' + aData[0]  + '">' + aData[0] + '</a>' )
-          
-Global.DisplayStats()
+
+ready =->          
+  Global.DisplayStats()
+  
+$(document).ready(ready)
+$(document).on('page:load', ready)
