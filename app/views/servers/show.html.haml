@@ -2,6 +2,8 @@
   .span3.bs-docs-sidebar
     #sidemenu.affix
       %h2= @server.hostname
+      %span.label.label-info run date
+      %strong= @server.run_date
       %ul.nav.nav-list.bs-docs-sidenav
         %li=link_to "Release", "#release"
         %li=link_to "lpar", "#lpar"
@@ -25,8 +27,5 @@
       =render 'san'
     #healthchecks
       =render 'healthchecks'
-        
-%div.row
-  %div.span12.page-footer
     
 

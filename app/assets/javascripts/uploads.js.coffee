@@ -1,4 +1,4 @@
-jQuery ->
+ready =->
   $('#fileupload').fileupload
     dataType: "script"
     add: (e, data) ->
@@ -14,3 +14,4 @@ jQuery ->
     done: (e,data) ->
       $('#fileupload').unbind('click')
       return false
+

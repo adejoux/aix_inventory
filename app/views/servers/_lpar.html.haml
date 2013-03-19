@@ -1,31 +1,22 @@
 %h2 lpar
 - unless @server.lparstat.nil? 
   %table.table.table-bordered
+    %thead
+      %tr
+        %th partition
+        %th type
+        %th mode
+        %th vcpu
+        %th EC
+        %th mem
+
     %tbody
       %tr
-        %td
-          type
-        %td
-          = @server.lparstat.lpar_type
-      %tr
-        %td
-          partition name
-        %td
-          = @server.lparstat.partition_name
-      %tr
-        %td
-          virtual cpu
-        %td
-          = @server.lparstat.online_virtual_cpus
-      %tr
-        %td
-          entitled capacity
-        %td
-          = @server.lparstat.entitled_capacity
-      %tr
-        %td
-          memory
-        %td
-          = @server.lparstat.online_memory
+        %td= @server.lparstat.partition_name
+        %td= @server.lparstat.lpar_type
+        %td= @server.lparstat.mode
+        %td= @server.lparstat.online_virtual_cpus
+        %td= @server.lparstat.entitled_capacity
+        %td= @server.lparstat.online_memory
 - else
   %p No lpar informations available

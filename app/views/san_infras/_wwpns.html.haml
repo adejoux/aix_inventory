@@ -1,0 +1,17 @@
+- if @san_infra.wwpns.nil?
+  %b no WWPN to display
+- else
+  %table.table.table-bordered.table-striped
+    %thead
+      %tr
+        %th wwpn
+        %th server
+    %tbody
+      - @san_infra.wwpns.each do |wwpn|
+        %tr
+          %td= wwpn.wwpn
+          - unless wwpn.aix_port.nil?
+            %td= link_to wwpn.aix_port.server.hostname, server_path(wwpn.aix_port.server.id)
+          - else
+            %td NF
+

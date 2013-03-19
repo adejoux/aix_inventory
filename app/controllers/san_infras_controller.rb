@@ -53,12 +53,8 @@ class SanInfrasController < ApplicationController
     end
   end
 
-  def quick_search
-    if params[:type] == "hostname"
-      redirect_to(SanInfra.where(:hostname => params[:search]).select("id").first)
-    else
-      redirect_to san_infras_path( :q => {"c" => {"0" =>{"a" =>{"0" =>{"name"=> params[:type] }}, "p"=>"eq", "v" =>{"0"=>{"value" => params[:search] }}}}})
-    end
+  def view_logs
+    @san_infra = SanInfra.find(params[:id])
   end
 
     private
@@ -71,7 +67,8 @@ class SanInfrasController < ApplicationController
         san_infra.speed,
         san_infra.status,
         san_infra.portname,
-        san_infra.mode
+        san_infra.mode,
+        san_infra.id
       ]
     end 
   end

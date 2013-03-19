@@ -40,7 +40,7 @@ AixInventory::Application.routes.draw do
   resources :san_infras, :only => [:index, :show] do
     collection do
       post :search, to: 'san_infras#index'
-      get :quick_search, to:'san_infras#quick_search'
+      get :view_wwpns, to:'san_infras#view_wwpns'
     end
   end
   
