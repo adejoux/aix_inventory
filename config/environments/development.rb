@@ -34,7 +34,7 @@ AixInventory::Application.configure do
   config.assets.compress = false
 
   # Expands the lines which load the assets
-  config.assets.debug = true
+  config.assets.debug = false
   #caching testing
   #config.action_controller.perform_caching = true
   #config.consider_all_requests_local       = true
