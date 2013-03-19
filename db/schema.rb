@@ -303,7 +303,7 @@ ActiveRecord::Schema.define(:version => 20130318130111) do
   add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
 
   create_table "wwpns", :force => true do |t|
-    t.integer  "server_id"
+    t.integer  "aix_port_id"
     t.integer  "san_infra_id"
     t.integer  "sod_infra_id"
     t.string   "wwpn"

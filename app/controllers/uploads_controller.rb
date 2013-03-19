@@ -1,4 +1,5 @@
 class UploadsController < ApplicationController
+  load_and_authorize_resource
   # GET /uploads
   # GET /uploads.json
   def index
@@ -42,7 +43,7 @@ class UploadsController < ApplicationController
   # GET/uploads/import/1
   def import
     @upload = Upload.find(params[:id])
-    @upload.importing!
+    @upload.processing!
     redirect_to :uploads
   end
 

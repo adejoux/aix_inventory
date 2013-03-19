@@ -27,7 +27,10 @@ class Server < ActiveRecord::Base
   has_one :lparstat
   has_many :softwares, :through => :software_deployments
   has_many :switch_ports, :through => :aix_ports
+  has_many :wwpns, :through => :aix_ports
+  has_many :san_infras, :through => :wwpns
   accepts_nested_attributes_for :softwares
+  accepts_nested_attributes_for :wwpns
   
   attr_accessible :customer, :hostname, :os_type, :os_version
 

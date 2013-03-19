@@ -53,7 +53,7 @@ describe Server do
   end
   it "can have fibre adapter" do
     server=FactoryGirl.create(:server)
-    server.aix_ports.create( :port => "fcs1", :wwpn => "0123456789").should be_valid
+    server.aix_ports.create( :port => "fcs1").should be_valid
   end
   it "can have san paths" do
     server=FactoryGirl.create(:server)

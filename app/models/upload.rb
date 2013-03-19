@@ -26,7 +26,11 @@ class Upload < ActiveRecord::Base
       event :uploading, :transition_to => :uploaded
     end
     state :uploaded do
-      event :importing, :transition_to => :imported
+      event :processing, :transition_to => :importing
+    end
+
+    state :importing do 
+      event :processed, :transition_to => :imported
     end
 
     state :imported do
@@ -40,7 +44,7 @@ class Upload < ActiveRecord::Base
     state :failed
   end
 
-  def importing
+  def processing
     case import_type
       when 'server'
         server_import
@@ -49,8 +53,10 @@ class Upload < ActiveRecord::Base
       when 'sod'
         sod_import
     end
+    processed!
   end
-  
+  handle_asynchronously :processing
+
   def server_import
     import_log = self.build_import_log
     import_log.success_count=0
@@ -59,7 +65,6 @@ class Upload < ActiveRecord::Base
     import_log.content = "starting importing #{self.upload_file_name}\n"
     unless self.csv_file_content?
       import_log.content << "ERROR: not a csv file\n"
-      import_log.result = "failed"
       import_log.save
       return false
     end
@@ -67,7 +72,8 @@ class Upload < ActiveRecord::Base
     total_chunks = SmarterCSV.process(self.upload.path, :chunk_size => 500, :col_sep => "\t", :key_mapping => { :scm_manager=> nil, :scm_alias => nil }) do |chunk|
       Server.transaction do
         chunk.each do |entry|
-          if entry[:lparstat].nil?
+          if entry[:run_date].nil?
+            import_log.content << "PROCESSING ERROR: unable to save this entry : \n #{entry}"
             import_log.error_count += 1
             next
           end
@@ -88,7 +94,6 @@ class Upload < ActiveRecord::Base
     end
     import_log.save
   end
-  #handle_asynchronously :server_import
 
   def san_import
     import_log = self.build_import_log
@@ -98,7 +103,6 @@ class Upload < ActiveRecord::Base
     import_log.content = "starting importing #{self.upload_file_name}\n"
     unless self.csv_file_content?
       import_log.content << "ERROR: not a csv file\n"
-      import_log.result = "failed"
       import_log.save
       return false
     end
@@ -126,12 +130,12 @@ class Upload < ActiveRecord::Base
     end
     import_log.save
   end
-  #handle_asynchronously :san_import
+  
 
   def sod_import
 
   end
-  handle_asynchronously :sod_import  
+
 
   def csv_file_content?
     if upload_content_type.match(/csv/)
@@ -146,7 +150,7 @@ class Upload < ActiveRecord::Base
   end
   
   def analyze_result
-    if import_log.success_count = 0
+    if import_log.success_count == 0
       error!
     elsif import_log.error_count > 0
       partial!

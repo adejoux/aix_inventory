@@ -52,7 +52,7 @@ class ServersController < ApplicationController
   # GET /servers/1
   # GET /servers/1.json
   def show
-    @server = Server.find(params[:id])
+    @server = Server.includes(:healthchecks).includes(:san_infras).includes(:softwares).find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb

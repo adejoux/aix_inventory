@@ -115,12 +115,16 @@ class ServerImport
         fc_card = aix_port.split(":")
         unless fc_card[1].nil?
           if fc_card[1] =~ /^\h+$/
-            aix_port = AixPort.find_by_server_and_wwpn(server.id, fc_card[1].to_s.upcase)
+            aix_port = AixPort.find_by_server_id_and_wwpn(server.id, fc_card[1].to_s.upcase)
             unless aix_port.nil? 
               aix_port.port=fc_card[0]
-              aix_port.wwpn=fc_card[1].to_s.upcase
             else
-              server.aix_ports.build(:port => fc_card[0], :wwpn => fc_card[1].to_s.upcase )  
+              aix_port=server.aix_ports.build(:port => fc_card[0])
+              if wwpn = Wwpn.find_by_wwpn(fc_card[1].to_s.upcase)
+                aix_port << wwpn
+              else
+                aix_port.build_wwpn(:wwpn => fc_card[1].to_s.upcase)
+              end
             end 
           end
         end
@@ -148,23 +152,23 @@ class ServerImport
     end
 
     unless csv_line[:cpm].nil?
-      update_or_build_healthcheck(server, "cpm", csv_line[:cpm])
+      update_or_build_healthcheck("cpm", csv_line[:cpm])
     end
      
     unless csv_line[:ssh].nil?
-      update_or_build_healthcheck(server, "ssh", csv_line[:ssh])
+      update_or_build_healthcheck("ssh", csv_line[:ssh])
     end
     
     unless csv_line[:ntpd].nil?
-      update_or_build_healthcheck(server, "ntpd", csv_line[:ntpd])
+      update_or_build_healthcheck("ntpd", csv_line[:ntpd])
     end          
     
     unless csv_line[:fibre_parameters].nil?
-      update_or_build_healthcheck(server, "fibre parameters", csv_line[:fibre_parameters])
+      update_or_build_healthcheck( "fibre parameters", csv_line[:fibre_parameters])
     end
     
     unless csv_line[:syslog].nil?
-      update_or_build_healthcheck(server, "syslog", csv_line[:syslog])
+      update_or_build_healthcheck( "syslog", csv_line[:syslog])
     end  
     server
   end
