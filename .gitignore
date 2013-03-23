@@ -16,6 +16,8 @@
 *swp
 *swo
 *~
+trinidad.pid
 *sqlite3
 public/assets/*
 public/system/*
+vendor/cache/*

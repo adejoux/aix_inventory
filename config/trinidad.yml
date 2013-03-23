@@ -1,15 +1,18 @@
 address: localhost # set to 127.0.0.1 if Trinidad behind a web server such as Apache
 port: 3000  # port where Trinidad is running
 http: # HTTP connector setup
-environment: production
+environment: development
 jruby_min_runtimes: 1 # min number of JRuby runtimes to use
 jruby_max_runtimes: 1 # max number of JRuby runtimes to use
 jruby_compat_version: 1.9 # or 1.8 by default uses the same as trinidad is running
-context_path: /aix_inventory # default context path
+#context_path: /aix_inventory # default context path
 root_dir: "." # system path where the application is located, by default is PWD
 rackup: config.ru # rackup script if you are running a (non-Rails) Rack application
 public: public # system path (relative to root) where your public files are located
-extensions:
-  daemon:
-    pid_file: ./trinidad.pid
-    jvm_args: '-XX:MaxPermSize=512m'
+# extensions:
+#   worker:
+#     delayed_job:
+#       thread_count: 1
+#       thread_priority: NORM
+  #daemon:
+  #  pid_file: ./trinidad.pid

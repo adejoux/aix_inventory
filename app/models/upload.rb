@@ -54,6 +54,7 @@ class Upload < ActiveRecord::Base
         sod_import
     end
     processed!
+    Rails.cache.clear
   end
   handle_asynchronously :processing
 
@@ -69,7 +70,7 @@ class Upload < ActiveRecord::Base
       return false
     end
 
-    total_chunks = SmarterCSV.process(self.upload.path, :chunk_size => 500, :col_sep => "\t", :key_mapping => { :scm_manager=> nil, :scm_alias => nil }) do |chunk|
+    total_chunks = SmarterCSV.process(self.upload.path, :chunk_size => 500, :col_sep => ";", :key_mapping => { :scm_manager=> nil, :scm_alias => nil }) do |chunk|
       Server.transaction do
         chunk.each do |entry|
           if entry[:run_date].nil?

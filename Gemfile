@@ -22,6 +22,7 @@ platforms :jruby do
   gem "therubyrhino", group: :assets
   gem "trinidad", require: false
   gem 'trinidad_daemon_extension', require: false
+  gem 'trinidad_worker_extension', require: false
   gem 'jruby-openssl'
   gem 'activerecord-jdbcsqlite3-adapter'
   gem 'activerecord-jdbcmysql-adapter'

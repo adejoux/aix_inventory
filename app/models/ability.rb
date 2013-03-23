@@ -23,7 +23,8 @@ class Ability
          can :general, Server
          can :customer, Server
          can :render_stats, Server
-         can :read, SwitchPort
+         can :read, SanAlert
+         can :read, Wwpn
          can :read, Lparstat
          can :san_alerts, SanAlert
          can :aix_alerts, SanAlert
