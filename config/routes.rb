@@ -3,6 +3,8 @@ AixInventory::Application.routes.draw do
     
 
 
+  get "wwpns/index"
+
   devise_for :users, :controllers => {:registrations => "users/registrations"}
   
   resources :users do
@@ -18,7 +20,7 @@ AixInventory::Application.routes.draw do
     end
   end
 
-    resources :firmwares
+  resources :firmwares
   
   get "alerts/san_alerts"
   get "alerts/aix_alerts"
@@ -44,6 +46,12 @@ AixInventory::Application.routes.draw do
     end
   end
   
+  resources :wwpns, :only => [:index] do
+    collection do
+      post :search, to: 'wwpns#index'
+    end
+  end
+  
   resources :servers, :only => [:edit, :update, :show] do
     collection do
       post :search, to: 'servers#index' 
@@ -51,15 +59,9 @@ AixInventory::Application.routes.draw do
     end
   end
 
-  resources :hardwares, :only => [:index, :show] do
+  resources :hardwares, :only => [:index] do
     collection do
       post :search, to: 'hardwares#index' 
-    end
-  end
-
-  resources :switch_ports, :only => [:index, :show] do
-    collection do
-      post :search, to: 'switch_ports#index' 
     end
   end
 

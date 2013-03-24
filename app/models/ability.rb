@@ -29,6 +29,7 @@ class Ability
          can :san_alerts, SanAlert
          can :aix_alerts, SanAlert
          can :update, User, :id => user.id
+         can :customer, User
        end
   end
 end

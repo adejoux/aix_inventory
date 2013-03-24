@@ -36,7 +36,7 @@ class LparstatsController < ApplicationController
     @search.build_condition
     
     respond_to do |format|
-       format.html # index.html.erb
+       format.html 
        format.json {  
          @secho = params[:sEcho].to_i
          @total_display_records = @lparstats.count
