@@ -26,7 +26,6 @@ class Server < ActiveRecord::Base
   has_many :software_deployments
   has_one :lparstat
   has_many :softwares, :through => :software_deployments
-  has_many :switch_ports, :through => :aix_ports
   has_many :wwpns, :through => :aix_ports
   has_many :san_infras, :through => :wwpns
   accepts_nested_attributes_for :softwares
@@ -61,16 +60,7 @@ class Server < ActiveRecord::Base
   end
   
   def self.not_in_both_fabrics(fabric1, fabric2)
-    find_by_sql(["SELECT * FROM servers WHERE id IN 
-                            (SELECT servers.id FROM  servers
-                                INNER JOIN aix_ports ON aix_ports.server_id = servers.id 
-                                INNER JOIN switch_ports ON switch_ports.aix_port_id = aix_ports.id 
-                                WHERE fabric = :fabric1 
-                          EXCEPT 
-                              SELECT servers.id FROM  servers
-                              INNER JOIN aix_ports ON aix_ports.server_id = servers.id 
-                              INNER JOIN switch_ports ON switch_ports.aix_port_id = aix_ports.id 
-                              WHERE fabric = :fabric2 )", :fabric1 => fabric1, :fabric2 => fabric2])
+    joins(:san_infras).where('fabric = ?', fabric1) - joins(:san_infras).where('fabric = ?', fabric2)
   end
   
   def self.retrieve_aix_invalid_status(check,status)

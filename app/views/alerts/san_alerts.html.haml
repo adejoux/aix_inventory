@@ -16,10 +16,10 @@
           - fabric_alerts(alert.fabric1, alert.fabric2).each do |server|
             %tr
               %td= server.customer
-              %td= server.hostname
+              %td= link_to server.hostname, server_path(server)
               %td.alert-error= alert.fabric2
           - fabric_alerts(alert.fabric2, alert.fabric1).each do |server|
             %tr
               %td= server.customer
-              %td= server.hostname
+              %td= link_to server.hostname, server_path(server)
               %td.alert-error= alert.fabric1
