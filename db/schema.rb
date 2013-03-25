@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130318130111) do
+ActiveRecord::Schema.define(:version => 20130325174823) do
 
   create_table "aix_alerts", :force => true do |t|
     t.string   "alert_type"
@@ -36,15 +36,12 @@ ActiveRecord::Schema.define(:version => 20130318130111) do
 
   create_table "aix_ports", :force => true do |t|
     t.string   "port"
-    t.string   "wwpn"
     t.integer  "server_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
 
-  add_index "aix_ports", ["port", "wwpn"], :name => "index_aix_ports_on_port_and_wwpn", :unique => true
   add_index "aix_ports", ["server_id"], :name => "index_aix_ports_on_server_id"
-  add_index "aix_ports", ["wwpn"], :name => "index_aix_ports_on_wwpn"
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0

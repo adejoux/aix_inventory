@@ -115,13 +115,14 @@ class ServerImport
         fc_card = aix_port.split(":")
         unless fc_card[1].nil?
           if fc_card[1] =~ /^\h+$/
-            aix_port = AixPort.find_by_server_id_and_wwpn(server.id, fc_card[1].to_s.upcase)
+            aix_port = AixPort.find_by_server_id_and_port(server.id, fc_card[0])
             unless aix_port.nil? 
               aix_port.port=fc_card[0]
             else
               aix_port=server.aix_ports.build(:port => fc_card[0])
-              if wwpn = Wwpn.find_by_wwpn(fc_card[1].to_s.upcase)
-                aix_port << wwpn
+              wwpn = Wwpn.find_by_wwpn(fc_card[1].to_s.upcase)
+              unless wwpn.nil?
+                aix_port.wwpn = wwpn
               else
                 aix_port.build_wwpn(:wwpn => fc_card[1].to_s.upcase)
               end

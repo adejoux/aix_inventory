@@ -38,6 +38,7 @@ AixInventory::Application.routes.draw do
   get :contacts, to: "contacts#index"
 
   resources :servers, :only => [:index] 
+  resources :lparstats, :only => [:index]
 
   resources :san_infras, :only => [:index, :show] do
     collection do

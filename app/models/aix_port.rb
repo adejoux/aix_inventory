@@ -28,6 +28,6 @@ class AixPort < ActiveRecord::Base
   end
 
   def self.find_by_server_id_and_wwpn(server_id, wwpn)
-    joins(:wwpn).where('"server_id" = ? and "wwpns"."wwpn" = ?', server_id, wwpn).first
+    joins(:wwpn).where('server_id = ? and wwpns.wwpn = ?', server_id, wwpn).first
   end
 end
