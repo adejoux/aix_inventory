@@ -35,7 +35,6 @@ end
 # in production environments by default.
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier', '>= 1.0.3'
   gem 'bootstrap-sass'
   gem 'jquery-datatables-rails'
@@ -56,6 +55,7 @@ group :test do
 end
 
 gem 'jquery-rails'
+gem 'coffee-rails', '~> 3.2.1'
 gem 'paperclip'
 gem 'morrisjs-rails'
 gem 'raphael-rails'

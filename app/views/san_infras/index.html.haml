@@ -3,7 +3,6 @@
     %h2 Views
     %ul.nav.nav-list.bs-docs-sidenav
       %li.active=link_to 'san', san_infras_path
-      %li=link_to 'sod', hardwares_path
   .span9
     %h2 Advanced search
     = search_form_for @search, :url=> search_san_infras_path, :html => {:class => "form-inline"}, method: :post do |f|

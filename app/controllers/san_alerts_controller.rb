@@ -45,6 +45,7 @@ class SanAlertsController < ApplicationController
 
     respond_to do |format|
       if @san_alert.save
+        Rails.cache.clear
         format.html { redirect_to @san_alert, notice: 'San alert was successfully created.' }
         format.json { render json: @san_alert, status: :created, location: @san_alert }
       else
@@ -60,6 +61,7 @@ class SanAlertsController < ApplicationController
     @san_alert = SanAlert.find(params[:id])
 
     respond_to do |format|
+      Rails.cache.clear
       if @san_alert.update_attributes(params[:san_alert])
         format.html { redirect_to @san_alert, notice: 'San alert was successfully updated.' }
         format.json { head :no_content }
@@ -75,7 +77,8 @@ class SanAlertsController < ApplicationController
   def destroy
     @san_alert = SanAlert.find(params[:id])
     @san_alert.destroy
-
+    Rails.cache.clear
+    
     respond_to do |format|
       format.html { redirect_to san_alerts_url }
       format.json { head :no_content }

@@ -25,12 +25,18 @@ private
     result=[]
     @alerts.each do |alert|
       
-      if params[:sSearch].present?
-        @servers = Server.aix_alerts_search("%#{params[:sSearch]}%").retrieve_aix_invalid_status(alert.check, alert.valid_status)
-      else
+      if current_user.customer_scope.nil?
         @servers = Server.retrieve_aix_invalid_status(alert.check, alert.valid_status)
+        @total_records+=Server.retrieve_aix_invalid_status(alert.check, alert.valid_status).count
+      else
+        @servers = Server.scoped_by_customer(current_user.customer_scope).retrieve_aix_invalid_status(alert.check, alert.valid_status)
+        @total_records+=Server.scoped_by_customer(current_user.customer_scope).retrieve_aix_invalid_status(alert.check, alert.valid_status).count
       end
-      @total_records+=Server.retrieve_aix_invalid_status(alert.check, alert.valid_status).count
+
+      if params[:sSearch].present?
+        @servers = @servers.aix_alerts_search("%#{params[:sSearch]}%").retrieve_aix_invalid_status(alert.check, alert.valid_status)
+      end
+      
       @total_display_records+=@servers.count
       result += @servers.map do |server|
           [

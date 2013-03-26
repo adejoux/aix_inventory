@@ -44,6 +44,7 @@ class AixAlertsController < ApplicationController
 
     respond_to do |format|
       if @aix_alert.save
+        Rails.cache.clear
         format.html { redirect_to @aix_alert, notice: 'Aix alert was successfully created.' }
         format.json { render json: @aix_alert, status: :created, location: @aix_alert }
       else
@@ -60,6 +61,7 @@ class AixAlertsController < ApplicationController
 
     respond_to do |format|
       if @aix_alert.update_attributes(params[:aix_alert])
+        Rails.cache.clear
         format.html { redirect_to @aix_alert, notice: 'Aix alert was successfully updated.' }
         format.json { head :no_content }
       else

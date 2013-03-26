@@ -64,13 +64,13 @@ class Server < ActiveRecord::Base
   end
   
   def self.retrieve_aix_invalid_status(check,status)
-    joins(:healthchecks).where('"healthchecks"."check" = ?', check)
-      .where('"healthchecks"."status" != ?', status)
-      .select('"servers"."customer", "servers".hostname, "healthchecks"."check" as "healthcheck", "healthchecks"."status" as "status"')
+    joins(:healthchecks).where('healthchecks.check = ?', check)
+      .where('healthchecks.status != ?', status)
+      .select('servers.customer, servers.hostname, healthchecks.check as healthcheck, healthchecks.status as status')
   end
   
   def self.aix_alerts_search(search)
-    joins(:healthchecks).where('"servers"."customer" like :search or "servers"."hostname" like :search or  "healthchecks"."check" like :search or "healthchecks"."status" like :search ', 
+    joins(:healthchecks).where('servers.customer like :search or servers.hostname like :search or healthchecks.check like :search or healthchecks.status like :search ', 
       search: search)
   end
 end

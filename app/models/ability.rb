@@ -24,6 +24,8 @@ class Ability
          can :customer, Server
          can :render_stats, Server
          can :read, SanAlert
+         can :read, SanInfra
+         can :view_wwpns, SanInfra
          can :read, Wwpn
          can :read, Lparstat
          can :san_alerts, SanAlert
