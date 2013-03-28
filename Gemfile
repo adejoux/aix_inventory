@@ -53,6 +53,7 @@ group :test do
   gem 'guard-rspec'
   gem 'launchy'
   gem 'simplecov'
+  gem 'simplecov-rcov'
 end
 
 gem 'jquery-rails'

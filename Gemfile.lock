@@ -249,6 +249,8 @@ GEM
       multi_json (~> 1.0)
       simplecov-html (~> 0.7.1)
     simplecov-html (0.7.1)
+    simplecov-rcov (0.2.3)
+      simplecov (>= 0.4.1)
     slop (3.4.4)
     smarter_csv (1.0.4)
     spoon (0.0.1)
@@ -336,6 +338,7 @@ DEPENDENCIES
   rspec-rails
   sass-rails (~> 3.2.3)
   simplecov
+  simplecov-rcov
   smarter_csv
   sqlite3
   therubyracer
