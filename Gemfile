@@ -54,6 +54,7 @@ group :test do
   gem 'launchy'
   gem 'simplecov'
   gem 'simplecov-rcov'
+  gem 'ci_reporter'
 end
 
 gem 'jquery-rails'
