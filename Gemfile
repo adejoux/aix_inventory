@@ -43,6 +43,7 @@ group :assets do
 end
 
 group :development, :test do
+  gem 'brakeman'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
 end
@@ -52,6 +53,9 @@ group :test do
   gem 'capybara'
   gem 'guard-rspec'
   gem 'launchy'
+  gem 'simplecov'
+  gem 'simplecov-rcov'
+  gem 'ci_reporter'
 end
 
 gem 'jquery-rails'
