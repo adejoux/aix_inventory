@@ -21,3 +21,6 @@ trinidad.pid
 public/assets/*
 public/system/*
 vendor/cache/*
+coverage/
+doc/app
+spec/reports/
