@@ -25,7 +25,7 @@ private
     result=[]
     @alerts.each do |alert|
       
-      if current_user.customer_scope.nil?
+      if current_user.customer_scope.empty?
         @servers = Server.retrieve_aix_invalid_status(alert.check, alert.valid_status)
         @total_records+=Server.retrieve_aix_invalid_status(alert.check, alert.valid_status).count
       else
