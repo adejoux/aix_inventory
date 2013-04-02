@@ -19,7 +19,7 @@ class LparstatsController < ApplicationController
     end
     
     if current_user.customer_scope.present?
-      @search = Lparstat.scoped_customer(current_user.customer_scope).joins(:server).search(session[:last_query])
+      @search = Lparstat.scoped_customer(current_user.customer_scope).search(session[:last_query])
       @total_records = Lparstat.scoped_customer(current_user.customer_scope).count
     else
       @search = Lparstat.joins(:server).search(session[:lpar_last_query])
