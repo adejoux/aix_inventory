@@ -3,7 +3,7 @@
     %h2 Views
     %ul.nav.nav-list.bs-docs-sidenav
       %li=link_to 'san', san_infras_path
-      %li.active=link_to 'wwpn', hardwares_path
+      %li.active=link_to 'wwpn', wwpns_path
   .span9
     %h2 Advanced search
     = search_form_for @search, :url=> search_wwpns_path, :html => {:class => "form-inline"}, method: :post do |f|
@@ -19,12 +19,10 @@
     %table{ :id => "wwpn_datatable", :class => "table table-striped", :data => { :source => "#{ wwpns_url(format: "json") }" } }
       %thead
         %tr
-          %th infra
-          %th fabric
+          %th wwpn
+          %th customer
+          %th hostname
           %th switch
-          %th speed
-          %th status
           %th portname
-          %th mode
-          %th action
+          %th port
       %tbody

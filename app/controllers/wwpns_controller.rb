@@ -19,7 +19,7 @@ class WwpnsController < ApplicationController
       return
     end
     
-    @search = Wwpn.search(session[:last_query])
+    @search = Wwpn.datatable_query.search(session[:last_query])
     @total_records = Wwpn.count
 
     @wwpns = @search.result
@@ -63,24 +63,22 @@ class WwpnsController < ApplicationController
     @wwpns.page(page).per_page(per_page).map do |wwpn|
       [
         wwpn.wwpn,
-        wwpn.san_port.fabric,
-        wwpn.switch,
-        wwpn.speed,
-        wwpn.status,
-        wwpn.portname,
-        wwpn.mode,
-        wwpn.id
+        (wwpn.customer || "N/F"),
+        (wwpn.hostname || "N/F"),
+        (wwpn.switch || "N/F"),
+        (wwpn.portname || "N/F"),
+        (wwpn.port || "N/F")
       ]
-    end 
+    end
   end
 
   def datatable_search
-    @wwpns.where("infra like :search or fabric like :search or switch like :search or speed like :search or status like :search or portname like :search or mode like :search", 
+    @wwpns.where("wwpns.wwpn like :search or customer like :search or switch like :search or portname like :search or san_infras.port like :search", 
     search: "%#{params[:sSearch]}%")
   end
 
   def sort_column
-    columns = %w[infra fabric switch speed status portname mode]
+    columns = %w[wwpns.wwpn customer hostname switch portname port]
     columns[params[:iSortCol_0].to_i]
   end
 end
