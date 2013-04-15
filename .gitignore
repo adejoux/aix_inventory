@@ -24,3 +24,4 @@ vendor/cache/*
 coverage/
 doc/app
 spec/reports/
+*atabase.yml
