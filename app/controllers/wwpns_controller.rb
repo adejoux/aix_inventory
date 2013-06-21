@@ -15,10 +15,10 @@ class WwpnsController < ApplicationController
     end
 
     if params[:export].present?
-      redirect_to :action => 'index', :format => 'xlsx' 
+      redirect_to :action => 'index', :format => 'xlsx'
       return
     end
-    
+
     @search = Wwpn.datatable_query.search(session[:last_query])
     @total_records = Wwpn.count
 
@@ -31,10 +31,10 @@ class WwpnsController < ApplicationController
     @wwpns = @wwpns.order("#{sort_column} #{sort_direction}")
     @search.build_condition
 
-    
+
     respond_to do |format|
       format.html # index.html.erb
-      format.json { 
+      format.json {
         @secho = params[:sEcho].to_i
         @total_display_records = @wwpns.count
         @data = datatable_data
@@ -65,6 +65,7 @@ class WwpnsController < ApplicationController
         wwpn.wwpn,
         (wwpn.customer || "N/F"),
         (wwpn.hostname || "N/F"),
+        get_sdd_driver(wwpn),
         (wwpn.switch || "N/F"),
         (wwpn.portname || "N/F"),
         (wwpn.port || "N/F")
@@ -73,12 +74,20 @@ class WwpnsController < ApplicationController
   end
 
   def datatable_search
-    @wwpns.where("wwpns.wwpn like :search or customer like :search or switch like :search or portname like :search or san_infras.port like :search", 
+    @wwpns.where("wwpns.wwpn like :search or customer like :search or customer like :search or switch like :search or portname like :search or san_infras.port like :search",
     search: "%#{params[:sSearch]}%")
   end
 
   def sort_column
     columns = %w[wwpns.wwpn customer hostname switch portname port]
     columns[params[:iSortCol_0].to_i]
+  end
+
+  def get_sdd_driver(wwpn)
+    if wwpn.softwares.where(:name => "sdd driver").first.nil?
+      "N/F"
+    else
+      wwpn.softwares.where(:name => "sdd driver").first.version
+    end
   end
 end

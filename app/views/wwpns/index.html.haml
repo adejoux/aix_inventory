@@ -15,13 +15,14 @@
         =f.submit "Excel Export", :class => "btn btn-warning", :name => 'export'
         = link_to "Reset", san_infras_path({:clear => 'yes'}), :class => "btn btn-primary"
 .row
-  .span12        
+  .span12
     %table{ :id => "wwpn_datatable", :class => "table table-striped", :data => { :source => "#{ wwpns_url(format: "json") }" } }
       %thead
         %tr
           %th wwpn
           %th customer
           %th hostname
+          %th driver
           %th switch
           %th portname
           %th port
