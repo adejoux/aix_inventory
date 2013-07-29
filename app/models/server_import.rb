@@ -42,81 +42,79 @@ class ServerImport
     server.customer = csv_line[:customer]
     server.hostname = csv_line[:hostname]
     server.os_type = csv_line[:os_type]
+
     server.os_version = csv_line[:os_version]
-    server.sys_fwversion = csv_line[:sys_fwversion]
-    server.sys_serial = csv_line[:sys_id].to_s
-    server.sys_model = csv_line[:sys_model]
-    server.global_image = csv_line[:global_image]
-    server.install_date = csv_line[:aix_install_date]
-    server.nim = csv_line[:nim]
+    hardware=server.build_hardware
+    hardware.firmware = csv_line[:sys_fwversion]
+    hardware.serial = csv_line[:sys_id].to_s
+    hardware.sys_model = csv_line[:sys_model]
     server.run_date = csv_line[:run_date]
 
-    if csv_line[:lparstat] =~ /:/ 
+    if csv_line[:lparstat] =~ /:/
       lparhash = Hash.new
       csv_line[:lparstat].split("|").each do |lpar_entry|
         lpar_info, lpar_value = lpar_entry.split(':')
-        unless lpar_value.nil?  or lpar_value.empty? 
+        unless lpar_value.nil?  or lpar_value.empty?
           lparhash[lparstat_to_sym(lpar_info)] =  lpar_value
         else
           lparhash[lparstat_to_sym(lpar_info)] = nil
         end
       end
-    
+
       lparstat = server.lparstat || server.build_lparstat
-      lparstat.active_cpus_in_pool = lparhash[:active_cpus_in_pool] 
-      lparstat.active_physical_cpus_in_system = lparhash[:active_physical_cpus_in_system] 
-      lparstat.capacity_increment = lparhash[:capacity_increment] 
-      lparstat.desired_capacity = lparhash[:desired_capacity] 
-      lparstat.desired_memory = lparhash[:desired_memory] 
-      lparstat.desired_variable_capacity_weight = lparhash[:desired_variable_capacity_weight] 
-      lparstat.desired_virtual_cpus = lparhash[:desired_virtual_cpus] 
-      lparstat.entitled_capacity = lparhash[:entitled_capacity] 
-      lparstat.entitled_capacity_of_pool = lparhash[:entitled_capacity_of_pool] 
-      lparstat.hypervisor_page_size = lparhash[:hypervisor_page_size] 
-      lparstat.maximum_capacity = lparhash[:maximum_capacity] 
-      lparstat.maximum_capacity_of_pool = lparhash[:maximum_capacity_of_pool] 
-      lparstat.maximum_memory = lparhash[:maximum_memory] 
-      lparstat.maximum_physical_cpus_in_system = lparhash[:maximum_physical_cpus_in_system] 
-      lparstat.maximum_virtual_cpus = lparhash[:maximum_virtual_cpus] 
-      lparstat.memory_group_id_of_lpar = lparhash[:memory_group_id_of_lpar] 
-      lparstat.memory_mode = lparhash[:memory_mode] 
-      lparstat.memory_pool = lparhash[:memory_pool] 
-      lparstat.minimum_capacity = lparhash[:minimum_capacity] 
-      lparstat.minimum_memory = lparhash[:minimum_memory] 
-      lparstat.minimum_virtual_cpus = lparhash[:minimum_virtual_cpus] 
-      lparstat.mode = lparhash[:mode] 
-      lparstat.node_name = lparhash[:node_name] 
-      lparstat.online_memory = lparhash[:online_memory] 
-      lparstat.online_virtual_cpus = lparhash[:online_virtual_cpus] 
-      lparstat.partition_group = lparhash[:partition_group] 
-      lparstat.partition_name = lparhash[:partition_name] 
-      lparstat.partition_number = lparhash[:partition_number] 
-      lparstat.physical_cpu_percentage = lparhash[:physical_cpu_percentage] 
-      lparstat.physical_memory_in_the_pool = lparhash[:physical_memory_in_the_pool] 
-      lparstat.power_saving_mode = lparhash[:power_saving_mode] 
-      lparstat.shared_physical_cpus_in_system = lparhash[:shared_physical_cpus_in_system] 
-      lparstat.shared_pool = lparhash[:shared_pool] 
-      lparstat.target_memory_expansion_factor = lparhash[:target_memory_expansion_factor] 
-      lparstat.target_memory_expansion_size = lparhash[:target_memory_expansion_size] 
-      lparstat.total_io_memory_entitlement = lparhash[:total_io_memory_entitlement] 
-      lparstat.lpar_type = lparhash[:type] 
-      lparstat.unallocated_capacity = lparhash[:unallocated_capacity] 
-      lparstat.unallocated_io_memory_entitlement = lparhash[:unallocated_io_memory_entitlement] 
-      lparstat.unallocated_variable_memory_capacity_weight = lparhash[:unallocated_variable_memory_capacity_weight] 
-      lparstat.unallocated_weight = lparhash[:unallocated_weight] 
-      lparstat.variable_capacity_weight = lparhash[:variable_capacity_weight] 
+      lparstat.active_cpus_in_pool = lparhash[:active_cpus_in_pool]
+      lparstat.active_physical_cpus_in_system = lparhash[:active_physical_cpus_in_system]
+      lparstat.capacity_increment = lparhash[:capacity_increment]
+      lparstat.desired_capacity = lparhash[:desired_capacity]
+      lparstat.desired_memory = lparhash[:desired_memory]
+      lparstat.desired_variable_capacity_weight = lparhash[:desired_variable_capacity_weight]
+      lparstat.desired_virtual_cpus = lparhash[:desired_virtual_cpus]
+      lparstat.entitled_capacity = lparhash[:entitled_capacity]
+      lparstat.entitled_capacity_of_pool = lparhash[:entitled_capacity_of_pool]
+      lparstat.hypervisor_page_size = lparhash[:hypervisor_page_size]
+      lparstat.maximum_capacity = lparhash[:maximum_capacity]
+      lparstat.maximum_capacity_of_pool = lparhash[:maximum_capacity_of_pool]
+      lparstat.maximum_memory = lparhash[:maximum_memory]
+      lparstat.maximum_physical_cpus_in_system = lparhash[:maximum_physical_cpus_in_system]
+      lparstat.maximum_virtual_cpus = lparhash[:maximum_virtual_cpus]
+      lparstat.memory_group_id_of_lpar = lparhash[:memory_group_id_of_lpar]
+      lparstat.memory_mode = lparhash[:memory_mode]
+      lparstat.memory_pool = lparhash[:memory_pool]
+      lparstat.minimum_capacity = lparhash[:minimum_capacity]
+      lparstat.minimum_memory = lparhash[:minimum_memory]
+      lparstat.minimum_virtual_cpus = lparhash[:minimum_virtual_cpus]
+      lparstat.mode = lparhash[:mode]
+      lparstat.node_name = lparhash[:node_name]
+      lparstat.online_memory = lparhash[:online_memory]
+      lparstat.online_virtual_cpus = lparhash[:online_virtual_cpus]
+      lparstat.partition_group = lparhash[:partition_group]
+      lparstat.partition_name = lparhash[:partition_name]
+      lparstat.partition_number = lparhash[:partition_number]
+      lparstat.physical_cpu_percentage = lparhash[:physical_cpu_percentage]
+      lparstat.physical_memory_in_the_pool = lparhash[:physical_memory_in_the_pool]
+      lparstat.power_saving_mode = lparhash[:power_saving_mode]
+      lparstat.shared_physical_cpus_in_system = lparhash[:shared_physical_cpus_in_system]
+      lparstat.shared_pool = lparhash[:shared_pool]
+      lparstat.target_memory_expansion_factor = lparhash[:target_memory_expansion_factor]
+      lparstat.target_memory_expansion_size = lparhash[:target_memory_expansion_size]
+      lparstat.total_io_memory_entitlement = lparhash[:total_io_memory_entitlement]
+      lparstat.lpar_type = lparhash[:type]
+      lparstat.unallocated_capacity = lparhash[:unallocated_capacity]
+      lparstat.unallocated_io_memory_entitlement = lparhash[:unallocated_io_memory_entitlement]
+      lparstat.unallocated_variable_memory_capacity_weight = lparhash[:unallocated_variable_memory_capacity_weight]
+      lparstat.unallocated_weight = lparhash[:unallocated_weight]
+      lparstat.variable_capacity_weight = lparhash[:variable_capacity_weight]
       lparstat.variable_memory_capacity_weight = lparhash[:variable_memory_capacity_weight]
     end
-    
-  
-    unless csv_line[:wwpn].nil? 
+
+    unless csv_line[:wwpn].nil?
       csv_line[:wwpn].gsub(/.*found. /, '')
       csv_line[:wwpn].split("|").each do |aix_port|
         fc_card = aix_port.split(":")
         unless fc_card[1].nil?
           if fc_card[1] =~ /^\h+$/
             aix_port = AixPort.find_by_server_id_and_port(server.id, fc_card[0])
-            unless aix_port.nil? 
+            unless aix_port.nil?
               aix_port.port=fc_card[0]
             else
               aix_port=server.aix_ports.build(:port => fc_card[0])
@@ -126,12 +124,12 @@ class ServerImport
               else
                 aix_port.build_wwpn(:wwpn => fc_card[1].to_s.upcase)
               end
-            end 
+            end
           end
         end
       end
     end
-          
+
     unless csv_line[:pcmpath].nil?
       unless csv_line[:pcmpath] == 'N/A'
         csv_line[:pcmpath].split(" ").each do |aix_path|
@@ -139,7 +137,7 @@ class ServerImport
           path.shift #first field empty in initial file
           unless path[2].nil?
             aix_path = AixPath.find_by_server_id_and_adapter(server.id, path[1])
-            unless aix_path.nil? 
+            unless aix_path.nil?
               aix_path.path=path[0]
               aix_path.adapter=path[1]
               aix_path.state=path[2]
@@ -155,42 +153,42 @@ class ServerImport
     unless csv_line[:cpm].nil?
       update_or_build_healthcheck("cpm", csv_line[:cpm])
     end
-     
+
     unless csv_line[:ssh].nil?
       update_or_build_healthcheck("ssh", csv_line[:ssh])
     end
-    
+
     unless csv_line[:ntpd].nil?
       update_or_build_healthcheck("ntpd", csv_line[:ntpd])
-    end          
-    
+    end
+
     unless csv_line[:fibre_parameters].nil?
       update_or_build_healthcheck( "fibre parameters", csv_line[:fibre_parameters])
     end
-    
+
     unless csv_line[:syslog].nil?
       update_or_build_healthcheck( "syslog", csv_line[:syslog])
-    end  
+    end
     server
   end
 
    def save_softwares!
-    unless csv_line[:openssl].nil? 
+    unless csv_line[:openssl].nil?
       if csv_line[:openssl] =~ /openssl/i
         set_software_deployment('openssl', csv_line[:openssl])
       end
     end
-    unless csv_line[:ssh_version].nil? 
+    unless csv_line[:ssh_version].nil?
       if csv_line[:ssh_version] =~ /openssh/i
         set_software_deployment( 'openssh',  csv_line[:ssh_version])
       end
     end
-    unless csv_line[:sudo_version].nil? 
+    unless csv_line[:sudo_version].nil?
       if csv_line[:sudo_version] =~ /sudo/i
         set_software_deployment( 'sudo', csv_line[:sudo_version])
       end
-    end          
-    unless csv_line[:sdd_driver].nil? 
+    end
+    unless csv_line[:sdd_driver].nil?
       unless csv_line[:sdd_driver] == "NF"
         set_software_deployment( 'sdd driver', csv_line[:sdd_driver])
       end
@@ -205,7 +203,7 @@ class ServerImport
     software=get_software(name,version)
     SoftwareDeployment.find_by_server_id_and_software_id(server.id, software.id) || SoftwareDeployment.create!( :server_id => server.id, :software_id => software.id )
   end
-              
+
 
 private
   def lparstat_to_sym(stat)

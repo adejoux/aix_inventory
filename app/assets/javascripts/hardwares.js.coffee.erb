@@ -12,7 +12,8 @@ ready =->
     bProcessing: true
     bServerSide: true
     bSort: false
-    fnRowCallback: (nRow, aData, iDisplayIndex, iDisplayIndexFull) -> 
+    bFilter: false
+    fnRowCallback: (nRow, aData, iDisplayIndex, iDisplayIndexFull) ->
                      $('td:eq(0)', nRow).html( '<a href="<%= web_root + url.quick_search_servers_path %>?type=customer&search=' + aData[0]  + '">' + aData[0] + '</a>' )
                      $('td:eq(1)', nRow).html( '<a href="<%= web_root + url.quick_search_servers_path %>?type=sys_model&search=' + aData[1]  + '">' + aData[1] + '</a>' )
                      $('td:eq(2)', nRow).html( '<a href="<%= web_root + url.quick_search_servers_path %>?type=sys_fwversion&search=' + aData[2]  + '">' + aData[2] + '</a>' )

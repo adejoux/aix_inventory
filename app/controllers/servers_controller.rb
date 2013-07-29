@@ -17,10 +17,10 @@ class ServersController < ApplicationController
     end
 
     if params[:export].present?
-      redirect_to :action => 'index', :format => 'xlsx' 
+      redirect_to :action => 'index', :format => 'xlsx'
       return
     end
-    
+
     if current_user.customer_scope.present?
       @search = Server.scoped_by_customer(current_user.customer_scope).search(session[:last_query])
       @total_records = Server.scoped_by_customer(current_user.customer_scope).count
@@ -37,10 +37,10 @@ class ServersController < ApplicationController
     @servers = @servers.order("#{sort_column} #{sort_direction}")
     @search.build_condition
 
-    
+
     respond_to do |format|
       format.html # index.html.erb
-      format.json { 
+      format.json {
         @secho = params[:sEcho].to_i
         @total_display_records = @servers.count
         @data = datatable_data
@@ -67,7 +67,7 @@ class ServersController < ApplicationController
       redirect_to servers_path( :q => {"c" => {"0" =>{"a" =>{"0" =>{"name"=> params[:type] }}, "p"=>"eq", "v" =>{"0"=>{"value" => params[:search] }}}}})
     end
   end
-  
+
   # GET /servers/1/edit
   def edit
     @server = Server.find(params[:id])
@@ -93,25 +93,15 @@ class ServersController < ApplicationController
       [
         server.customer,
         server.hostname,
-        server.os_version,
         server.os_type,
-        server.global_image,
-        server.nim,
-        server.install_date,
-        server.sys_model,
-        server.sys_serial,
-        server.sys_fwversion
+        server.os_version,
+        server.run_date.to_s
       ]
-    end 
-  end
-
-  def datatable_search
-    @servers.where("hostname like :search or customer like :search or os_version like :search or sys_model like :search or nim like :search or sys_serial like :search or sys_fwversion like :search", 
-    search: "%#{params[:sSearch]}%")
+    end
   end
 
   def sort_column
-    columns = %w[customer hostname os_version os_type global_image nim install_date sys_model sys_serial sys_fwversion]
+    columns = %w[customer hostname os_type os_version run_date]
     columns[params[:iSortCol_0].to_i]
   end
 end

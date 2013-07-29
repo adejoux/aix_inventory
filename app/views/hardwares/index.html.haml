@@ -16,7 +16,7 @@
         = f.submit "Excel Export", :class => "btn btn-warning", :name => 'export'
         = link_to "Reset", hardwares_path({:clear => 'yes'}), :class => "btn btn-primary"
 .row
-  .span12        
+  .span12
     %table{ :id => "hw_datatable", :class => "table table-striped", :data => { :source => "#{ hardwares_url(format: "json") }" } }
       %thead
         %tr

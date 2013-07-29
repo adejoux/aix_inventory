@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.13'
+gem 'rails', '3.2.14'
 gem 'haml-rails'
 
 platforms :ruby do
@@ -9,7 +9,7 @@ platforms :ruby do
   gem 'libv8'
   gem "therubyracer"
   gem 'thin'
-  
+
   group :development do
     gem 'binding_of_caller'
     gem 'quiet_assets'

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130325174823) do
+ActiveRecord::Schema.define(:version => 20130728193703) do
 
   create_table "aix_alerts", :force => true do |t|
     t.string   "alert_type"
@@ -64,6 +64,15 @@ ActiveRecord::Schema.define(:version => 20130325174823) do
     t.string   "recommended"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+  end
+
+  create_table "hardwares", :force => true do |t|
+    t.string   "sys_model"
+    t.string   "firmware"
+    t.string   "serial"
+    t.integer  "server_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "healthcheck_versions", :force => true do |t|
@@ -198,15 +207,10 @@ ActiveRecord::Schema.define(:version => 20130325174823) do
     t.string   "hostname"
     t.string   "os_type"
     t.string   "os_version"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
-    t.string   "sys_fwversion"
-    t.string   "sys_serial"
-    t.string   "sys_model"
-    t.string   "global_image"
-    t.string   "install_date"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
     t.date     "run_date"
-    t.string   "nim"
+    t.integer  "hardware_id"
   end
 
   add_index "servers", ["customer", "hostname"], :name => "index_servers_on_customer_and_hostname", :unique => true

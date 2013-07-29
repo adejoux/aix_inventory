@@ -1,18 +1,16 @@
 # -*- encoding : utf-8 -*-
 AixInventory::Application.routes.draw do
-    
-
 
   get "wwpns/index"
 
   devise_for :users, :controllers => {:registrations => "users/registrations"}
-  
+
   resources :users do
     member do
       get :customer
     end
   end
-  
+
   resources :uploads do
     member do
       get :import
@@ -21,23 +19,23 @@ AixInventory::Application.routes.draw do
   end
 
   resources :firmwares
-  
+
   get "alerts/san_alerts"
   get "alerts/aix_alerts"
 
   resources :san_alerts
-  
+
   get "hardwares/index"
 
   get "statistics/general"
-  
+
   get "statistics/customer"
-  
+
   get "statistics/render_stats"
-  
+
   get :contacts, to: "contacts#index"
 
-  resources :servers, :only => [:index] 
+  resources :servers, :only => [:index]
   resources :lparstats, :only => [:index]
 
   resources :san_infras, :only => [:index, :show] do
@@ -46,29 +44,29 @@ AixInventory::Application.routes.draw do
       get :view_wwpns, to:'san_infras#view_wwpns'
     end
   end
-  
+
   resources :wwpns, :only => [:index] do
     collection do
       post :search, to: 'wwpns#index'
     end
   end
-  
+
   resources :servers, :only => [:edit, :update, :show] do
     collection do
-      post :search, to: 'servers#index' 
+      post :search, to: 'servers#index'
       get :quick_search, to:'servers#quick_search'
     end
   end
 
   resources :hardwares, :only => [:index] do
     collection do
-      post :search, to: 'hardwares#index' 
+      post :search, to: 'hardwares#index'
     end
   end
 
   resources :lparstats, :only => [:index] do
     collection do
-      post :search, to: 'lparstats#index' 
+      post :search, to: 'lparstats#index'
     end
   end
 

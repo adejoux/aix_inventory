@@ -1,7 +1,7 @@
 class SanInfrasController < ApplicationController
   load_and_authorize_resource
   def index
-  if params[:clear].present?
+    if params[:clear].present?
       params[:q] = nil
       params[:sSearch]=nil
       session[:last_query] = nil
@@ -14,10 +14,10 @@ class SanInfrasController < ApplicationController
     end
 
     if params[:export].present?
-      redirect_to :action => 'index', :format => 'xlsx' 
+      redirect_to :action => 'index', :format => 'xlsx'
       return
     end
-    
+
     @search = SanInfra.search(session[:last_query])
     @total_records = SanInfra.count
 
@@ -30,10 +30,10 @@ class SanInfrasController < ApplicationController
     @san_infras = @san_infras.order("#{sort_column} #{sort_direction}")
     @search.build_condition
 
-    
+
     respond_to do |format|
       format.html # index.html.erb
-      format.json { 
+      format.json {
         @secho = params[:sEcho].to_i
         @total_display_records = @san_infras.count
         @data = datatable_data
@@ -70,11 +70,11 @@ class SanInfrasController < ApplicationController
         san_infra.mode,
         san_infra.id
       ]
-    end 
+    end
   end
 
   def datatable_search
-    @san_infras.where("infra like :search or fabric like :search or switch like :search or speed like :search or status like :search or portname like :search or mode like :search", 
+    @san_infras.where("infra like :search or fabric like :search or switch like :search or speed like :search or status like :search or portname like :search or mode like :search",
     search: "%#{params[:sSearch]}%")
   end
 

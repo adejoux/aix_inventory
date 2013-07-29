@@ -16,18 +16,13 @@
         =f.submit "Excel Export", :class => "btn btn-warning", :name => 'export'
         = link_to "Reset", servers_path({:clear => 'yes'}), :class => "btn btn-primary"
 .row
-  .span12        
-    %table{ :id => "datatable1", :class => "table table-striped", :data => { :source => "#{ servers_url(format: "json") }" } }
+  .span12
+    %table{ :id => "srv_datatable", :class => "table table-striped", :data => { :source => "#{ servers_url(format: "json") }" } }
       %thead
         %tr
           %th customer
           %th hostname
-          %th OS version
           %th OS type
-          %th global image
-          %th nim
-          %th install date
-          %th model
-          %th serial #
-          %th firmware
+          %th OS version
+          %th run date
       %tbody
