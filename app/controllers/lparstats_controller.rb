@@ -13,22 +13,12 @@ class LparstatsController < ApplicationController
       params.merge( session[:lpar_last_query] )
     end
 
-    if params[:export].present?
-      redirect_to :action => 'index', :format => 'xlsx'
-      return
-    end
-
-    if current_user.customer_scope.present?
-      @search = Lparstat.scoped_customer(current_user.customer_scope).search(session[:last_query])
-      @total_records = Lparstat.scoped_customer(current_user.customer_scope).count
-    else
-      @search = Lparstat.joins(:server).search(session[:lpar_last_query])
-      @total_records = Lparstat.count
-    end
+    @search = Lparstat.customer_scope(current_user.customer_scope).search(session[:last_query])
+    @total_records = Lparstat.customer_scope(current_user.customer_scope).count
 
     @lparstats = @search.result
 
-    @lparstats = @lparstats.order("#{sort_column} #{sort_direction}")
+    @lparstats = @lparstats.joins(:server).order("#{sort_column} #{sort_direction}")
     @search.build_condition
 
     respond_to do |format|
@@ -69,7 +59,8 @@ private
   end
 
   def sort_column
-    columns = %w[servers.customer servers.model partition_name lpar_type mode online_virtual_cpus entitled_capacity online_memory minimum_virtual_cpus desired_virtual_cpus maximum_virtual_cpus minimum_capacity desired_capacity maximum_capacity minimum_memory desired_memory maximum_memory]
+    #TODO fix sort model
+    columns = %w[servers.customer servers.customer partition_name lpar_type mode online_virtual_cpus entitled_capacity online_memory minimum_virtual_cpus desired_virtual_cpus maximum_virtual_cpus minimum_capacity desired_capacity maximum_capacity minimum_memory desired_memory maximum_memory]
     columns[params[:iSortCol_0].to_i]
   end
 end

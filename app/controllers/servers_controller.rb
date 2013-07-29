@@ -16,23 +16,10 @@ class ServersController < ApplicationController
       params.merge( session[:last_query] )
     end
 
-    if params[:export].present?
-      redirect_to :action => 'index', :format => 'xlsx'
-      return
-    end
+    @search = Server.customer_scope(current_user.customer_scope).search(session[:last_query])
+    @total_records = Server.customer_scope(current_user.customer_scope).count
 
-    if current_user.customer_scope.present?
-      @search = Server.scoped_by_customer(current_user.customer_scope).search(session[:last_query])
-      @total_records = Server.scoped_by_customer(current_user.customer_scope).count
-    else
-      @search = Server.search(session[:last_query])
-      @total_records = Server.count
-    end
     @servers = @search.result
-
-    if params[:sSearch].present?
-      @servers = datatable_search
-    end
 
     @servers = @servers.order("#{sort_column} #{sort_direction}")
     @search.build_condition

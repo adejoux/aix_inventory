@@ -103,4 +103,12 @@ class Server < ActiveRecord::Base
     joins(:healthchecks).where('servers.customer like :search or servers.hostname like :search or healthchecks.check like :search or healthchecks.status like :search ',
       search: search)
   end
+
+  def self.customer_scope(customer)
+    unless customer.empty?
+      where("servers.customer = ?", customer)
+    else
+      scoped
+    end
+  end
 end

@@ -14,19 +14,9 @@ class HardwaresController < ApplicationController
       params.merge( session[:hw_last_query] )
     end
 
-    if params[:export].present?
-      redirect_to :action => 'index', :format => 'xlsx'
-      return
-    end
+    @search = Hardware.customer_scope(current_user.customer_scope).search(session[:hw_last_query])
+    @total_records = Hardware.customer_scope(current_user.customer_scope).count
 
-    @search=Hardware.includes(:servers)
-    if current_user.customer_scope.present?
-      @search = @search.customer_scope(current_user.customer_scope).search(session[:hw_last_query])
-      @total_records = Hardware.customer_scope(current_user.customer_scope).count
-    else
-      @search = @search.search(session[:hw_last_query])
-      @total_records = Hardware.count
-    end
     @hardwares = @search.result
 
     @search.build_condition
@@ -38,13 +28,13 @@ class HardwaresController < ApplicationController
          @total_display_records = @hardwares.count
          @data = datatable_data
       }
-      format.xlsx { @hardwares }
+      format.xlsx
     end
   end
 
 private
   def datatable_data
-     @hardwares.limit(per_page).offset((page - 1)*per_page).map do |hardware|
+     @hardwares.page(page).per_page(per_page).map do |hardware|
         [
           hardware.servers.map { |srv| srv.customer }.uniq,
           hardware.sys_model,

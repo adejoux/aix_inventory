@@ -44,10 +44,16 @@ class ServerImport
     server.os_type = csv_line[:os_type]
 
     server.os_version = csv_line[:os_version]
-    hardware=server.build_hardware
-    hardware.firmware = csv_line[:sys_fwversion]
-    hardware.serial = csv_line[:sys_id].to_s
-    hardware.sys_model = csv_line[:sys_model]
+    result=Hardware.find_by_serial(csv_line[:sys_id].to_s)
+    if result.nil?
+      hardware=server.build_hardware
+      hardware.firmware = csv_line[:sys_fwversion]
+      hardware.serial = csv_line[:sys_id].to_s
+      hardware.sys_model = csv_line[:sys_model]
+    else
+      server.hardware=result
+    end
+
     server.run_date = csv_line[:run_date]
 
     if csv_line[:lparstat] =~ /:/

@@ -13,7 +13,7 @@
       = link_to_add_fields "Add Conditions", f, :condition
       .form-actions
         = f.submit "Search", :class => "btn btn-success"
-        = f.submit "Excel Export", :class => "btn btn-warning", :name => 'export'
+        = link_to "Excel Export", hardwares_path(:format => :xlsx), :class => "btn btn-warning"
         = link_to "Reset", hardwares_path({:clear => 'yes'}), :class => "btn btn-primary"
 .row
   .span12
@@ -22,8 +22,8 @@
         %tr
           %th customer
           %th model
+          %th serial #
           %th firmware
           %th recommended firmware
-          %th serial #
           %th partitions count
       %tbody

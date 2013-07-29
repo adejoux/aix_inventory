@@ -13,10 +13,10 @@
       = link_to_add_fields "Add Conditions", f, :condition
       .form-actions
         =f.submit "Search", :class => "btn btn-success"
-        =f.submit "Excel Export", :class => "btn btn-warning", :name => 'export'
+        = link_to "Excel Export", lparstats_path(:format => :xlsx), :class => "btn btn-warning"
         = link_to "Reset", servers_path({:clear => 'yes'}), :class => "btn btn-primary"
 .row
-  .span12        
+  .span12
     %table{ :id => "lpar_datatable", :class => "table table-striped table-bordered", :data => { :source => "#{ lparstats_url(format: "json") }" } }
       %thead
         %tr
