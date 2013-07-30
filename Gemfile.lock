@@ -26,9 +26,16 @@ GEM
     activerecord-jdbcmysql-adapter (1.2.7)
       activerecord-jdbc-adapter (~> 1.2.7)
       jdbc-mysql (~> 5.1.0)
+    activerecord-jdbcpostgresql-adapter (1.2.7)
+      activerecord-jdbc-adapter (~> 1.2.7)
+      jdbc-postgres (>= 9.1, < 9.3)
     activerecord-jdbcsqlite3-adapter (1.2.7)
       activerecord-jdbc-adapter (~> 1.2.7)
       jdbc-sqlite3 (~> 3.7.2)
+    activerecord-postgres-hstore (0.7.6)
+      activerecord (>= 3.1)
+      pg-hstore (>= 1.1.5)
+      rake
     activeresource (3.2.14)
       activemodel (= 3.2.14)
       activesupport (= 3.2.14)
@@ -141,6 +148,7 @@ GEM
     htmlentities (4.3.1)
     i18n (0.6.4)
     jdbc-mysql (5.1.24)
+    jdbc-postgres (9.2.1002.1)
     jdbc-sqlite3 (3.7.2.1)
     journey (1.0.4)
     jquery-datatables-rails (1.11.2)
@@ -190,6 +198,8 @@ GEM
       activesupport (>= 3.0.0)
       cocaine (~> 0.5.0)
       mime-types
+    pg (0.16.0)
+    pg-hstore (1.2.0)
     polyamorous (0.5.0)
       activerecord (~> 3.0)
     polyglot (0.3.3)
@@ -337,7 +347,9 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-jdbcmysql-adapter
+  activerecord-jdbcpostgresql-adapter
   activerecord-jdbcsqlite3-adapter
+  activerecord-postgres-hstore
   annotate
   axlsx
   axlsx_rails
@@ -366,6 +378,7 @@ DEPENDENCIES
   mysql2
   paper_trail
   paperclip
+  pg
   quiet_assets
   rails (= 3.2.14)
   rails-erd

@@ -20,6 +20,7 @@
 #
 
 class Server < ActiveRecord::Base
+  serialize :properties, ActiveRecord::Coders::Hstore
   has_many :aix_ports, :dependent => :destroy, :autosave => true
   has_many :aix_paths, :dependent => :destroy, :autosave => true
   has_many :healthchecks, :dependent => :destroy, :autosave => true
@@ -34,7 +35,7 @@ class Server < ActiveRecord::Base
   belongs_to :hardware
   accepts_nested_attributes_for :hardware
 
-  attr_accessible :customer, :hostname, :os_type, :os_version
+  attr_accessible :customer, :hostname, :os_type, :os_version, :properties
 
   # validations
   validates_presence_of :customer, :hostname, :os_type, :os_version
@@ -105,7 +106,7 @@ class Server < ActiveRecord::Base
   end
 
   def self.customer_scope(customer)
-    unless customer.empty?
+    unless customer.nil? or customer.empty?
       where("servers.customer = ?", customer)
     else
       scoped

@@ -67,7 +67,7 @@ class Lparstat < ActiveRecord::Base
   end
 
   def self.customer_scope(customer)
-    unless customer.empty?
+    unless customer.nil? or customer.empty?
       joins(:server).where("servers.customer = ?", customer)
     else
       scoped

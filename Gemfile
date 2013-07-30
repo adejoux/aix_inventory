@@ -6,6 +6,7 @@ gem 'haml-rails'
 platforms :ruby do
   gem 'sqlite3'
   gem 'mysql2'
+  gem 'pg'
   gem 'libv8'
   gem "therubyracer"
   gem 'thin'
@@ -27,6 +28,7 @@ platforms :jruby do
   gem 'jruby-openssl'
   gem 'activerecord-jdbcsqlite3-adapter'
   gem 'activerecord-jdbcmysql-adapter'
+  gem 'activerecord-jdbcpostgresql-adapter'
 end
 
 
@@ -76,3 +78,4 @@ gem 'annotate'
 gem 'workflow'
 gem 'paper_trail'
 gem 'turbolinks'
+gem 'activerecord-postgres-hstore'

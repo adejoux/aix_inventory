@@ -18,7 +18,7 @@ class Upload < ActiveRecord::Base
   attr_accessible :upload, :import_type, :workflow_state
   has_attached_file :upload
   has_one :import_log, :dependent => :destroy
-  
+
   TYPES = %w[server san sod]
 
   workflow do
@@ -29,7 +29,7 @@ class Upload < ActiveRecord::Base
       event :processing, :transition_to => :importing
     end
 
-    state :importing do 
+    state :importing do
       event :processed, :transition_to => :imported
     end
 
@@ -80,7 +80,7 @@ class Upload < ActiveRecord::Base
           end
           next unless entry[:version] == "1.8".to_f
           imported_server = ServerImport.new(entry)
-          begin 
+          begin
             imported_server.save!
             imported_server.save_softwares!
           rescue  Exception => e
@@ -116,7 +116,7 @@ class Upload < ActiveRecord::Base
             next
           end
           imported_san_infra = SanInfraImport.new(entry)
-          begin 
+          begin
             imported_san_infra.save!
             imported_san_infra.save_wwpns!
           rescue  Exception => e
@@ -131,7 +131,7 @@ class Upload < ActiveRecord::Base
     end
     import_log.save
   end
-  
+
 
   def sod_import
 
@@ -145,11 +145,11 @@ class Upload < ActiveRecord::Base
       return false
     end
   end
-  
+
   def self.imported_state
-    where('workflow_state = "imported"')
+    where(:workflow_state => "imported")
   end
-  
+
   def analyze_result
     if import_log.success_count == 0
       error!
