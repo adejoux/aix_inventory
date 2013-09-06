@@ -1,0 +1,82 @@
+<servers>
+<server>
+  <name>MHIS1003</name>
+  <version>2.1</version>
+  <run>2013/09/03 13:35</run>
+  <CPM>ibm-cpm-linux-20130410-1smart.noarch</CPM>
+  <fibre_parameters>N/I</fibre_parameters>
+  <nim>N/I</nim>
+  <NTPd><srv>129.39.141.8</srv><srv>129.39.141.9</srv></NTPd>
+  <pconsole>N/A</pconsole>
+  <SSH>LogLevel</SSH>
+  <syslog>logrotate ERROR : ALERT exited abnormally with [1]</syslog>
+  <TAD4D></TAD4D>
+  <TSM>N/I</TSM>
+  <xmdaily>N/A</xmdaily>
+  <dapapath>N/I</dapapath>
+  <global_image></global_image>
+  <install_date>Mon Jul 1 15:16:23 2013</install_date>
+  <lspath>N/I</lspath>
+  <os_type>Linux</os_type>
+  <os_version><type>RHEL6</type><update>U2</update><arch>x86_64</arch><kernel>2.6.32-220.el6.x86_64</kernel></os_version>
+  <pcmpath>N/I</pcmpath>
+  <powermt>N/I</powermt>
+  <sdd_driver></sdd_driver>
+  <ssh_version>OpenSSH_5.3p1, OpenSSL 1.0.0-fips 29 Mar 2010</ssh_version>
+  <sudo_version>Sudo version 1.7.4p5</sudo_version>
+  <sys_fwversion>[G0E177AUS-1.77]</sys_fwversion>
+  <sys_id>0685101</sys_id>
+  <sys_model><manufacturer>IBM</manufacturer><model>x3850-X5-[71451RG]</model></sys_model>
+  <wwpn><host3><brand>QLogic</brand><model></model><type></type><speed>4GB</speed><port>Dual-Port</port><driverversion>8.03.07.05.06.2-k</driverversion><fcs>21000024FF2CF4DE</fcs><link>Down</link></host3><host4><brand>QLogic</brand><model></model><type></type><speed>4GB</speed><port>Dual-Port</port><driverversion>8.03.07.05.06.2-k</driverversion><fcs>21000024FF2CF4DF</fcs><link>Down</link></host4></wwpn>
+  <lsdf><fs><name>/</name><size>144G</size><free>116G</free></fs><fs><name>/APPvg</name><size>687G</size><free>652G</free></fs><fs><name>/AppSource</name><size>111G</size><free>105G</free></fs></lsdf>
+  <lsvg><vg><name>vgAPP</name><size>697.93G</size><free>0G</free><pv1>/dev/sdb2</pv1></vg><vg><name>vggAppSource</name><size>112.28G</size><free>0G</free><pv1>/dev/sdb3</pv1></vg></lsvg>
+  <lvmfilter><add><f1>/dev/mapper/mpath.*/</f1><f2>/dev/sda2/</f2><f3>/dev/sdb2/</f3><f4>/dev/sdb3/</f4></add><remove><f1>/.*/</f1></remove></lvmfilter>
+  <phyVM>Physical</phyVM>
+  <RAM>82503416kB</RAM>
+  <SWAP>84738040kB</SWAP>
+  <uptime><days>62</days><hours>23</hours><minutes>49</minutes></uptime>
+  <VMwaretools></VMwaretools>
+  <lparstat>N/I</lparstat>
+</server>
+<server>
+  <name>client05</name>
+  <version>2.1</version>
+  <run>2013/09/03 13:45</run>
+  <CPM>ibm-cpm-linux-20130410-1smart.noarch</CPM>
+  <fibre_parameters>N/I</fibre_parameters>
+  <nim>N/I</nim>
+  <NTPd><server>ehngsa.ibm.com</><server>129.39.141.8</><server>129.39.141.9</></NTPd>
+  <pconsole>N/A</pconsole>
+  <SSH>LogLevel</SSH>
+  <syslog>logrotate WARNING</syslog>
+  <TAD4D>N/C</TAD4D>
+  <TSM>N/I</TSM>
+  <xmdaily>N/A</xmdaily>
+  <dapapath>N/I</dapapath>
+  <global_image>Standard Build STD</global_image>
+  <install_date>Tue Apr 9 14:11:31 2013</install_date>
+  <lspath>N/I</lspath>
+  <os_type>Linux</os_type>
+  <os_version><type>RHEL6</type><update>U4</update><arch>x86_64</arch><kernel>2.6.32-358.el6.x86_64</kernel></os_version>
+  <pcmpath>N/I</pcmpath>
+  <powermt>N/I</powermt>
+  <sdd_driver></sdd_driver>
+  <ssh_version>OpenSSH_5.3p1, OpenSSL 1.0.0-fips 29 Mar 2010</ssh_version>
+  <sudo_version>Sudo version 1.8.6p3</sudo_version>
+  <sys_fwversion>6.00</sys_fwversion>
+  <sys_id>VMware-564db213c4b6c625-e1df8549004d9793</sys_id>
+  <sys_model><manufacturer>VMware</manufacturer><model>VMware-Virtual-Platform</model></sys_model>
+  <wwpn></wwpn>
+  <lsdf><fs><name>/</name><size>2.2G</size><free>984M</free></fs><fs><name>/boot</name><size>260M</size><free>192M</free></fs><fs><name>/exploit</name><size>1.1G</size><free>969M</free></fs><fs><name>/home</name><size>3.2G</size><free>1.1G</free></fs><fs><name>/opt</name><size>1.1G</size><free>329M</free></fs><fs><name>/tmp</name><size>1.1G</size><free>966M</free></fs><fs><name>/usr</name><size>3.2G</size><free>533M</free></fs><fs><name>/var</name><size>1.1G</size><free>587M</free></fs><fs><name>/var/log</name><size>2.2G</size><free>1.5G</free></fs></lsdf>
+  <lsvg><vg><name>rootvg</name><size>21.17G</size><free>3.99G</free><pv1>/dev/sda2</pv1></vg></lsvg>
+  <lvmfilter></lvmfilter>
+  <phyVM>Virtual</phyVM>
+  <RAM>1922472kB</RAM>
+  <SWAP>2097144kB</SWAP>
+  <uptime><days>0</days><hours>19</hours><minutes>14</minutes></uptime>
+  <VMwaretools>8.3.17.15269 (build-784891)</VMwaretools>
+  <lparstat>N/I</lparstat>
+</server>
+</servers>
+
+

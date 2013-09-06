@@ -8,7 +8,7 @@ class Hardware < ActiveRecord::Base
   validates :sys_model, :format => { :with => /-/, :message => "should be like TTTT-MMM"}
 
   def self.customer_scope(customer)
-    unless customer.empty?
+    unless customer.nil? or customer.empty?
       joins(:servers).where("servers.customer = ?", customer)
     else
       scoped

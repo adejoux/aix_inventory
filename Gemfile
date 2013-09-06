@@ -79,3 +79,8 @@ gem 'workflow'
 gem 'paper_trail'
 gem 'turbolinks'
 gem 'activerecord-postgres-hstore'
+
+# adding sidekiq
+gem 'sidekiq'
+gem 'sinatra', require: false
+gem 'slim'

@@ -56,9 +56,9 @@ class ServerImport
 
     properties={}
 
-    properties["nim"]=csv_line[:nim]
-    properties["global_image"]=csv_line[:global_image]
-    properties["install_date"]=csv_line[:install_date]
+    properties[:nim]=csv_line[:nim]
+    properties[:global_image]=csv_line[:global_image]
+    properties[:install_date]=csv_line[:install_date]
 
     server.properties=properties
     server.run_date = csv_line[:run_date]

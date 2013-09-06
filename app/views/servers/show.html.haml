@@ -9,13 +9,14 @@
         %li=link_to "lpar", "#lpar"
         %li=link_to "hardware", "#hardware"
         %li=link_to "san", "#san"
+        %li=link_to "properties", "#properties"
         %li=link_to "healthchecks", "#healthchecks"
-      %br  
+      %br
       = link_to 'back', servers_path, :class => "btn btn-primary"
       - if current_user.role == "admin"
-        = link_to 'edit', edit_server_path(@server), :class => "btn btn-danger" 
+        = link_to 'edit', edit_server_path(@server), :class => "btn btn-danger"
   .span9
-    #release 
+    #release
       =render 'release'
     #lpar
       =render 'lpar'
@@ -25,7 +26,9 @@
       =render 'hardware'
     #san
       =render 'san'
+    #properties
+      =render 'properties'
     #healthchecks
       =render 'healthchecks'
-    
+
 

@@ -1,0 +1,11 @@
+%h2 Properties
+%table.table.table-bordered.table-striped
+  %thead
+    %tr
+      %th property
+      %th value
+  %tbody
+    - @server.properties.each_pair do |property, value|
+      %tr
+        %td= property
+        %td= value

@@ -70,6 +70,12 @@ AixInventory::Application.routes.draw do
     end
   end
 
+
   resources :aix_alerts
   root to: 'statistics#general'
+
+  require 'sidekiq/web'
+  authenticate :user, lambda { |u| u.role == "admin" } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 end
