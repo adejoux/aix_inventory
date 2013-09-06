@@ -84,3 +84,6 @@ gem 'activerecord-postgres-hstore'
 gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'slim'
+
+gem "clockwork"
+gem 'sanitize'

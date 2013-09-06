@@ -92,6 +92,9 @@ GEM
       builder (>= 2.1.2)
     climate_control (0.0.3)
       activesupport (>= 3.0)
+    clockwork (0.5.2)
+      activesupport
+      tzinfo (~> 0.3.35)
     cocaine (0.5.1)
       climate_control (>= 0.0.3, < 1.0)
     coderay (1.0.9)
@@ -280,6 +283,8 @@ GEM
     ruby_parser (3.1.2)
       sexp_processor (~> 4.1)
     rubyzip (0.9.9)
+    sanitize (2.0.3)
+      nokogiri (>= 1.4.4, < 1.6)
     sass (3.2.7)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -379,6 +384,7 @@ DEPENDENCIES
   cancan
   capybara
   ci_reporter
+  clockwork
   coffee-rails (~> 3.2.1)
   delayed_job_active_record
   devise
@@ -404,6 +410,7 @@ DEPENDENCIES
   ransack
   raphael-rails
   rspec-rails
+  sanitize
   sass-rails (~> 3.2.3)
   sidekiq
   simplecov
