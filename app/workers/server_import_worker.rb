@@ -8,8 +8,8 @@ class ServerImportWorker
 
   def perform
     puts Rails.root
-    new_path=Rails.root.join('import','new','conf').to_s
-    done_path=Rails.root.join('import','imported','conf').to_s
+    new_path=Rails.root.join('import','server','new').to_s
+    done_path=Rails.root.join('import','server','imported').to_s
     files = Dir.entries(new_path).select{|x| x.end_with?("json")}
     files.each do |x|
       process_server([new_path,x].join('/'))

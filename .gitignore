@@ -25,3 +25,4 @@ coverage/
 doc/app
 spec/reports/
 *atabase.yml
+import/
