@@ -70,6 +70,11 @@ AixInventory::Application.routes.draw do
     end
   end
 
+  resources :health_checks do
+    member do
+      get :history
+    end
+  end
 
   resources :aix_alerts
   root to: 'statistics#general'

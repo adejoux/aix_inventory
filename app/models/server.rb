@@ -23,7 +23,7 @@ class Server < ActiveRecord::Base
   serialize :properties, ActiveRecord::Coders::Hstore
   has_many :aix_ports, :dependent => :destroy, :autosave => true
   has_many :aix_paths, :dependent => :destroy, :autosave => true
-  has_many :healthchecks, :dependent => :destroy, :autosave => true
+  has_many :health_checks, :dependent => :destroy, :autosave => true
   has_many :software_deployments
   has_one :lparstat
   has_many :softwares, :through => :software_deployments
@@ -89,21 +89,23 @@ class Server < ActiveRecord::Base
   #  - *status* -> OK status for the helathcheck service
   # * *Returns* :
   #   - returns every servers where healthcheck status is not equals to *status*
-  def self.retrieve_aix_invalid_status(check,status)
-    joins(:healthchecks).where('healthchecks.check = ?', check)
-      .where('healthchecks.status != ?', status)
-      .select('servers.customer, servers.hostname, healthchecks.check as healthcheck, healthchecks.status as status')
-  end
+
+  # def self.retrieve_aix_invalid_status(check,status)
+  #   joins(:healthchecks).where('healthchecks.check = ?', check)
+  #     .where('healthchecks.status != ?', status)
+  #     .select('servers.customer, servers.hostname, healthchecks.check as healthcheck, healthchecks.status as status')
+  # end
 
   # This method provides a find method on servers attributes
   # * *Args*    :
   #  - *search* -> search criteria
   # * *Returns* :
   #   - returns every servers where healthcheck status is not equals to *status*
-  def self.aix_alerts_search(search)
-    joins(:healthchecks).where('servers.customer like :search or servers.hostname like :search or healthchecks.check like :search or healthchecks.status like :search ',
-      search: search)
-  end
+
+  # def self.aix_alerts_search(search)
+  #   joins(:healthchecks).where('servers.customer like :search or servers.hostname like :search or healthchecks.check like :search or healthchecks.status like :search ',
+  #     search: search)
+  # end
 
   def self.customer_scope(customer)
     unless customer.nil? or customer.empty?

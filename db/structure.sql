@@ -248,6 +248,42 @@ ALTER SEQUENCE hardwares_id_seq OWNED BY hardwares.id;
 
 
 --
+-- Name: health_checks; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE health_checks (
+    id integer NOT NULL,
+    name character varying(255),
+    description text,
+    return_code integer,
+    output text,
+    hc_errors text,
+    server_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: health_checks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE health_checks_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: health_checks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE health_checks_id_seq OWNED BY health_checks.id;
+
+
+--
 -- Name: healthcheck_versions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -280,39 +316,6 @@ CREATE SEQUENCE healthcheck_versions_id_seq
 --
 
 ALTER SEQUENCE healthcheck_versions_id_seq OWNED BY healthcheck_versions.id;
-
-
---
--- Name: healthchecks; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE healthchecks (
-    id integer NOT NULL,
-    "check" character varying(255),
-    status character varying(255),
-    server_id integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: healthchecks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE healthchecks_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: healthchecks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE healthchecks_id_seq OWNED BY healthchecks.id;
 
 
 --
@@ -940,14 +943,14 @@ ALTER TABLE ONLY hardwares ALTER COLUMN id SET DEFAULT nextval('hardwares_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY healthcheck_versions ALTER COLUMN id SET DEFAULT nextval('healthcheck_versions_id_seq'::regclass);
+ALTER TABLE ONLY health_checks ALTER COLUMN id SET DEFAULT nextval('health_checks_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY healthchecks ALTER COLUMN id SET DEFAULT nextval('healthchecks_id_seq'::regclass);
+ALTER TABLE ONLY healthcheck_versions ALTER COLUMN id SET DEFAULT nextval('healthcheck_versions_id_seq'::regclass);
 
 
 --
@@ -1104,19 +1107,19 @@ ALTER TABLE ONLY hardwares
 
 
 --
+-- Name: health_checks_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY health_checks
+    ADD CONSTRAINT health_checks_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: healthcheck_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY healthcheck_versions
     ADD CONSTRAINT healthcheck_versions_pkey PRIMARY KEY (id);
-
-
---
--- Name: healthchecks_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY healthchecks
-    ADD CONSTRAINT healthchecks_pkey PRIMARY KEY (id);
 
 
 --
@@ -1275,20 +1278,6 @@ CREATE INDEX index_healthcheck_versions_on_item_type_and_item_id ON healthcheck_
 
 
 --
--- Name: index_healthchecks_on_server_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_healthchecks_on_server_id ON healthchecks USING btree (server_id);
-
-
---
--- Name: index_healthchecks_on_server_id_and_check; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE UNIQUE INDEX index_healthchecks_on_server_id_and_check ON healthchecks USING btree (server_id, "check");
-
-
---
 -- Name: index_lparstat_versions_on_item_type_and_item_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1433,3 +1422,7 @@ INSERT INTO schema_migrations (version) VALUES ('20130728193703');
 INSERT INTO schema_migrations (version) VALUES ('20130730160530');
 
 INSERT INTO schema_migrations (version) VALUES ('20130730164212');
+
+INSERT INTO schema_migrations (version) VALUES ('20130908145747');
+
+INSERT INTO schema_migrations (version) VALUES ('20130908150654');

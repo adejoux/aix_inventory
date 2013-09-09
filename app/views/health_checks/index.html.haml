@@ -1,0 +1,34 @@
+- model_class = HealthCheck
+.row
+  .span12
+    .page-header
+      %h1 Health Checks
+
+.row
+  .span9.offset2
+    %table.table.table-striped.table-bordered
+      %thead
+        %tr
+          %th= model_class.human_attribute_name(:name)
+          %th= model_class.human_attribute_name(:server_name)
+          %th= model_class.human_attribute_name(:description)
+          %th= model_class.human_attribute_name(:output)
+          %th= model_class.human_attribute_name(:info)
+          %th= model_class.human_attribute_name(:return_code)
+          %th= model_class.human_attribute_name(:hc_erors)
+          - if can? :manage, HealthCheck
+            %th=t '.actions', :default => t("helpers.actions")
+      %tbody
+        - @hcs.each do |hc|
+          %tr
+            %td= hc.name
+            %td= hc.srv.name
+            %td= hc.description.to_s.html_safe
+            %td= hc.output.html_safe
+            %td= hc.info
+            %td= hc.return_code
+            %td= hc.hc_errors
+            - if can? :manage, HealthCheck
+              %td
+                = link_to t('.show', :default => t("helpers.links.show")), health_check_path(hc), :class => 'btn btn-mini'
+

@@ -10,7 +10,6 @@
         %li=link_to "hardware", "#hardware"
         %li=link_to "san", "#san"
         %li=link_to "properties", "#properties"
-        %li=link_to "healthchecks", "#healthchecks"
       %br
       = link_to 'back', servers_path, :class => "btn btn-primary"
       - if current_user.role == "admin"
@@ -28,7 +27,3 @@
       =render 'san'
     #properties
       =render 'properties'
-    #healthchecks
-      =render 'healthchecks'
-
-
