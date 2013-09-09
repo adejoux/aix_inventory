@@ -1,12 +1,13 @@
-%h2 hardware
-%table.table.table-bordered.table-striped
-  %thead
-    %tr
-      %th model
-      %th serial number
-      %th firmware
-  %tbody
-    %tr
-      %td= @server.hardware.sys_model
-      %td= @server.hardware.serial
-      %td= @server.hardware.firmware
+- unless @server.hardware.nil?
+  %h2 hardware
+  %table.table.table-bordered.table-striped
+    %thead
+      %tr
+        %th model
+        %th serial number
+        %th firmware
+    %tbody
+      %tr
+        %td= @server.hardware.sys_model
+        %td= @server.hardware.serial
+        %td= @server.hardware.firmware

@@ -39,7 +39,7 @@ class ServersController < ApplicationController
   # GET /servers/1
   # GET /servers/1.json
   def show
-    @server = Server.includes(:healthchecks).includes(:san_infras).includes(:softwares).find(params[:id])
+    @server = Server.includes(:health_checks).includes(:san_infras).includes(:softwares).find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -80,8 +80,8 @@ class ServersController < ApplicationController
       [
         server.customer,
         server.hostname,
-        server.os_type,
-        server.os_version,
+        server.os_type || "NF",
+        server.os_version || "NF",
         server.run_date.to_s
       ]
     end

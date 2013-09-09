@@ -38,7 +38,7 @@ class Server < ActiveRecord::Base
   attr_accessible :customer, :hostname, :os_type, :os_version, :properties
 
   # validations
-  validates_presence_of :customer, :hostname, :os_type, :os_version
+  validates_presence_of :customer, :hostname
 
   validates :hostname, uniqueness: { scope: :customer  }
 

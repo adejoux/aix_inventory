@@ -1,34 +1,26 @@
 - model_class = HealthCheck
 .row
-  .span12
-    .page-header
-      %h1 Health Checks
+.span12
+  .page-header
+    %h1 Health Checks
+  %h2 Advanced search
+  = search_form_for @search, :url=> search_health_checks_path, :html => {:class => "form-inline"}, method: :post do |f|
+    = f.condition_fields do |c|
+      = render "condition_fields", f: c
+    = link_to_add_fields "Add Conditions", f, :condition
+    .form-actions
+      =f.submit "Search", :class => "btn btn-success"
+      = link_to "Reset", health_checks_path({:clear => 'yes'}), :class => "btn btn-primary"
+  %table{ :id => "hc_datatable", :class => "table table-striped", :data => { :source => "#{ health_checks_url(format: "json") }" } }
+    %thead
+      %tr
+        %th= model_class.human_attribute_name(:name)
+        %th= model_class.human_attribute_name(:server_name)
+        %th= model_class.human_attribute_name(:description)
+        %th= model_class.human_attribute_name(:output)
+        %th= model_class.human_attribute_name(:info)
+        %th= model_class.human_attribute_name(:return_code)
+        %th= model_class.human_attribute_name(:hc_erors)
+    %tbody
 
-.row
-  .span9.offset2
-    %table.table.table-striped.table-bordered
-      %thead
-        %tr
-          %th= model_class.human_attribute_name(:name)
-          %th= model_class.human_attribute_name(:server_name)
-          %th= model_class.human_attribute_name(:description)
-          %th= model_class.human_attribute_name(:output)
-          %th= model_class.human_attribute_name(:info)
-          %th= model_class.human_attribute_name(:return_code)
-          %th= model_class.human_attribute_name(:hc_erors)
-          - if can? :manage, HealthCheck
-            %th=t '.actions', :default => t("helpers.actions")
-      %tbody
-        - @hcs.each do |hc|
-          %tr
-            %td= hc.name
-            %td= hc.srv.name
-            %td= hc.description.to_s.html_safe
-            %td= hc.output.html_safe
-            %td= hc.info
-            %td= hc.return_code
-            %td= hc.hc_errors
-            - if can? :manage, HealthCheck
-              %td
-                = link_to t('.show', :default => t("helpers.links.show")), health_check_path(hc), :class => 'btn btn-mini'
 

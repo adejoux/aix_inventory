@@ -260,7 +260,8 @@ CREATE TABLE health_checks (
     hc_errors text,
     server_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    info text
 );
 
 
@@ -1426,3 +1427,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130730164212');
 INSERT INTO schema_migrations (version) VALUES ('20130908145747');
 
 INSERT INTO schema_migrations (version) VALUES ('20130908150654');
+
+INSERT INTO schema_migrations (version) VALUES ('20130909130132');

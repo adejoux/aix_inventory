@@ -70,7 +70,10 @@ AixInventory::Application.routes.draw do
     end
   end
 
-  resources :health_checks do
+  resources :health_checks, :only => [:index, :show] do
+    collection do
+      post :search, to: 'health_checks#index'
+    end
     member do
       get :history
     end

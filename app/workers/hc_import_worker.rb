@@ -11,8 +11,10 @@ class HcImportWorker
       json['CHECKS'].each do |x|
         puts x['SERVER']
 
-        srv = Server.find_or_create_by_name(:name => x['SERVER'])
-        srv.customer=json['CUSTOMER']
+        srv = Server.find_or_create_by_hostname(:hostname => x['SERVER'])
+        if srv.customer.nil?
+          srv.customer=json['CUSTOMER']
+        end
 
         x['RESULTS'].each do |y|
             hc = srv.health_checks.select{|h| h.name==y['PLUG']}.first
@@ -32,14 +34,12 @@ class HcImportWorker
 
 
   def perform
-    puts Rails.root
     new_path=Rails.root.join('import', 'hcm', 'new').to_s
     done_path=Rails.root.join('import','hcm', 'imported').to_s
     files = Dir.entries(new_path).select{|x| x.end_with?("json")}
     files.each do |x|
-
-    hcm_json([new_path,x].join('/'))
-    File.rename([new_path,x].join('/'), [done_path,x+Time.new.to_s.gsub(' ','-')].join('/'))
+      hcm_json([new_path,x].join('/'))
+      File.rename([new_path,x].join('/'), [done_path,x+Time.new.to_s.gsub(' ','-')].join('/'))
     end
   end
 
