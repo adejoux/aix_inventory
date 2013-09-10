@@ -87,3 +87,4 @@ gem 'slim'
 
 gem "clockwork"
 gem 'sanitize'
+gem 'foreman', require: false
