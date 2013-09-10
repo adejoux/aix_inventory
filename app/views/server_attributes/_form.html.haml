@@ -1,0 +1,31 @@
+= form_for @server_attribute do |f|
+  - if @server_attribute.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@server_attribute.errors.count, "error")} prohibited this server_attribute from being saved:"
+      %ul
+        - @server_attribute.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :category
+    = f.text_field :category
+  .field
+    = f.label :description
+    = f.text_area :description
+  .field
+    = f.label :output
+    = f.text_area :output
+  .field
+    = f.label :conf_errors
+    = f.text_area :conf_errors
+  .field
+    = f.label :return_code
+    = f.number_field :return_code
+  .field
+    = f.label :server_id
+    = f.number_field :server_id
+  .actions
+    = f.submit 'Save'

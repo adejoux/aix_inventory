@@ -1,6 +1,9 @@
 # -*- encoding : utf-8 -*-
 AixInventory::Application.routes.draw do
 
+  resources :server_attributes
+
+
   get "wwpns/index"
 
   devise_for :users, :controllers => {:registrations => "users/registrations"}

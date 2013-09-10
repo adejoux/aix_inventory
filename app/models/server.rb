@@ -24,6 +24,7 @@ class Server < ActiveRecord::Base
   has_many :aix_ports, :dependent => :destroy, :autosave => true
   has_many :aix_paths, :dependent => :destroy, :autosave => true
   has_many :health_checks, :dependent => :destroy, :autosave => true
+  has_many :server_attributes, :dependent => :destroy, :autosave => true
   has_many :software_deployments
   has_one :lparstat
   has_many :softwares, :through => :software_deployments
@@ -31,9 +32,7 @@ class Server < ActiveRecord::Base
   has_many :san_infras, :through => :wwpns
   accepts_nested_attributes_for :softwares
   accepts_nested_attributes_for :wwpns
-
   belongs_to :hardware
-  accepts_nested_attributes_for :hardware
 
   attr_accessible :customer, :hostname, :os_type, :os_version, :properties
 

@@ -1,0 +1,27 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @server_attribute.name
+%p
+  %b Category:
+  = @server_attribute.category
+%p
+  %b Description:
+  = @server_attribute.description
+%p
+  %b Output:
+  = @server_attribute.output
+%p
+  %b Conf errors:
+  = @server_attribute.conf_errors
+%p
+  %b Return code:
+  = @server_attribute.return_code
+%p
+  %b Server:
+  = @server_attribute.server_id
+
+= link_to 'Edit', edit_server_attribute_path(@server_attribute)
+\|
+= link_to 'Back', server_attributes_path

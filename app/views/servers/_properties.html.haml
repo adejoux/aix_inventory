@@ -5,7 +5,7 @@
       %th property
       %th value
   %tbody
-    - @server.properties.each_pair do |property, value|
+    - @server.server_attributes.each do |attr|
       %tr
-        %td= property
-        %td= value
+        %td= attr.name
+        %td= attr.output

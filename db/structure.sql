@@ -544,6 +544,43 @@ CREATE TABLE schema_migrations (
 
 
 --
+-- Name: server_attributes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE server_attributes (
+    id integer NOT NULL,
+    name character varying(255),
+    category character varying(255),
+    description text,
+    output text,
+    conf_errors text,
+    return_code integer,
+    server_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: server_attributes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE server_attributes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: server_attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE server_attributes_id_seq OWNED BY server_attributes.id;
+
+
+--
 -- Name: server_versions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -993,6 +1030,13 @@ ALTER TABLE ONLY san_infras ALTER COLUMN id SET DEFAULT nextval('san_infras_id_s
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY server_attributes ALTER COLUMN id SET DEFAULT nextval('server_attributes_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY server_versions ALTER COLUMN id SET DEFAULT nextval('server_versions_id_seq'::regclass);
 
 
@@ -1161,6 +1205,14 @@ ALTER TABLE ONLY san_alerts
 
 ALTER TABLE ONLY san_infras
     ADD CONSTRAINT san_infras_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: server_attributes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY server_attributes
+    ADD CONSTRAINT server_attributes_pkey PRIMARY KEY (id);
 
 
 --
@@ -1429,3 +1481,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130908145747');
 INSERT INTO schema_migrations (version) VALUES ('20130908150654');
 
 INSERT INTO schema_migrations (version) VALUES ('20130909130132');
+
+INSERT INTO schema_migrations (version) VALUES ('20130910123753');

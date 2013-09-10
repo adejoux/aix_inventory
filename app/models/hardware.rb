@@ -5,7 +5,7 @@ class Hardware < ActiveRecord::Base
 
   validates_presence_of :firmware, :serial, :sys_model
   validates_uniqueness_of :serial
-  validates :sys_model, :format => { :with => /-/, :message => "should be like TTTT-MMM"}
+  #validates :sys_model, :format => { :with => /-/, :message => "should be like TTTT-MMM"}
 
   def self.customer_scope(customer)
     unless customer.nil? or customer.empty?

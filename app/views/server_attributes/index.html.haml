@@ -1,0 +1,31 @@
+%h1 Listing server_attributes
+
+%table
+  %tr
+    %th Name
+    %th Category
+    %th Description
+    %th Output
+    %th Conf errors
+    %th Return code
+    %th Server
+    %th
+    %th
+    %th
+
+  - @server_attributes.each do |server_attribute|
+    %tr
+      %td= server_attribute.name
+      %td= server_attribute.category
+      %td= server_attribute.description
+      %td= server_attribute.output
+      %td= server_attribute.conf_errors
+      %td= server_attribute.return_code
+      %td= server_attribute.server_id
+      %td= link_to 'Show', server_attribute
+      %td= link_to 'Edit', edit_server_attribute_path(server_attribute)
+      %td= link_to 'Destroy', server_attribute, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Server attribute', new_server_attribute_path
