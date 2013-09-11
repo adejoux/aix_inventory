@@ -1,5 +1,5 @@
-%h2 lpar
-- unless @server.lparstat.nil? 
+- unless @server.lparstat.nil?
+  %h2 lpar
   %table.table.table-bordered
     %thead
       %tr
@@ -18,5 +18,3 @@
         %td= @server.lparstat.online_virtual_cpus
         %td= @server.lparstat.entitled_capacity
         %td= @server.lparstat.online_memory
-- else
-  %p No lpar informations available

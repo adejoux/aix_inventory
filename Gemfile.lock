@@ -26,9 +26,6 @@ GEM
     activerecord-jdbcmysql-adapter (1.2.7)
       activerecord-jdbc-adapter (~> 1.2.7)
       jdbc-mysql (~> 5.1.0)
-    activerecord-jdbcpostgresql-adapter (1.2.7)
-      activerecord-jdbc-adapter (~> 1.2.7)
-      jdbc-postgres (>= 9.1, < 9.3)
     activerecord-jdbcsqlite3-adapter (1.2.7)
       activerecord-jdbc-adapter (~> 1.2.7)
       jdbc-sqlite3 (~> 3.7.2)
@@ -157,7 +154,6 @@ GEM
     htmlentities (4.3.1)
     i18n (0.6.4)
     jdbc-mysql (5.1.24)
-    jdbc-postgres (9.2.1002.1)
     jdbc-sqlite3 (3.7.2.1)
     journey (1.0.4)
     jquery-datatables-rails (1.11.2)
@@ -373,7 +369,6 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-jdbcmysql-adapter
-  activerecord-jdbcpostgresql-adapter
   activerecord-jdbcsqlite3-adapter
   annotate
   axlsx

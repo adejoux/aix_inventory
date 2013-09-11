@@ -1,5 +1,6 @@
 class ServerImportWorker
   include Sidekiq::Worker
+  sidekiq_options retry: false
 
   def process_server(filename)
     doc = Nokogiri.XML(File.open(filename,"rb"))
@@ -32,6 +33,8 @@ class ServerImportWorker
       srv.except!("sys_id")
       srv.except!("sys_model")
 
+
+
       srv.each_key do |attr|
         if srv[attr].is_a?(String)
           begin
@@ -48,7 +51,6 @@ class ServerImportWorker
       end
       begin
         server.save!
-        puts server.hardware.inspect
       rescue Exception => e
         puts "SAVE ERROR: #{e.message}\n"
         puts server.to_yaml
@@ -56,6 +58,8 @@ class ServerImportWorker
         puts server.hardware.to_yaml
       end
     end
+
+    Rails.cache.clear
   end
 
 

@@ -3,6 +3,7 @@ require "sanitize"
 
 class HcConfImportWorker
   include Sidekiq::Worker
+  sidekiq_options retry: false
 
   def hcm_conf_json(filename)
       f=File.open(filename, 'r')

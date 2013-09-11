@@ -6,7 +6,7 @@
       %strong= @server.run_date
       %ul.nav.nav-list.bs-docs-sidenav
         %li=link_to "Release", "#release"
-        %li=link_to "lpar", "#lpar"
+        %li=link_to "lpar", "#lpar" unless @server.lparstat.nil?
         %li=link_to "hardware", "#hardware"
         %li=link_to "san", "#san"
         %li=link_to "properties", "#properties"
