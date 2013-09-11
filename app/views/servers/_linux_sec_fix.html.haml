@@ -1,0 +1,16 @@
+- unless @server.linux_security_fixes.nil?
+  %h2 security fixes
+  %table.table.table-bordered#secfix
+    %thead
+      %tr
+        %th name
+        %th rhsa
+        %th severity
+        %th category
+    %tbody
+      - @server.linux_security_fixes.each do |fix|
+        %tr
+          %td= fix.name
+          %td= fix.rhsa
+          %td= fix.severity
+          %td= fix.category

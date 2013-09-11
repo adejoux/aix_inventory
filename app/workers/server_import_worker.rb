@@ -33,19 +33,25 @@ class ServerImportWorker
       srv.except!("sys_id")
       srv.except!("sys_model")
 
-
+      unless srv["lssecfixes"].nil?
+        ['overdue', 'list'].each do |category|
+          srv["lssecfixes"][category]["package"].each do |package|
+            fix=server.linux_security_fixes.select{|h| h.name== package["name"]}.first
+            if fix.nil?
+              server.linux_security_fixes.build(:name => package["name"], :rhsa => package["rhsa"], :category => category, :severity => package["severity"])
+            else
+              fix.update_attributes(:rhsa => package["rhsa"], :category => category, :severity => package["severity"])
+            end
+          end
+        end
+      end
 
       srv.each_key do |attr|
         if srv[attr].is_a?(String)
           begin
             server.send("#{attr}=", srv[attr])
           rescue
-            conf = server.server_attributes.select{|h| h.name== attr}.first
-            if conf.nil?
-              server.server_attributes.build(:name=>attr, :output=> srv[attr], :category => "inv")
-            else
-              conf.update_attributes( :output=> srv[attr])
-            end
+            server.add_or_update_attribute(attr, srv[attr])
           end
         end
       end

@@ -18,5 +18,11 @@ ready =->
                      $('td:eq(3)', nRow).html( '<a href="<%= web_root + url.quick_search_servers_path %>?type=os_type&search=' + aData[2]  + '">' + aData[2] + '</a>' )
                      $('td:eq(2)', nRow).html( '<a href="<%= web_root + url.quick_search_servers_path %>?type=os_version&search=' + aData[3]  + '">' + aData[3] + '</a>' )
     sAjaxSource: $('#srv_datatable').data('source')
+  $('#secfix').dataTable
+    bJQueryUI: true
+    sPaginationType: "bootstrap"
+  $('#srv_property').dataTable
+    bJQueryUI: true
+    sPaginationType: "bootstrap"
 $(document).ready(ready)
 $(document).on('page:load', ready)

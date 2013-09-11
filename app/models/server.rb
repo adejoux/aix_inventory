@@ -22,6 +22,7 @@
 class Server < ActiveRecord::Base
   has_many :aix_ports, :dependent => :destroy, :autosave => true
   has_many :aix_paths, :dependent => :destroy, :autosave => true
+  has_many :linux_security_fixes, :dependent => :destroy, :autosave => true
   has_many :health_checks, :dependent => :destroy, :autosave => true
   has_many :server_attributes, :dependent => :destroy, :autosave => true
   has_many :software_deployments
@@ -112,4 +113,15 @@ class Server < ActiveRecord::Base
       scoped
     end
   end
+
+  def add_or_update_attribute(name, value)
+    attr = server_attributes.select{|h| h.name== name}.first
+    if attr.nil?
+      server_attributes.build(:name=>name, :output=> value, :category => "inv")
+    else
+      attr.update_attributes( :output=> value)
+    end
+  end
+
+
 end

@@ -7,9 +7,11 @@
       %ul.nav.nav-list.bs-docs-sidenav
         %li=link_to "Release", "#release"
         %li=link_to "lpar", "#lpar" unless @server.lparstat.nil?
+        %li=link_to "softwares", "#softwares" unless @server.softwares.empty?
         %li=link_to "hardware", "#hardware"
-        %li=link_to "san", "#san"
+        %li=link_to "san", "#san" unless @server.wwpns.empty?
         %li=link_to "properties", "#properties"
+        %li=link_to "security", "#security" unless @server.linux_security_fixes.nil?
       %br
       = link_to 'back', servers_path, :class => "btn btn-primary"
       - if current_user.role == "admin"
@@ -27,3 +29,5 @@
       =render 'san'
     #properties
       =render 'properties'
+    #security
+      =render 'linux_sec_fix'

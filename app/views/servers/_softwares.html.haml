@@ -1,11 +1,12 @@
-%h2 software
-%table.table.table-bordered.table-striped
-  %thead
-    %tr
-      %th software
-      %th version
-  %tbody
-    - @server.softwares.each do |software|
+- unless @server.softwares.empty?
+  %h2 software
+  %table.table.table-bordered.table-striped
+    %thead
       %tr
-        %td= software.name
-        %td= software.version
+        %th software
+        %th version
+    %tbody
+      - @server.softwares.each do |software|
+        %tr
+          %td= software.name
+          %td= software.version

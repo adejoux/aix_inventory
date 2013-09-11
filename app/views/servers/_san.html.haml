@@ -1,69 +1,70 @@
-%h2 SAN Information
-%h3 fibre channel adapters
-- unless @server.aix_ports.empty?
-  %table.table.table-bordered.table-striped
-    %thead
-      %tr
-        %th port
-        %th wwpn
-        %th infra
-        %th fabric
-        %th switch
-        %th port
-        %th portname
-        %th speed
-        %th status
-
-    %tbody
-      - @server.aix_ports.each do |aix_port|
+- unless @server.wwpns.empty?
+  %h2 SAN Information
+  %h3 fibre channel adapters
+  - unless @server.aix_ports.empty?
+    %table.table.table-bordered.table-striped
+      %thead
         %tr
-          %td= aix_port.port
-          - if aix_port.wwpn.nil?
-            %td NF
-            %td NF
-            %td NF
-            %td NF
-            %td NF
-            %td NF
-            %td NF
-            %td NF
-          - else
-            %td= aix_port.wwpn.wwpn
-            - if aix_port.wwpn.san_infra.nil?
-              %td NF
-              %td NF
-              %td NF
-              %td NF
-              %td NF
-              %td NF
-              %td NF
-            -else
-              - san_infra = aix_port.wwpn.san_infra 
-              %td= san_infra.infra
-              %td= san_infra.fabric
-              %td= san_infra.switch
-              %td= san_infra.port
-              %td= san_infra.portname
-              %td= san_infra.speed
-              %td= san_infra.status
+          %th port
+          %th wwpn
+          %th infra
+          %th fabric
+          %th switch
+          %th port
+          %th portname
+          %th speed
+          %th status
 
-- else
-  No aix ports informations
-%h3 san paths
-- unless @server.aix_paths.empty?
-  %table.table.table-bordered.table-striped
-    %thead
-      %tr
-        %th path id
-        %th adapter
-        %th state
-        %th mode
-    %tbody
-      - @server.aix_paths.each do |aix_path|
+      %tbody
+        - @server.aix_ports.each do |aix_port|
+          %tr
+            %td= aix_port.port
+            - if aix_port.wwpn.nil?
+              %td NF
+              %td NF
+              %td NF
+              %td NF
+              %td NF
+              %td NF
+              %td NF
+              %td NF
+            - else
+              %td= aix_port.wwpn.wwpn
+              - if aix_port.wwpn.san_infra.nil?
+                %td NF
+                %td NF
+                %td NF
+                %td NF
+                %td NF
+                %td NF
+                %td NF
+              -else
+                - san_infra = aix_port.wwpn.san_infra
+                %td= san_infra.infra
+                %td= san_infra.fabric
+                %td= san_infra.switch
+                %td= san_infra.port
+                %td= san_infra.portname
+                %td= san_infra.speed
+                %td= san_infra.status
+
+  - else
+    No aix ports informations
+  %h3 san paths
+  - unless @server.aix_paths.empty?
+    %table.table.table-bordered.table-striped
+      %thead
         %tr
-          %td= aix_path.path
-          %td= aix_path.adapter
-          %td= aix_path.state
-          %td= aix_path.mode
-- else
-  No aix paths informations
+          %th path id
+          %th adapter
+          %th state
+          %th mode
+      %tbody
+        - @server.aix_paths.each do |aix_path|
+          %tr
+            %td= aix_path.path
+            %td= aix_path.adapter
+            %td= aix_path.state
+            %td= aix_path.mode
+  - else
+    No aix paths informations

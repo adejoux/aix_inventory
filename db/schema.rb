@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130911084549) do
+ActiveRecord::Schema.define(:version => 20130911114449) do
 
   create_table "aix_alerts", :force => true do |t|
     t.string   "alert_type"
@@ -106,6 +106,16 @@ ActiveRecord::Schema.define(:version => 20130911084549) do
     t.datetime "updated_at",    :null => false
     t.integer  "success_count"
     t.integer  "error_count"
+  end
+
+  create_table "linux_security_fixes", :force => true do |t|
+    t.string   "name"
+    t.string   "severity"
+    t.string   "rhsa"
+    t.string   "category"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "server_id"
   end
 
   create_table "lparstat_versions", :force => true do |t|
