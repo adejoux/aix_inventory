@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130728193703) do
+ActiveRecord::Schema.define(:version => 20130911084549) do
 
   create_table "aix_alerts", :force => true do |t|
     t.string   "alert_type"
@@ -70,9 +70,20 @@ ActiveRecord::Schema.define(:version => 20130728193703) do
     t.string   "sys_model"
     t.string   "firmware"
     t.string   "serial"
-    t.integer  "server_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "health_checks", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "return_code"
+    t.text     "output"
+    t.text     "hc_errors"
+    t.integer  "server_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.text     "info"
   end
 
   create_table "healthcheck_versions", :force => true do |t|
@@ -86,17 +97,6 @@ ActiveRecord::Schema.define(:version => 20130728193703) do
   end
 
   add_index "healthcheck_versions", ["item_type", "item_id"], :name => "index_healthcheck_versions_on_item_type_and_item_id"
-
-  create_table "healthchecks", :force => true do |t|
-    t.string   "check"
-    t.string   "status"
-    t.integer  "server_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  add_index "healthchecks", ["server_id", "check"], :name => "index_healthchecks_on_server_id_and_check", :unique => true
-  add_index "healthchecks", ["server_id"], :name => "index_healthchecks_on_server_id"
 
   create_table "import_logs", :force => true do |t|
     t.integer  "upload_id"
@@ -188,6 +188,18 @@ ActiveRecord::Schema.define(:version => 20130728193703) do
     t.string   "mode",       :limit => 15
     t.datetime "created_at",               :null => false
     t.datetime "updated_at",               :null => false
+  end
+
+  create_table "server_attributes", :force => true do |t|
+    t.string   "name"
+    t.string   "category"
+    t.text     "description"
+    t.text     "output"
+    t.text     "conf_errors"
+    t.integer  "return_code"
+    t.integer  "server_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "server_versions", :force => true do |t|

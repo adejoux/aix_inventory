@@ -222,7 +222,6 @@ CREATE TABLE hardwares (
     sys_model character varying(255),
     firmware character varying(255),
     serial character varying(255),
-    server_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -628,8 +627,7 @@ CREATE TABLE servers (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     run_date date,
-    hardware_id integer,
-    properties hstore
+    hardware_id integer
 );
 
 
@@ -1415,13 +1413,6 @@ CREATE INDEX index_versions_on_item_type_and_item_id ON versions USING btree (it
 
 
 --
--- Name: servers_properties; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX servers_properties ON servers USING gin (properties);
-
-
---
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1483,3 +1474,7 @@ INSERT INTO schema_migrations (version) VALUES ('20130908150654');
 INSERT INTO schema_migrations (version) VALUES ('20130909130132');
 
 INSERT INTO schema_migrations (version) VALUES ('20130910123753');
+
+INSERT INTO schema_migrations (version) VALUES ('20130911084424');
+
+INSERT INTO schema_migrations (version) VALUES ('20130911084549');

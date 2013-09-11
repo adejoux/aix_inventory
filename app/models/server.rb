@@ -20,7 +20,6 @@
 #
 
 class Server < ActiveRecord::Base
-  serialize :properties, ActiveRecord::Coders::Hstore
   has_many :aix_ports, :dependent => :destroy, :autosave => true
   has_many :aix_paths, :dependent => :destroy, :autosave => true
   has_many :health_checks, :dependent => :destroy, :autosave => true
