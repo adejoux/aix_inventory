@@ -24,6 +24,8 @@ class Server < ActiveRecord::Base
   has_many :aix_paths, :dependent => :destroy, :autosave => true
   has_many :linux_security_fixes, :dependent => :destroy, :autosave => true
   has_many :health_checks, :dependent => :destroy, :autosave => true
+  has_many :volume_groups, :dependent => :destroy, :autosave => true
+  has_many :file_systems, :dependent => :destroy, :autosave => true
   has_many :server_attributes, :dependent => :destroy, :autosave => true
   has_many :software_deployments
   has_one :lparstat
@@ -115,7 +117,7 @@ class Server < ActiveRecord::Base
   end
 
   def add_or_update_attribute(name, value)
-    attr = server_attributes.select{|h| h.name== name}.first
+    attr = server_attributes.select{|h| h.name == name}.first
     if attr.nil?
       server_attributes.build(:name=>name, :output=> value, :category => "inv")
     else
@@ -123,5 +125,31 @@ class Server < ActiveRecord::Base
     end
   end
 
+  def add_or_update_vg(name, size, free)
+    vg = volume_groups.select{|h| h.name == name}.first
+    if vg.nil?
+      volume_groups.build(:name=>name, :vg_size => size, :free_size => free)
+    else
+      vg.update_attributes(:vg_size => size, :free_size => free)
+    end
+  end
+
+  def add_or_update_fs(name, size, free)
+    fs = file_systems.select{|h| h.mount_point == name}.first
+    if fs.nil?
+      file_systems.build(:mount_point =>name, :size => size, :free => free)
+    else
+      fs.update_attributes(:size => size, :free => free)
+    end
+  end
+
+  def add_or_update_secfix(name, rhsa, category, severity)
+    fix = linux_security_fixes.select{|h| h.name == name}.first
+    if fix.nil?
+      linux_security_fixes.build(:name=>name, :rhsa=> rhsa, :category => category, :severity => severity)
+    else
+      fix.update_attributes(:rhsa=> rhsa, :category => category, :severity => severity)
+    end
+  end
 
 end

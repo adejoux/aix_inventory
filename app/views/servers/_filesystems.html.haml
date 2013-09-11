@@ -1,0 +1,14 @@
+- unless @server.file_systems.nil?
+  %h2 filesystems
+  %table.table.table-bordered
+    %thead
+      %tr
+        %th mount point
+        %th size
+        %th free space
+    %tbody
+      - @server.file_systems.each do |vg|
+        %tr
+          %td= vg.mount_point
+          %td= vg.size
+          %td= vg.free

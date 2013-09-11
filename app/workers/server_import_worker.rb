@@ -36,13 +36,23 @@ class ServerImportWorker
       unless srv["lssecfixes"].nil?
         ['overdue', 'list'].each do |category|
           srv["lssecfixes"][category]["package"].each do |package|
-            fix=server.linux_security_fixes.select{|h| h.name== package["name"]}.first
-            if fix.nil?
-              server.linux_security_fixes.build(:name => package["name"], :rhsa => package["rhsa"], :category => category, :severity => package["severity"])
-            else
-              fix.update_attributes(:rhsa => package["rhsa"], :category => category, :severity => package["severity"])
-            end
+            server.add_or_update_secfix(package["name"], package["rhsa"], category, package["severity"])
           end
+        end
+      end
+
+      unless srv["lsvg"].nil?
+        vgs=[]
+        vgs[0]=srv["lsvg"]["vg"] if srv["lsvg"]["vg"].is_a?(Hash)
+        vgs=srv["lsvg"]["vg"] if srv["lsvg"]["vg"].is_a?(Array)
+        vgs.each do |vg|
+          server.add_or_update_vg(vg["name"], vg["size"], vg["free"])
+        end
+      end
+
+      unless srv["lsdf"].nil?
+        srv["lsdf"]["fs"].each do |fs|
+          server.add_or_update_fs(fs["name"], fs["size"], fs["free"])
         end
       end
 

@@ -1,0 +1,14 @@
+- unless @server.volume_groups.nil?
+  %h2 volume groups
+  %table.table.table-bordered
+    %thead
+      %tr
+        %th name
+        %th size
+        %th free space
+    %tbody
+      - @server.volume_groups.each do |vg|
+        %tr
+          %td= vg.name
+          %td= vg.vg_size
+          %td= vg.free_size
