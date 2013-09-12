@@ -21,6 +21,7 @@
 
 class Server < ActiveRecord::Base
   has_many :aix_ports, :dependent => :destroy, :autosave => true
+  has_many :linux_ports, :dependent => :destroy, :autosave => true
   has_many :aix_paths, :dependent => :destroy, :autosave => true
   has_many :linux_security_fixes, :dependent => :destroy, :autosave => true
   has_many :health_checks, :dependent => :destroy, :autosave => true
@@ -30,7 +31,7 @@ class Server < ActiveRecord::Base
   has_many :software_deployments
   has_one :lparstat
   has_many :softwares, :through => :software_deployments
-  has_many :wwpns, :through => :aix_ports
+  has_many :wwpns, :autosave => true
   has_many :san_infras, :through => :wwpns
   accepts_nested_attributes_for :softwares
   accepts_nested_attributes_for :wwpns
@@ -152,4 +153,17 @@ class Server < ActiveRecord::Base
     end
   end
 
+  def add_or_update_linux_port(name, brand, model, card_type, speed, slot, driver, wwpn)
+    port = linux_ports.select{|h| h.name == name}.first
+    if port.nil?
+      port=linux_ports.build(:name=>name, :brand => brand, :card_model => model, :card_type => card_type, :speed => speed, :slot => slot, :driver => driver)
+    else
+      port.update_attributes(:brand => brand, :card_model => model, :card_type => card_type, :speed => speed, :slot => slot, :driver => driver)
+    end
+    wwn = Wwpn.find_by_wwpn(wwpn)
+    if wwn.nil?
+        wwn=wwpns.build( :wwpn => wwpn)
+    end
+    port.wwpn=wwn
+  end
 end

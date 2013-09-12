@@ -1,6 +1,32 @@
 - unless @server.wwpns.empty?
   %h2 SAN Information
   %h3 fibre channel adapters
+  - unless @server.linux_ports.empty?
+    %table.table.table-bordered.table-striped
+      %thead
+        %tr
+          %th name
+          %th brand
+          %th model
+          %th type
+          %th speed
+          %th slot
+          %th driver
+          %th wwpn
+      %tbody
+        - @server.linux_ports.each do |linux_port|
+          %tr
+            %td= linux_port.name
+            %td= linux_port.brand
+            %td= linux_port.card_model
+            %td= linux_port.card_type
+            %td= linux_port.speed
+            %td= linux_port.slot
+            %td= linux_port.driver
+            - unless linux_port.wwpn.nil?
+              %td= linux_port.wwpn.wwpn
+            - else
+              %td N/F
   - unless @server.aix_ports.empty?
     %table.table.table-bordered.table-striped
       %thead
@@ -14,7 +40,6 @@
           %th portname
           %th speed
           %th status
-
       %tbody
         - @server.aix_ports.each do |aix_port|
           %tr
@@ -47,11 +72,8 @@
                 %td= san_infra.portname
                 %td= san_infra.speed
                 %td= san_infra.status
-
-  - else
-    No aix ports informations
-  %h3 san paths
   - unless @server.aix_paths.empty?
+    %h3 san paths
     %table.table.table-bordered.table-striped
       %thead
         %tr
@@ -66,5 +88,3 @@
             %td= aix_path.adapter
             %td= aix_path.state
             %td= aix_path.mode
-  - else
-    No aix paths informations

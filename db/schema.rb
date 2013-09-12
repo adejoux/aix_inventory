@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130911162238) do
+ActiveRecord::Schema.define(:version => 20130912145929) do
 
   create_table "aix_alerts", :force => true do |t|
     t.string   "alert_type"
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(:version => 20130911162238) do
     t.integer  "server_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "wwpn_id"
   end
 
   add_index "aix_ports", ["server_id"], :name => "index_aix_ports_on_server_id"
@@ -115,6 +116,20 @@ ActiveRecord::Schema.define(:version => 20130911162238) do
     t.datetime "updated_at",    :null => false
     t.integer  "success_count"
     t.integer  "error_count"
+  end
+
+  create_table "linux_ports", :force => true do |t|
+    t.string   "name"
+    t.string   "brand"
+    t.string   "card_model"
+    t.string   "card_type"
+    t.string   "speed"
+    t.string   "slot"
+    t.string   "driver"
+    t.integer  "server_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "wwpn_id"
   end
 
   create_table "linux_security_fixes", :force => true do |t|
@@ -344,12 +359,10 @@ ActiveRecord::Schema.define(:version => 20130911162238) do
   end
 
   create_table "wwpns", :force => true do |t|
-    t.integer  "aix_port_id"
-    t.integer  "san_infra_id"
-    t.integer  "sod_infra_id"
     t.string   "wwpn"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "server_id"
   end
 
 end
