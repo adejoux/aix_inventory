@@ -9,6 +9,7 @@
         %li=link_to "lpar", "#lpar" unless @server.lparstat.nil?
         %li=link_to "volume groups", "#volume_groups" unless @server.volume_groups.nil?
         %li=link_to "filesystems", "#filesystems" unless @server.file_systems.nil?
+        %li=link_to "ip addresses", "#ip_addresses" unless @server.ip_addresses.empty?
         %li=link_to "softwares", "#softwares" unless @server.softwares.empty?
         %li=link_to "hardware", "#hardware"
         %li=link_to "san", "#san" unless @server.wwpns.empty?
@@ -27,6 +28,8 @@
       =render 'volume_groups'
     #filesystems
       =render 'filesystems'
+    #ip_addresses
+      =render 'ip_address'
     #softwares
       =render 'softwares'
     #hardware

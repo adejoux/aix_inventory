@@ -1,4 +1,4 @@
-class ServerImportWorker
+class XmlServerImportWorker
   include Sidekiq::Worker
   sidekiq_options retry: false
 
@@ -17,7 +17,7 @@ class ServerImportWorker
     end
 
     data["servers"]["server"].each do |srv|
-      server=Server.find_or_create_by_hostname(:hostname => srv["name"])
+      server=Server.find_or_create_by_hostname(:hostname => srv["name"].downcase)
 
       result=Hardware.find_by_serial(srv["sys_id"])
       if result.nil?

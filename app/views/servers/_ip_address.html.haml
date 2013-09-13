@@ -1,0 +1,14 @@
+- unless @server.ip_addresses.empty?
+  %h2 IP addresses
+  %table.table.table-bordered.table-striped
+    %thead
+      %tr
+        %th ip address
+        %th subnet
+        %th mac address
+    %tbody
+      - @server.ip_addresses.each do |ip_address|
+        %tr
+          %td= ip_address.address
+          %td= ip_address.subnet
+          %td= ip_address.mac_address

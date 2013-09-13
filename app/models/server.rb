@@ -27,6 +27,7 @@ class Server < ActiveRecord::Base
   has_many :health_checks, :dependent => :destroy, :autosave => true
   has_many :volume_groups, :dependent => :destroy, :autosave => true
   has_many :file_systems, :dependent => :destroy, :autosave => true
+  has_many :ip_addresses, :dependent => :destroy, :autosave => true
   has_many :server_attributes, :dependent => :destroy, :autosave => true
   has_many :software_deployments
   has_one :lparstat
@@ -165,5 +166,14 @@ class Server < ActiveRecord::Base
         wwn=wwpns.build( :wwpn => wwpn)
     end
     port.wwpn=wwn
+  end
+
+  def add_or_update_ip_address(address, subnet, mac_address)
+    ip = ip_addresses.select{|h| h.address == address}.first
+    if ip.nil?
+      ip_addresses.build(:address=>address, :subnet=> subnet, :mac_address => mac_address)
+    else
+      ip.update_attributes(:subnet=> subnet, :mac_address => mac_address)
+    end
   end
 end
