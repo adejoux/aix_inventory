@@ -1,31 +1,25 @@
-%h1 Listing server_attributes
+- model_class = ServerAttribute
+.row
+.span12
+  .page-header
+    %h1 Server Attributes
+  %h2 Advanced search
+  = search_form_for @search, :url=> search_server_attributes_path, :html => {:class => "form-inline"}, method: :post do |f|
+    = f.condition_fields do |c|
+      = render "condition_fields", f: c
+    = link_to_add_fields "Add Conditions", f, :condition
+    .form-actions
+      =f.submit "Search", :class => "btn btn-success"
+      = link_to "Reset", health_checks_path({:clear => 'yes'}), :class => "btn btn-primary"
+  %table{ :id => "srv_attr_datatable", :class => "table table-striped", :data => { :source => "#{ server_attributes_url(format: "json") }" } }
+    %thead
+      %tr
+        %th= model_class.human_attribute_name(:name)
+        %th= model_class.human_attribute_name(:server_name)
+        %th= model_class.human_attribute_name(:description)
+        %th= model_class.human_attribute_name(:output)
+        %th= model_class.human_attribute_name(:return_code)
+        %th conf_errors
+    %tbody
 
-%table
-  %tr
-    %th Name
-    %th Category
-    %th Description
-    %th Output
-    %th Conf errors
-    %th Return code
-    %th Server
-    %th
-    %th
-    %th
 
-  - @server_attributes.each do |server_attribute|
-    %tr
-      %td= server_attribute.name
-      %td= server_attribute.category
-      %td= server_attribute.description
-      %td= server_attribute.output
-      %td= server_attribute.conf_errors
-      %td= server_attribute.return_code
-      %td= server_attribute.server_id
-      %td= link_to 'Show', server_attribute
-      %td= link_to 'Edit', edit_server_attribute_path(server_attribute)
-      %td= link_to 'Destroy', server_attribute, :method => :delete, :data => { :confirm => 'Are you sure?' }
-
-%br
-
-= link_to 'New Server attribute', new_server_attribute_path

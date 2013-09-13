@@ -55,7 +55,13 @@
                  <li><%= link_to "AIX", alerts_aix_alerts_path %></li>
               </ul>
             </li>
-            <li class="<%= 'active' if current_page?(health_checks_path) %>"><%= link_to "HealthChecks", health_checks_path %></li>
+            <li class="dropdown <%= 'active' if ( current_page?(health_checks_path) or current_page?(server_attributes_path) )%>">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">HCM<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                 <li><%= link_to "HealthChecks", health_checks_path %></li>
+                 <li><%= link_to "ServerAttributes", server_attributes_path %></li>
+              </ul>
+            </li>
             <% if current_user.role == "admin" or current_user.role == "editor" %>
               <li class="dropdown <%= 'active' if current_page?(firmwares_path) %>">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Config<b class="caret"></b></a>

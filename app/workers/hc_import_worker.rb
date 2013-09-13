@@ -5,33 +5,33 @@ class HcImportWorker
   sidekiq_options retry: false
 
   def hcm_json(filename)
-      f=File.open(filename, 'r')
-      json = JSON.load(f)
-      f.close()
+    f=File.open(filename, 'r')
+    json = JSON.load(f)
+    f.close()
 
-      json['CHECKS'].each do |x|
-        puts x['SERVER']
+    json['CHECKS'].each do |x|
+      puts x['SERVER']
 
-        srv = Server.find_or_create_by_hostname(:hostname => x['SERVER'])
-        if srv.customer.nil?
-          srv.customer=json['CUSTOMER']
-        end
+      srv = Server.find_or_create_by_hostname(:hostname => x['SERVER'].downcase)
+      if srv.customer.nil?
+        srv.customer=json['CUSTOMER']
+      end
 
-        x['RESULTS'].each do |y|
-            hc = srv.health_checks.select{|h| h.name==y['PLUG']}.first
-            if hc.nil?
-                srv.health_checks.build(:name=>y['PLUG'], :description=>y['DESCRIPTION'], :output=>y['OUTPUT'], :return_code=>y['CODE'], :info=>y['INFO'], :hc_errors=>'')
-            else
-                hc.update_attributes(:output=>y['OUTPUT'], :description=>y['DESCRIPTION'], :return_code=>y['CODE'].to_i,:info=>y['INFO'], :hc_errors=>'')
-            end
-        end
-        begin
-          srv.save!
-        rescue Exception => e
-            puts "ERROR: unable to save SRV : #{e.message}"
-        end
+      x['RESULTS'].each do |y|
+          hc = srv.health_checks.select{|h| h.name==y['PLUG']}.first
+          if hc.nil?
+              srv.health_checks.build(:name=>y['PLUG'], :description=>y['DESCRIPTION'], :output=>y['OUTPUT'], :return_code=>y['CODE'], :info=>y['INFO'], :hc_errors=>'')
+          else
+              hc.update_attributes(:output=>y['OUTPUT'], :description=>y['DESCRIPTION'], :return_code=>y['CODE'].to_i,:info=>y['INFO'], :hc_errors=>'')
+          end
+      end
+      begin
+        srv.save!
+      rescue Exception => e
+          puts "ERROR: unable to save SRV : #{e.message}"
       end
     end
+  end
 
 
   def perform

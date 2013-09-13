@@ -1,27 +1,29 @@
-%p#notice= notice
+- model_class = ServerAttribute
+.row
+  .span12
+    .page-header
+      %h2=@hc.name + ' on ' + @hc.srv.name
 
-%p
-  %b Name:
-  = @server_attribute.name
-%p
-  %b Category:
-  = @server_attribute.category
-%p
-  %b Description:
-  = @server_attribute.description
-%p
-  %b Output:
-  = @server_attribute.output
-%p
-  %b Conf errors:
-  = @server_attribute.conf_errors
-%p
-  %b Return code:
-  = @server_attribute.return_code
-%p
-  %b Server:
-  = @server_attribute.server_id
+.row
+  .span9.offset2
+    %table.table.table-striped.table-bordered
+      %thead
+        %tr
+          %th= model_class.human_attribute_name(:name)
+          %th= model_class.human_attribute_name(:server_name)
+          %th= model_class.human_attribute_name(:description)
+          %th= model_class.human_attribute_name(:output)
+          %th= model_class.human_attribute_name(:return_code)
+          %th conf_errors
+          %th= model_class.human_attribute_name(:updated_at)
 
-= link_to 'Edit', edit_server_attribute_path(@server_attribute)
-\|
-= link_to 'Back', server_attributes_path
+      %tbody
+        - @srv_attrs.each do |srv_attr|
+          %tr
+            %td= srv_attr.name
+            %td= srv_attr.srv.name
+            %td= srv_attr.description.to_s.html_safe
+            %td= srv_attr.output.html_safe
+            %td= srv_attr.return_code
+            %td= srv_attr.conf_errors
+            %td= srv_attr.updated_at

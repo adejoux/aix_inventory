@@ -9,4 +9,5 @@ every 1.minutes, 'Hc import worker' do
   XmlServerImportWorker.perform_async
   CsvServerImportWorker.perform_async
   HcImportWorker.perform_async
+  HcConfImportWorker.perform_async
 end

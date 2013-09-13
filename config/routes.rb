@@ -82,6 +82,15 @@ AixInventory::Application.routes.draw do
     end
   end
 
+  resources :server_attributes, :only => [:index, :show] do
+    collection do
+      post :search, to: 'server_attributes#index'
+    end
+    member do
+      get :history
+    end
+  end
+
   resources :aix_alerts
   root to: 'statistics#general'
 
