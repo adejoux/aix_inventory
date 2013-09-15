@@ -38,6 +38,7 @@ class Server < ActiveRecord::Base
   accepts_nested_attributes_for :wwpns
   belongs_to :hardware
 
+
   attr_accessible :customer, :hostname, :os_type, :os_version, :properties
 
   # validations
@@ -119,61 +120,40 @@ class Server < ActiveRecord::Base
   end
 
   def add_or_update_attribute(name, value)
-    attr = server_attributes.select{|h| h.name == name}.first
-    if attr.nil?
-      server_attributes.build(:name=>name, :output=> value, :category => "inv")
-    else
-      attr.update_attributes( :output=> value)
-    end
+    attr = server_attributes.find_or_initialize_by_name(name)
+    attr.update_attributes(:output=> value, :category => "inv")
+    attr.activities.build(action: "update")
   end
 
   def add_or_update_vg(name, size, free)
-    vg = volume_groups.select{|h| h.name == name}.first
-    if vg.nil?
-      volume_groups.build(:name=>name, :vg_size => size, :free_size => free)
-    else
-      vg.update_attributes(:vg_size => size, :free_size => free)
-    end
+    vg = volume_groups.find_or_initialize_by_name(name)
+    vg.update_attributes(:vg_size => size, :free_size => free)
+    vg.activities.build(action: "update")
   end
 
   def add_or_update_fs(name, size, free)
-    fs = file_systems.select{|h| h.mount_point == name}.first
-    if fs.nil?
-      file_systems.build(:mount_point =>name, :size => size, :free => free)
-    else
-      fs.update_attributes(:size => size, :free => free)
-    end
+    fs = file_systems.find_or_initialize_by_name(name)
+    fs.update_attributes(:mount_point =>name, :size => size, :free => free)
+    fs.activities.build(action: "update")
   end
 
   def add_or_update_secfix(name, rhsa, category, severity)
-    fix = linux_security_fixes.select{|h| h.name == name}.first
-    if fix.nil?
-      linux_security_fixes.build(:name=>name, :rhsa=> rhsa, :category => category, :severity => severity)
-    else
-      fix.update_attributes(:rhsa=> rhsa, :category => category, :severity => severity)
-    end
+    fix = linux_security_fixes.find_or_initialize_by_name(name)
+    fix.update_attributes(:rhsa=> rhsa, :category => category, :severity => severity)
+    fix.activities.build(action: "update")
   end
 
   def add_or_update_linux_port(name, brand, model, card_type, speed, slot, driver, wwpn)
-    port = linux_ports.select{|h| h.name == name}.first
-    if port.nil?
-      port=linux_ports.build(:name=>name, :brand => brand, :card_model => model, :card_type => card_type, :speed => speed, :slot => slot, :driver => driver)
-    else
-      port.update_attributes(:brand => brand, :card_model => model, :card_type => card_type, :speed => speed, :slot => slot, :driver => driver)
-    end
-    wwn = Wwpn.find_by_wwpn(wwpn)
-    if wwn.nil?
-        wwn=wwpns.build( :wwpn => wwpn)
-    end
+    port = linux_ports.find_or_initialize_by_name(name)
+    port.update_attributes(:brand => brand, :card_model => model, :card_type => card_type, :speed => speed, :slot => slot, :driver => driver)
+    port.activities.build(action: "update")
+    wwn = Wwpn.find_or_create_by_wwpn(wwpn)
     port.wwpn=wwn
   end
 
   def add_or_update_ip_address(address, subnet, mac_address)
-    ip = ip_addresses.select{|h| h.address == address}.first
-    if ip.nil?
-      ip_addresses.build(:address=>address, :subnet=> subnet, :mac_address => mac_address)
-    else
-      ip.update_attributes(:subnet=> subnet, :mac_address => mac_address)
-    end
+    ip = ip_addresses.find_or_initialize_by_address(address)
+    ip.update_attributes(:subnet=> subnet, :mac_address => mac_address)
+    ip.activities.build(action: "update")
   end
 end
