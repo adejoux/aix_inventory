@@ -1,4 +1,5 @@
 class ServerAttributesController < ApplicationController
+  load_and_authorize_resource
    # GET /health_checks
   # GET /health_checks.json
    def index

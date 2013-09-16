@@ -1,0 +1,22 @@
+- model_class = ImportReport
+.row
+.span12
+  .page-header
+    %h1 Import Reports
+  %table.table.table-striped.table-bordered#reports
+    %thead
+      %tr
+        %th filename
+        %th status
+        %th success count
+        %th error count
+        %th date
+    %tbody
+      - @import_reports.each do |import_report|
+        %tr
+          %td= link_to import_report.filename, import_report
+          %td= import_report.result
+          %td= import_report.success_count
+          %td= import_report.error_count
+          %td= import_report.created_at.to_formatted_s(:db)
+

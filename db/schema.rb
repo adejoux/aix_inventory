@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130915174843) do
+ActiveRecord::Schema.define(:version => 20130916131100) do
 
   create_table "activities", :force => true do |t|
     t.string   "action"
@@ -126,6 +126,16 @@ ActiveRecord::Schema.define(:version => 20130915174843) do
     t.datetime "updated_at",    :null => false
     t.integer  "success_count"
     t.integer  "error_count"
+  end
+
+  create_table "import_reports", :force => true do |t|
+    t.string   "filename"
+    t.string   "result"
+    t.text     "output"
+    t.integer  "success_count"
+    t.integer  "error_count"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "ip_addresses", :force => true do |t|

@@ -3,17 +3,22 @@ class XmlServerImportWorker
   sidekiq_options retry: false
 
   def process_server(filename)
+    log=ImportReport.new
+    log.filename=filename
+    log.success_count=0
+    log.error_count=0
+
     doc = Nokogiri.XML(File.open(filename,"rb"))
     data = Hash.from_xml(doc.to_xml)
 
     if data["servers"].nil?
-      puts "error: file not valid"
-      exit 1
+      log.file_error!("KO", "error: file not valid")
+      return
     end
 
     if data["servers"]["server"].nil?
-      puts "error: file not valid"
-      exit 1
+      log.file_error!("KO", "error: file not valid")
+      return
     end
 
     data["servers"]["server"].each do |srv|
@@ -75,14 +80,14 @@ class XmlServerImportWorker
       end
       begin
         server.save!
+        log.success_count += 1
       rescue Exception => e
-        puts "SAVE ERROR: #{e.message}\n"
-        puts server.to_yaml
-        #puts server.server_attributes.to_yaml
-        puts server.hardware.to_yaml
+        log.output << "SAVE ERROR: #{e.message}\n"
+        log.error_count += 1
       end
     end
-
+    log.analyze_result
+    log.save!
     Rails.cache.clear
   end
 
