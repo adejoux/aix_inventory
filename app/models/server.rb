@@ -37,6 +37,7 @@ class Server < ActiveRecord::Base
   accepts_nested_attributes_for :softwares
   accepts_nested_attributes_for :wwpns
   belongs_to :hardware
+  has_many :activities, as: :trackable, :autosave => true
 
 
   attr_accessible :customer, :hostname, :os_type, :os_version, :properties
@@ -121,39 +122,40 @@ class Server < ActiveRecord::Base
 
   def add_or_update_attribute(name, value)
     attr = server_attributes.find_or_initialize_by_name(name)
-    attr.update_attributes(:output=> value, :category => "inv")
-    attr.activities.build(action: "update")
+    attr.update_attributes(output: value, category: "inv")
+    attr.activities.find_or_initialize_by_action("update")
   end
 
   def add_or_update_vg(name, size, free)
     vg = volume_groups.find_or_initialize_by_name(name)
-    vg.update_attributes(:vg_size => size, :free_size => free)
-    vg.activities.build(action: "update")
+    vg.update_attributes(vg_size: size, free_size: free)
+    vg.activities.find_or_initialize_by_action("update")
   end
 
-  def add_or_update_fs(name, size, free)
-    fs = file_systems.find_or_initialize_by_name(name)
-    fs.update_attributes(:mount_point =>name, :size => size, :free => free)
-    fs.activities.build(action: "update")
+  def add_or_update_fs(mount_point, size, free)
+    fs = file_systems.find_or_initialize_by_mount_point(mount_point)
+    fs.update_attributes(size: size, free: free)
+    fs.activities.find_or_initialize_by_action("update")
   end
 
   def add_or_update_secfix(name, rhsa, category, severity)
     fix = linux_security_fixes.find_or_initialize_by_name(name)
-    fix.update_attributes(:rhsa=> rhsa, :category => category, :severity => severity)
-    fix.activities.build(action: "update")
+    fix.update_attributes(rhsa: rhsa, category: category, severity: severity)
+    fix.activities.find_or_initialize_by_action("update")
   end
 
   def add_or_update_linux_port(name, brand, model, card_type, speed, slot, driver, wwpn)
     port = linux_ports.find_or_initialize_by_name(name)
-    port.update_attributes(:brand => brand, :card_model => model, :card_type => card_type, :speed => speed, :slot => slot, :driver => driver)
-    port.activities.build(action: "update")
+    port.update_attributes(brand: brand, card_model: model, card_type: card_type, speed: speed, slot: slot, driver: driver)
+    port.activities.find_or_initialize_by_action("update")
     wwn = Wwpn.find_or_create_by_wwpn(wwpn)
+    wwn.activities.find_or_initialize_by_action("update")
     port.wwpn=wwn
   end
 
   def add_or_update_ip_address(address, subnet, mac_address)
     ip = ip_addresses.find_or_initialize_by_address(address)
-    ip.update_attributes(:subnet=> subnet, :mac_address => mac_address)
-    ip.activities.build(action: "update")
+    ip.update_attributes(subnet: subnet, mac_address: mac_address)
+    ip.activities.find_or_initialize_by_action("update")
   end
 end

@@ -1,6 +1,7 @@
 class HealthCheck < ActiveRecord::Base
   attr_accessible :description, :hc_errors, :name, :info, :output, :return_code, :server_id
   belongs_to :server
+  has_many :activities, as: :trackable, :autosave => true
   has_paper_trail :only => [:description, :hc_errors, :info, :output]
 
   UNRANSACKABLE_ATTRIBUTES = ["created_at", "updated_at", "id", "server_id"]

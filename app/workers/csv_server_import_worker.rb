@@ -10,7 +10,6 @@ class CsvServerImportWorker
           next unless servers.include?(entry[:hostname].downcase)
           server=Server.find_by_hostname(entry[:hostname].downcase)
           next if server.nil?
-          puts "here"
           server.add_or_update_ip_address(entry[:ip_address], entry[:subnet], entry[:mac_address])
           server.save!
         end

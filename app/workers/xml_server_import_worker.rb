@@ -59,7 +59,6 @@ class XmlServerImportWorker
       unless srv["wwpn"].nil?
         srv["wwpn"]["port"].each do |port|
           unless port["brand"].nil?
-            puts port.inspect
             server.add_or_update_linux_port(port["name"], port["brand"], port["card_model"], port["card_type"], port["speed"], port["slot"], port["driver"], port["wwn"])
           end
         end

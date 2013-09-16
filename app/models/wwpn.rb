@@ -7,6 +7,8 @@ class Wwpn < ActiveRecord::Base
   has_one :linux_port, :autosave => true
   has_one :aix_port
   belongs_to :server
+  has_many :activities, as: :trackable, :autosave => true
+
 
   UNRANSACKABLE_ATTRIBUTES = ["created_at", "updated_at", "id", "server_id"]
 
