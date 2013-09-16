@@ -80,6 +80,7 @@ class XmlServerImportWorker
       end
       begin
         server.save!
+        server.activities.find_or_create_by_action("update").touch
         log.success_count += 1
       rescue Exception => e
         log.output << "SAVE ERROR: #{e.message}\n"

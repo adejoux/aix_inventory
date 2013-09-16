@@ -6,8 +6,14 @@ include Clockwork
 
 every 1.minutes, 'Hc import worker' do
   puts "Will import now"
-  XmlServerImportWorker.perform_async
-  CsvServerImportWorker.perform_async
   HcImportWorker.perform_async
   HcConfImportWorker.perform_async
 end
+every 1.minutes, 'Server import' do
+  XmlServerImportWorker.perform_async
+  CsvServerImportWorker.perform_async
+end
+every 1.minutes, "clean up old data" do
+  CleanDataWorker.perform_async
+end
+

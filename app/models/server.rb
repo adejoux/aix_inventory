@@ -37,7 +37,7 @@ class Server < ActiveRecord::Base
   accepts_nested_attributes_for :softwares
   accepts_nested_attributes_for :wwpns
   belongs_to :hardware
-  has_many :activities, as: :trackable, :autosave => true
+  has_many :activities, as: :trackable, :autosave => true, :dependent => :destroy
 
 
   attr_accessible :customer, :hostname, :os_type, :os_version, :properties

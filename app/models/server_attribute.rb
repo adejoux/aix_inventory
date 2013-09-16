@@ -2,7 +2,7 @@ class ServerAttribute < ActiveRecord::Base
   attr_accessible :category, :conf_errors, :description, :name, :output, :return_code, :server_id
   belongs_to :server
   has_paper_trail :only => [:name, :description, :category, :conf_errors, :output, :return_code]
-  has_many :activities, as: :trackable, :autosave => true
+  has_many :activities, as: :trackable, :autosave => true, :dependent => :destroy
 
   UNRANSACKABLE_ATTRIBUTES = ["created_at", "updated_at", "id", "server_id"]
 
