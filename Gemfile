@@ -85,3 +85,5 @@ gem 'slim'
 gem "clockwork"
 gem 'sanitize'
 gem 'foreman', require: false
+
+gem 'simple_form'

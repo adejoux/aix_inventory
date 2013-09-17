@@ -1,11 +1,11 @@
 # -*- encoding : utf-8 -*-
 AixInventory::Application.routes.draw do
 
+  resources :reports
+
   resources :import_reports
 
-
   resources :activities
-
 
   resources :server_attributes
 

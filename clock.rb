@@ -13,7 +13,7 @@ every 1.minutes, 'Server import' do
   XmlServerImportWorker.perform_async
   CsvServerImportWorker.perform_async
 end
-every 1.minutes, "clean up old data" do
-  CleanDataWorker.perform_async
-end
+# every 1.minutes, "clean up old data" do
+#   CleanDataWorker.perform_async
+# end
 

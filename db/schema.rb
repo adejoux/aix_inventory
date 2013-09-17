@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130916131100) do
+ActiveRecord::Schema.define(:version => 20130917142951) do
 
   create_table "activities", :force => true do |t|
     t.string   "action"
@@ -230,6 +230,20 @@ ActiveRecord::Schema.define(:version => 20130916131100) do
     t.string   "mode"
     t.string   "total_io_memory_entitlement"
     t.string   "lpar_type"
+  end
+
+  create_table "report_queries", :force => true do |t|
+    t.string   "association_type"
+    t.string   "select_attribute"
+    t.string   "report_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
+  create_table "reports", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "san_alerts", :force => true do |t|
