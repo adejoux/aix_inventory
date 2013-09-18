@@ -26,6 +26,7 @@
       <div class="nav-collapse">
         <ul class="nav">
           <% if user_signed_in?  %>
+            <li class="<%= 'active' if current_page?(reports_path) %>"><%= link_to "Reports", reports_path %></li>
             <li class="dropdown <%= 'active' if (current_page?(statistics_general_path) or current_page?(statistics_customer_path) ) %>">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Statistics<b class="caret"></b></a>
               <ul class="dropdown-menu">

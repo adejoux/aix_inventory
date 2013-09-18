@@ -1,9 +1,1 @@
-= simple_form_for @report do |f|
-  = f.input :name
-
-  = f.fields_for :report_queries do |builder|
-    %fieldset
-      = builder.label :content, "ServerAttribute field"
-      = builder.hidden_field :association_type, "ServerAttribute"
-      = builder.collection_select :select_attribute, ServerAttribute.group(:name), :name, :name
-  = f.submit
+= render partial: 'form'

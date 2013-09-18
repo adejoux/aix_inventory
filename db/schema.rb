@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130917142951) do
+ActiveRecord::Schema.define(:version => 20130918143821) do
 
   create_table "activities", :force => true do |t|
     t.string   "action"
@@ -232,7 +232,7 @@ ActiveRecord::Schema.define(:version => 20130917142951) do
     t.string   "lpar_type"
   end
 
-  create_table "report_queries", :force => true do |t|
+  create_table "report_fields", :force => true do |t|
     t.string   "association_type"
     t.string   "select_attribute"
     t.string   "report_id"

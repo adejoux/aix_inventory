@@ -1,2 +1,12 @@
-%h1 Reports#show
-%p Find me in app/views/reports/show.html.haml
+.row
+  .span12
+    %h1= @report.name
+    %table{ :id => "report_datatable", :class => "table table-striped", :data => { :source => "#{ report_url(format: "json") }" } }
+      %thead
+        %tr
+          %th server
+          - @columns.each do |column|
+            %th=column
+      %tbody
+
+    = link_to "back", reports_path, class: "btn btn-danger"

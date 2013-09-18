@@ -1,3 +1,17 @@
-- simple_form_for @report do |f|
-  = f.error_messages
-  = f.input :name
+.row
+  .span12
+    %h1 reports
+    %table.table.table-bordered
+      %thead
+        %tr
+          %th reports
+      %tbody
+        - @reports.each do |report|
+          %tr
+            %td= link_to report.name, report
+            - if can? :manage, Report
+              %td
+                = link_to t('.edit', :default => t("helpers.links.edit")), edit_report_path(report), :class => 'btn btn-mini'
+                = link_to t('.destroy', :default => t("helpers.links.destroy")), report_path(report), :method => :delete, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, :class => 'btn btn-mini btn-danger'
+    - if can? :manage, Report
+      = link_to t('.new', :default => t("helpers.links.new")), new_report_path, :class => 'btn btn-primary'
