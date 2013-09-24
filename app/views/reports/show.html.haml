@@ -1,6 +1,8 @@
 .row
   .span12
     %h1= @report.name
+    = link_to "back", reports_path, class: "btn btn-danger"
+    = link_to "Excel Export", report_path(@report, :format => :xlsx), :class => "btn btn-warning"
     %table{ :id => "report_datatable", :class => "table table-striped", :data => { :source => "#{ report_url(format: "json") }" } }
       %thead
         %tr
@@ -9,4 +11,5 @@
             %th=column
       %tbody
 
-    = link_to "back", reports_path, class: "btn btn-danger"
+
+

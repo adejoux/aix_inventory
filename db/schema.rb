@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130918143821) do
+ActiveRecord::Schema.define(:version => 20130923143103) do
 
   create_table "activities", :force => true do |t|
     t.string   "action"
@@ -242,8 +242,10 @@ ActiveRecord::Schema.define(:version => 20130918143821) do
 
   create_table "reports", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.string   "description"
+    t.string   "report_type"
   end
 
   create_table "san_alerts", :force => true do |t|

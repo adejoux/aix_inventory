@@ -1,3 +1,4 @@
 %fieldset
-  = f.label :content, "ServerAttribute field"
+  = f.label :content, "Server Field"
   = f.collection_select :select_attribute, ServerAttribute.group(:name), :name, :name
+  = link_to "remove", '#', class: "remove_fields btn btn-danger"

@@ -14,6 +14,7 @@ class ReportsController < ApplicationController
       format.json {
         @secho = params[:sEcho].to_i
         @data=datatable_data }
+      format.xlsx { @data=xlsx_data }
     end
   end
 
@@ -92,7 +93,16 @@ class ReportsController < ApplicationController
   private
   def datatable_data
     server_list=Server.customer_scope(current_user.customer_scope).page(page).per_page(per_page).select("id").map { |srv| srv.id }
+    build_rows(server_list)
+  end
 
+  def xlsx_data
+    server_list=Server.customer_scope(current_user.customer_scope).select("id").map { |srv| srv.id }
+    @first_header="server"
+    build_rows(server_list)
+  end
+
+  def build_rows(server_list)
     #build result array
     results=Hash.new{|hash, key| hash[key] = Hash.new}
     @report.report_fields.each do |query|
@@ -111,4 +121,5 @@ class ReportsController < ApplicationController
       row
     end
   end
+
 end
