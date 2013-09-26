@@ -4,11 +4,13 @@
     %thead
       %tr
         %th mount point
+        %th device
         %th size
         %th free space
     %tbody
-      - @server.file_systems.each do |vg|
+      - @server.file_systems.each do |fs|
         %tr
-          %td= vg.mount_point
-          %td= vg.size
-          %td= vg.free
+          %td= fs.mount_point
+          %td= fs.device
+          %td= fs.size
+          %td= fs.free

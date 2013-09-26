@@ -38,12 +38,24 @@ class XmlServerImportWorker
       srv.except!("sys_id")
       srv.except!("sys_model")
 
+      srv.each_key do |attr|
+        if srv[attr].is_a?(String)
+          begin
+            server.send("#{attr}=", srv[attr])
+          rescue
+            server.add_or_update_attribute(attr, srv[attr])
+          end
+        srv.except!(attr)
+        end
+      end
+
       unless srv["lssecfixes"].nil?
         ['overdue', 'list'].each do |category|
           srv["lssecfixes"][category]["package"].each do |package|
             server.add_or_update_secfix(package["name"], package["rhsa"], category, package["severity"])
           end
         end
+        srv.except!("lssecfixes")
       end
 
       unless srv["lsvg"].nil?
@@ -53,12 +65,14 @@ class XmlServerImportWorker
         vgs.each do |vg|
           server.add_or_update_vg(vg["name"], vg["size"], vg["free"])
         end
+        srv.except!("lsvg")
       end
 
       unless srv["lsdf"].nil?
         srv["lsdf"]["fs"].each do |fs|
-          server.add_or_update_fs(fs["name"], fs["size"], fs["free"])
+          server.add_or_update_fs(fs["name"], fs["device"], fs["size"], fs["free"])
         end
+        srv.except!("lsdf")
       end
 
       unless srv["wwpn"].nil?
@@ -67,17 +81,23 @@ class XmlServerImportWorker
             server.add_or_update_linux_port(port["name"], port["brand"], port["card_model"], port["card_type"], port["speed"], port["slot"], port["driver"], port["wwn"])
           end
         end
+        srv.except!("wwpn")
       end
 
       srv.each_key do |attr|
-        if srv[attr].is_a?(String)
-          begin
-            server.send("#{attr}=", srv[attr])
-          rescue
-            server.add_or_update_attribute(attr, srv[attr])
+        next if srv[attr].nil?
+        begin
+          srv[attr].each_key do |sub_attr|
+            server.add_or_update_attribute("#{attr}_#{sub_attr}", srv[attr][sub_attr])
           end
+        rescue Exception => e
+          puts "error: unable to import #{attr} #{e.message}"
         end
+        srv.except!(attr)
       end
+
+      server.customer=File.basename(filename).sub(/.xml/, '')
+
       begin
         server.save!
         server.activities.find_or_create_by_action("update").touch
@@ -92,13 +112,13 @@ class XmlServerImportWorker
     Rails.cache.clear
   end
 
-
   def perform
     new_path=Rails.root.join('import', 'new', 'server').to_s
     done_path=Rails.root.join('import', 'imported', 'server').to_s
     files = Dir.entries(new_path).select{|x| x.end_with?("xml")}
-    files.each do |x|
-      process_server([new_path,x].join('/'))
+    files.each do |file|
+      puts "processing file #{file}\n"
+      process_server([new_path,file].join('/'))
       #File.rename([new_path,x].join('/'), [done_path,x+Time.new.to_formatted_s(:number)].join('/'))
     end
   end

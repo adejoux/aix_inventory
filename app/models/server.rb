@@ -132,9 +132,9 @@ class Server < ActiveRecord::Base
     vg.activities.find_or_initialize_by_action("update").touch
   end
 
-  def add_or_update_fs(mount_point, size, free)
+  def add_or_update_fs(mount_point, device, size, free)
     fs = file_systems.find_or_initialize_by_mount_point(mount_point)
-    fs.update_attributes(size: size, free: free)
+    fs.update_attributes(size: size, device: device, free: free)
     fs.activities.find_or_initialize_by_action("update").touch
   end
 
