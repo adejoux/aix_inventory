@@ -20,8 +20,6 @@
 #
 
 class Server < ActiveRecord::Base
-  has_many :aix_ports, :dependent => :destroy, :autosave => true
-  has_many :linux_ports, :dependent => :destroy, :autosave => true
   has_many :aix_paths, :dependent => :destroy, :autosave => true
   has_many :linux_security_fixes, :dependent => :destroy, :autosave => true
   has_many :health_checks, :dependent => :destroy, :autosave => true
@@ -35,10 +33,8 @@ class Server < ActiveRecord::Base
   has_many :wwpns, :autosave => true
   has_many :san_infras, :through => :wwpns
   accepts_nested_attributes_for :softwares
-  accepts_nested_attributes_for :wwpns
   belongs_to :hardware
   has_many :activities, as: :trackable, :autosave => true, :dependent => :destroy
-
 
   attr_accessible :customer, :hostname, :os_type, :os_version, :properties
 
@@ -144,13 +140,31 @@ class Server < ActiveRecord::Base
     fix.activities.find_or_initialize_by_action("update").touch
   end
 
-  def add_or_update_linux_port(name, brand, model, card_type, speed, slot, driver, wwpn)
-    port = linux_ports.find_or_initialize_by_name(name)
-    port.update_attributes(brand: brand, card_model: model, card_type: card_type, speed: speed, slot: slot, driver: driver)
-    port.activities.find_or_initialize_by_action("update").touch
+  def add_or_update_linux_port(name, brand, model, card_type, speed, slot, driver, wwpn, firmware)
     wwn = Wwpn.find_or_create_by_wwpn(wwpn)
-    wwn.activities.find_or_initialize_by_action("update").touch
-    port.wwpn=wwn
+    puts "LINUX : #{self.id}"
+    wwn.server_id =self.id
+    puts "LINUX wwn : #{wwn.server_id}"
+    begin
+      wwn.linux_port.update_attributes(name: name, brand: brand, card_model: model, card_type: card_type, speed: speed, slot: slot, driver: driver, firmware: firmware)
+    rescue
+      wwn.build_linux_port(name: name, brand: brand, card_model: model, card_type: card_type, speed: speed, slot: slot, driver: driver, firmware: firmware)
+    end
+    wwn.save
+    puts
+    wwn.activities.find_or_create_by_action("update").touch
+  end
+
+  def add_or_update_aix_port(name, wwpn)
+    wwn = Wwpn.find_or_create_by_wwpn(wwpn)
+    wwn.server_id =self.id
+    begin
+      wwn.aix_port.name=name
+    rescue
+      wwn.build_aix_port(name: name)
+    end
+    wwn.save
+    wwn.activities.find_or_create_by_action("update").touch
   end
 
   def add_or_update_ip_address(address, subnet, mac_address)

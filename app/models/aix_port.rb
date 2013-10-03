@@ -12,22 +12,18 @@
 #
 
 class AixPort < ActiveRecord::Base
-  belongs_to :server
-  has_one :wwpn
-  attr_accessible :port
-  
-  # validations
-  validates_presence_of :port
-  validates :port, uniqueness: { scope: :server_id  }
+  belongs_to :wwpn
+  attr_accessible :name
+  has_many :activities, as: :trackable, :autosave => true, :dependent => :destroy
 
-  
-  UNRANSACKABLE_ATTRIBUTES = ["created_at", "updated_at", "id", "server_id"]
-  
+
+  # validations
+  validates_presence_of :name
+  validates_uniqueness_of :name
+
+  UNRANSACKABLE_ATTRIBUTES = ["created_at", "updated_at", "id"]
+
   def self.ransackable_attributes auth_object = nil
     (column_names - UNRANSACKABLE_ATTRIBUTES) + _ransackers.keys
-  end
-
-  def self.find_by_server_id_and_wwpn(server_id, wwpn)
-    joins(:wwpn).where('server_id = ? and wwpns.wwpn = ?', server_id, wwpn).first
   end
 end

@@ -12,7 +12,7 @@
         %li=link_to "ip addresses", "#ip_addresses" unless @server.ip_addresses.empty?
         %li=link_to "softwares", "#softwares" unless @server.softwares.empty?
         %li=link_to "hardware", "#hardware"
-        %li=link_to "san", "#san" unless @server.wwpns.empty?
+        %li=link_to "san", "#san" unless @server.wwpns.nil?
         %li=link_to "properties", "#properties"
         %li=link_to "security", "#security" unless @server.linux_security_fixes.nil?
       %br

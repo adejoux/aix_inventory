@@ -4,12 +4,12 @@ require "./config/environment"
 require "clockwork"
 include Clockwork
 
-every 1.minutes, 'Hc import worker' do
+every 10.minutes, 'Hc import worker' do
   puts "Will import now"
   HcImportWorker.perform_async
   HcConfImportWorker.perform_async
 end
-every 1.minutes, 'Server import' do
+every 10.minutes, 'Server import' do
   XmlServerImportWorker.perform_async
   CsvServerImportWorker.perform_async
 end

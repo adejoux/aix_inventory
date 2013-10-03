@@ -21,7 +21,10 @@ class XmlServerImportWorker
       return
     end
 
-    data["servers"]["server"].each do |srv|
+    servers=[]
+    servers=data["servers"]["server"] if data["servers"]["server"].is_a?(Array)
+    servers << data["servers"]["server"] if data["servers"]["server"].is_a?(Hash)
+    servers.each do |srv|
       server=Server.find_or_create_by_hostname(:hostname => srv["name"].downcase)
 
       result=Hardware.find_by_serial(srv["sys_id"])
@@ -51,8 +54,11 @@ class XmlServerImportWorker
 
       unless srv["lssecfixes"].nil?
         ['overdue', 'list'].each do |category|
-          srv["lssecfixes"][category]["package"].each do |package|
-            server.add_or_update_secfix(package["name"], package["rhsa"], category, package["severity"])
+          begin
+            srv["lssecfixes"][category]["package"].each do |package|
+              server.add_or_update_secfix(package["name"], package["rhsa"], category, package["severity"])
+            end
+          rescue
           end
         end
         srv.except!("lssecfixes")
@@ -77,8 +83,11 @@ class XmlServerImportWorker
 
       unless srv["wwpn"].nil?
         srv["wwpn"]["port"].each do |port|
-          unless port["brand"].nil?
-            server.add_or_update_linux_port(port["name"], port["brand"], port["card_model"], port["card_type"], port["speed"], port["slot"], port["driver"], port["wwn"])
+          if port["name"].match(/host/)
+            server.add_or_update_linux_port(port["name"], port["brand"], port["model"], port["type"], port["speed"], port["slot"], port["driver"], port["wwn"], port["fwversion"])
+          end
+          if port["name"].match(/fc/)
+            server.add_or_update_aix_port(port["name"], port["wwn"])
           end
         end
         srv.except!("wwpn")
@@ -109,6 +118,7 @@ class XmlServerImportWorker
     end
     log.analyze_result
     log.save!
+    puts "#{log.filename} success : #{log.success_count}"
     Rails.cache.clear
   end
 

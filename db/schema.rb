@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130926120335) do
+ActiveRecord::Schema.define(:version => 20131003140648) do
 
   create_table "activities", :force => true do |t|
     t.string   "action"
@@ -45,14 +45,11 @@ ActiveRecord::Schema.define(:version => 20130926120335) do
   add_index "aix_paths", ["server_id"], :name => "index_aix_paths_on_server_id"
 
   create_table "aix_ports", :force => true do |t|
-    t.string   "port"
-    t.integer  "server_id"
+    t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.integer  "wwpn_id"
   end
-
-  add_index "aix_ports", ["server_id"], :name => "index_aix_ports_on_server_id"
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -156,10 +153,10 @@ ActiveRecord::Schema.define(:version => 20130926120335) do
     t.string   "speed"
     t.string   "slot"
     t.string   "driver"
-    t.integer  "server_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.integer  "wwpn_id"
+    t.string   "firmware"
   end
 
   create_table "linux_security_fixes", :force => true do |t|
@@ -406,9 +403,10 @@ ActiveRecord::Schema.define(:version => 20130926120335) do
 
   create_table "wwpns", :force => true do |t|
     t.string   "wwpn"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
     t.integer  "server_id"
+    t.integer  "san_infra_id"
   end
 
 end

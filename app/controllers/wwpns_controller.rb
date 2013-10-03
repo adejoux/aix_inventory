@@ -19,7 +19,7 @@ class WwpnsController < ApplicationController
       return
     end
 
-    @search = Wwpn.datatable_query.search(session[:last_query])
+    @search = Wwpn.customer_scope(current_user.customer_scope).search(session[:last_query])
     @total_records = Wwpn.count
 
     @wwpns = @search.result
@@ -30,7 +30,6 @@ class WwpnsController < ApplicationController
 
     @wwpns = @wwpns.order("#{sort_column} #{sort_direction}")
     @search.build_condition
-
 
     respond_to do |format|
       format.html # index.html.erb
@@ -63,12 +62,18 @@ class WwpnsController < ApplicationController
     @wwpns.page(page).per_page(per_page).map do |wwpn|
       [
         wwpn.wwpn,
-        (wwpn.customer || "N/F"),
-        (wwpn.hostname || "N/F"),
-        get_sdd_driver(wwpn),
-        (wwpn.switch || "N/F"),
-        (wwpn.portname || "N/F"),
-        (wwpn.port || "N/F")
+        wwpn.get_server("customer"),
+        wwpn.get_server("hostname"),
+        wwpn.get_server("run_date").to_s,
+        wwpn.get_server("os_version"),
+        wwpn.get_linux_port("name"),
+        wwpn.get_linux_port("brand"),
+        wwpn.get_linux_port("card_model"),
+        wwpn.get_linux_port("card_type"),
+        wwpn.get_linux_port("driver"),
+        wwpn.get_server_attribute("configsan_multipathing"),
+        wwpn.get_server_attribute("configsan_sanboot"),
+        wwpn.get_linux_port("firmware"),
       ]
     end
   end
@@ -84,10 +89,11 @@ class WwpnsController < ApplicationController
   end
 
   def get_sdd_driver(wwpn)
-    if wwpn.softwares.where(:name => "sdd driver").first.nil?
-      "N/F"
+    if wwpn.server && wwpn.server.server_attributes.where( name: "sdd_driver").first
+      wwpn.server.server_attributes.where( name: "sdd_driver").first.output
     else
-      wwpn.softwares.where(:name => "sdd driver").first.version
+      "N/F"
     end
   end
+
 end

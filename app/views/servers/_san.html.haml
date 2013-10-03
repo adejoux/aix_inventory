@@ -1,7 +1,7 @@
 - unless @server.wwpns.empty?
   %h2 SAN Information
   %h3 fibre channel adapters
-  - unless @server.linux_ports.empty?
+  - if @server.os_type == "Linux"
     %table.table.table-bordered.table-striped
       %thead
         %tr
@@ -14,20 +14,17 @@
           %th driver
           %th wwpn
       %tbody
-        - @server.linux_ports.each do |linux_port|
+        - @server.wwpns.each do |wwpn|
           %tr
-            %td= linux_port.name
-            %td= linux_port.brand
-            %td= linux_port.card_model
-            %td= linux_port.card_type
-            %td= linux_port.speed
-            %td= linux_port.slot
-            %td= linux_port.driver
-            - unless linux_port.wwpn.nil?
-              %td= linux_port.wwpn.wwpn
-            - else
-              %td N/F
-  - unless @server.aix_ports.empty?
+            %td= wwpn.linux_port.name
+            %td= wwpn.linux_port.brand
+            %td= wwpn.linux_port.card_model
+            %td= wwpn.linux_port.card_type
+            %td= wwpn.linux_port.speed
+            %td= wwpn.linux_port.slot
+            %td= wwpn.linux_port.driver
+            %td= wwpn.wwpn
+  - if @server.os_type == "AIX"
     %table.table.table-bordered.table-striped
       %thead
         %tr
@@ -41,10 +38,11 @@
           %th speed
           %th status
       %tbody
-        - @server.aix_ports.each do |aix_port|
+        - @server.wwpns.each do |wwpn|
           %tr
-            %td= aix_port.port
-            - if aix_port.wwpn.nil?
+            %td= wwpn.aix_port.name
+            %td= wwpn.wwpn
+            - if wwpn.san_infra.nil?
               %td NF
               %td NF
               %td NF
@@ -52,26 +50,15 @@
               %td NF
               %td NF
               %td NF
-              %td NF
-            - else
-              %td= aix_port.wwpn.wwpn
-              - if aix_port.wwpn.san_infra.nil?
-                %td NF
-                %td NF
-                %td NF
-                %td NF
-                %td NF
-                %td NF
-                %td NF
-              -else
-                - san_infra = aix_port.wwpn.san_infra
-                %td= san_infra.infra
-                %td= san_infra.fabric
-                %td= san_infra.switch
-                %td= san_infra.port
-                %td= san_infra.portname
-                %td= san_infra.speed
-                %td= san_infra.status
+            -else
+              - san_infra = wwpn.san_infra
+              %td= san_infra.infra
+              %td= san_infra.fabric
+              %td= san_infra.switch
+              %td= san_infra.port
+              %td= san_infra.portname
+              %td= san_infra.speed
+              %td= san_infra.status
   - unless @server.aix_paths.empty?
     %h3 san paths
     %table.table.table-bordered.table-striped
