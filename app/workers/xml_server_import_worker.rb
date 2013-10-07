@@ -5,6 +5,7 @@ class XmlServerImportWorker
   def process_server(filename)
     log=ImportReport.new
     log.filename=filename
+    log.output=""
     log.success_count=0
     log.error_count=0
 
@@ -25,8 +26,9 @@ class XmlServerImportWorker
     servers=data["servers"]["server"] if data["servers"]["server"].is_a?(Array)
     servers << data["servers"]["server"] if data["servers"]["server"].is_a?(Hash)
     servers.each do |srv|
-      server=Server.find_or_create_by_hostname(:hostname => srv["name"].downcase)
-
+      customer=File.basename(filename).sub(/.xml/, '')
+      server=Server.find_or_create_by_hostname(hostname: srv["name"].downcase, customer: customer)
+      server.save
       result=Hardware.find_by_serial(srv["sys_id"])
       if result.nil?
         server.build_hardware
@@ -75,22 +77,39 @@ class XmlServerImportWorker
       end
 
       unless srv["lsdf"].nil?
-        srv["lsdf"]["fs"].each do |fs|
-          server.add_or_update_fs(fs["name"], fs["device"], fs["size"], fs["free"])
+        begin
+          srv["lsdf"]["fs"].each do |fs|
+            server.add_or_update_fs(fs["name"], fs["device"], fs["size"], fs["free"])
+          end
+        rescue
         end
         srv.except!("lsdf")
       end
 
       unless srv["wwpn"].nil?
-        srv["wwpn"]["port"].each do |port|
-          if port["name"].match(/host/)
-            server.add_or_update_linux_port(port["name"], port["brand"], port["model"], port["type"], port["speed"], port["slot"], port["driver"], port["wwn"], port["fwversion"])
+        begin
+          srv["wwpn"]["port"].each do |port|
+            if port["name"].match(/host/)
+              server.add_or_update_linux_port(port["name"], port["brand"], port["model"], port["type"], port["speed"], port["slot"], port["driver"], port["wwn"], port["fwversion"])
+            end
+            if port["name"].match(/fc/)
+              server.add_or_update_aix_port(port["name"], port["wwn"])
+            end
           end
-          if port["name"].match(/fc/)
-            server.add_or_update_aix_port(port["name"], port["wwn"])
-          end
+        rescue
         end
         srv.except!("wwpn")
+      end
+
+      unless srv["lparstat"].nil?
+        lparstat = server.lparstat || server.build_lparstat
+        srv["lparstat"]["stat"].each do |stat|
+          begin
+            attribute=lparstat_to_sym(stat["name"])
+            lparstat.send("#{attribute}=", stat["value"])
+          rescue
+          end
+        end
       end
 
       srv.each_key do |attr|
@@ -105,7 +124,7 @@ class XmlServerImportWorker
         srv.except!(attr)
       end
 
-      server.customer=File.basename(filename).sub(/.xml/, '')
+
 
       begin
         server.save!
@@ -129,8 +148,61 @@ class XmlServerImportWorker
     files.each do |file|
       puts "processing file #{file}\n"
       process_server([new_path,file].join('/'))
-      #File.rename([new_path,x].join('/'), [done_path,x+Time.new.to_formatted_s(:number)].join('/'))
+      File.rename([new_path,file].join('/'), [done_path,file+Time.new.to_formatted_s(:number)].join('/'))
     end
   end
+
+  private
+  def lparstat_to_sym(stat)
+    convert_name = {
+      "ActiveCPUsinPool"=> "active_cpus_in_pool",
+      "ActivePhysicalCPUsinsystem" =>"active_physical_cpus_in_system",
+      "CapacityIncrement" =>"capacity_increment",
+      "DesiredCapacity" =>"desired_capacity",
+      "DesiredMemory" =>"desired_memory",
+      "DesiredVariableCapacityWeight" =>"desired_variable_capacity_weight",
+      "DesiredVirtualCPUs" =>"desired_virtual_cpus",
+      "EntitledCapacity" =>"entitled_capacity",
+      "EntitledCapacityofPool" =>"entitled_capacity_of_pool",
+      "HypervisorPageSize" =>"hypervisor_page_size",
+      "MaximumCapacity" =>"maximum_capacity",
+      "MaximumCapacityofPool" =>"maximum_capacity_of_pool",
+      "MaximumMemory" =>"maximum_memory",
+      "MaximumPhysicalCPUsinsystem" =>"maximum_physical_cpus_in_system",
+      "MaximumVirtualCPUs" =>"maximum_virtual_cpus",
+      "MemoryGroupIDofLPAR" =>"memory_group_id_of_lpar",
+      "MemoryMode" =>"memory_mode",
+      "MemoryPoolID" =>"memory_pool",
+      "MinimumCapacity" =>"minimum_capacity",
+      "MinimumMemory" =>"minimum_memory",
+      "MinimumVirtualCPUs" =>"minimum_virtual_cpus",
+      "Mode" =>"mode",
+      "NodeName" =>"node_name",
+      "OnlineMemory" =>"online_memory",
+      "OnlineVirtualCPUs" =>"online_virtual_cpus",
+      "PartitionGroup-ID" =>"partition_group",
+      "PartitionName" =>"partition_name",
+      "PartitionNumber" =>"partition_number",
+      "PhysicalCPUPercentage" =>"physical_cpu_percentage",
+      "PhysicalMemoryinthePool" =>"physical_memory_in_the_pool",
+      "PowerSavingMode" =>"power_saving_mode",
+      "SharedPhysicalCPUsinsystem" =>"shared_physical_cpus_in_system",
+      "SharedPoolID" =>"shared_pool",
+      "TargetMemoryExpansionFactor" =>"target_memory_expansion_factor",
+      "TargetMemoryExpansionSize" =>"target_memory_expansion_size",
+      "TotalI/OMemoryEntitlement" =>"total_io_memory_entitlement",
+      "Type" =>"lpar_type",
+      "UnallocatedCapacity" =>"unallocated_capacity",
+      "UnallocatedI/OMemoryentitlement" =>"unallocated_io_memory_entitlement",
+      "UnallocatedVariableMemoryCapacityWeight" =>"unallocated_variable_memory_capacity_weight",
+      "UnallocatedWeight" =>"unallocated_weight",
+      "VariableCapacityWeight" =>"variable_capacity_weight",
+      "VariableMemoryCapacityWeight" =>"variable_memory_capacity_weight"}
+      unless convert_name[stat].nil?
+        convert_name[stat].to_sym
+      else
+        stat
+      end
+    end
 
 end

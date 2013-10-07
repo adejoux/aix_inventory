@@ -28,7 +28,7 @@ class Server < ActiveRecord::Base
   has_many :ip_addresses, :dependent => :destroy, :autosave => true
   has_many :server_attributes, :dependent => :destroy, :autosave => true
   has_many :software_deployments
-  has_one :lparstat
+  has_one :lparstat, :dependent => :destroy, :autosave => true
   has_many :softwares, :through => :software_deployments
   has_many :wwpns, :autosave => true
   has_many :san_infras, :through => :wwpns
@@ -157,6 +157,7 @@ class Server < ActiveRecord::Base
 
   def add_or_update_aix_port(name, wwpn)
     wwn = Wwpn.find_or_create_by_wwpn(wwpn)
+    puts self.inspect
     wwn.server_id =self.id
     begin
       wwn.aix_port.name=name

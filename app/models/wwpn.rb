@@ -1,5 +1,5 @@
 class Wwpn < ActiveRecord::Base
-  attr_accessible :wwpn
+  attr_accessible :wwpn, :san_infra_id
   validates_uniqueness_of :wwpn
   validates_presence_of :wwpn
   has_one :aix_port, :dependent => :destroy, :autosave => true
@@ -46,11 +46,23 @@ class Wwpn < ActiveRecord::Base
     end
   end
 
+  def get_aix_port(attribute)
+    begin
+      aix_port.send(attribute).to_s
+    rescue
+      "N/F"
+    end
+  end
+
   def self.customer_scope(customer)
     unless customer.nil? or customer.empty?
       joins(:server).where("servers.customer = ?", customer)
     else
       scoped
     end
+  end
+
+  def self.server_type(type)
+      joins(:server).where("servers.os_type = ?", type)
   end
 end

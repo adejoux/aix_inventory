@@ -40,7 +40,7 @@ private
         lparstat.server.hardware.sys_model,
         lparstat.server.hardware.serial,
         lparstat.partition_name,
-        lparstat.lpar_type,
+        lparstat.lpar_type.to_s,
         lparstat.mode,
         lparstat.online_virtual_cpus.to_s,
         lparstat.entitled_capacity.to_s,

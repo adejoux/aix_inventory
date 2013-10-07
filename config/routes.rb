@@ -60,6 +60,11 @@ AixInventory::Application.routes.draw do
     end
   end
 
+  resources :aix_wwpns, :only => [:index] do
+    collection do
+      post :search, to: 'wwpns#index'
+    end
+  end
   resources :servers, :only => [:edit, :update, :show] do
     collection do
       post :search, to: 'servers#index'

@@ -1,8 +1,6 @@
-class WwpnsController < ApplicationController
-  load_and_authorize_resource
-
+class AixWwpnsController < ApplicationController
   def index
-  if params[:clear].present?
+    if params[:clear].present?
       params[:q] = nil
       params[:sSearch]=nil
       session[:last_query] = nil
@@ -19,8 +17,8 @@ class WwpnsController < ApplicationController
       return
     end
 
-    @search = Wwpn.server_type("Linux").customer_scope(current_user.customer_scope).search(session[:last_query])
-    @total_records = Wwpn.server_type("Linux").customer_scope(current_user.customer_scope).count
+    @search = Wwpn.server_type("AIX").customer_scope(current_user.customer_scope).search(session[:last_query])
+    @total_records = Wwpn.server_type("AIX").customer_scope(current_user.customer_scope).count
 
     @wwpns = @search.result
 
@@ -66,14 +64,8 @@ class WwpnsController < ApplicationController
         wwpn.get_server("hostname"),
         wwpn.get_server("run_date").to_s,
         wwpn.get_server("os_version"),
-        wwpn.get_linux_port("name"),
-        wwpn.get_linux_port("brand"),
-        wwpn.get_linux_port("card_model"),
-        wwpn.get_linux_port("card_type"),
-        wwpn.get_linux_port("driver"),
-        wwpn.get_server_attribute("configsan_multipathing"),
-        wwpn.get_server_attribute("configsan_sanboot"),
-        wwpn.get_linux_port("firmware"),
+        wwpn.get_aix_port("name"),
+        wwpn.get_server_attribute("sdd_driver"),
       ]
     end
   end
