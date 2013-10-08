@@ -9,13 +9,10 @@ class CsvSanImportWorker
     log.success_count=0
     log.error_count=0
 
-    total_chunks = SmarterCSV.process(filename, :chunk_size => 500, :col_sep => ";", :key_mapping => { :scm_manager=> nil, :scm_alias => nil }) do |chunk|
+    total_chunks = SmarterCSV.process(filename, :chunk_size => 500, :col_sep => ":", :key_mapping => { :scm_manager=> nil, :scm_alias => nil }) do |chunk|
       chunk.each do |csv_line|
         next if csv_line[:wwpn].nil?
-        next if csv_line[:wwpn].empty?
-
-        wwpn_id=csv_line[:wwpn].to_s.upcase.gsub(':', '')
-        next unless wwpn_id.match(/^\h+$/)
+        next if csv_line[:wwpn].to_s.empty?
 
         san_infra=SanInfra.find_by_switch_and_port(csv_line[:switch], csv_line[:port]) || SanInfra.new
         san_infra.infra = csv_line[:infra]
@@ -29,13 +26,26 @@ class CsvSanImportWorker
 
         begin
           san_infra.save!
-          san_infra.activities.find_or_create_by_action("update").touch
-          wwpn.find_or_create_by_wwpn(wwpn: wwpn_id, san_infra_id: san_infra.id)
+          #san_infra.activities.find_or_create_by_action("update").touch
           log.success_count += 1
         rescue Exception => e
           log.output << "SAVE ERROR: #{e.message}\n"
           puts san_infra.inspect
           log.error_count += 1
+        end
+
+        begin
+          csv_line[:wwpn].to_s.split(',').each do |wwpn_id|
+            wwpn_id=wwpn_id.to_s.upcase.gsub(':', '')
+            wwpn = Wwpn.find_by_wwpn(wwpn_id)
+            if wwpn.nil?
+              san_infra.wwpns.create!( :wwpn => wwpn_id )
+            else
+              wwpn.san_infra_id=san_infra.id
+              wwpn.save!
+            end
+          end
+        rescue
         end
       end
     end

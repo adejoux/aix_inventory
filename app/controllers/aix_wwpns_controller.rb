@@ -17,8 +17,8 @@ class AixWwpnsController < ApplicationController
       return
     end
 
-    @search = Wwpn.server_type("AIX").customer_scope(current_user.customer_scope).search(session[:last_query])
-    @total_records = Wwpn.server_type("AIX").customer_scope(current_user.customer_scope).count
+    @search = Wwpn.server_type("VIO").joins(:san_infra).customer_scope(current_user.customer_scope).search(session[:last_query])
+    @total_records = Wwpn.server_type("VIO").joins(:san_infra).customer_scope(current_user.customer_scope).count
 
     @wwpns = @search.result
 

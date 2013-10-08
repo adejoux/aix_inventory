@@ -54,6 +54,14 @@ class Wwpn < ActiveRecord::Base
     end
   end
 
+  def get_san_infra(attribute)
+    begin
+      san_infra.send(attribute).to_s
+    rescue
+      "N/F"
+    end
+  end
+
   def self.customer_scope(customer)
     unless customer.nil? or customer.empty?
       joins(:server).where("servers.customer = ?", customer)

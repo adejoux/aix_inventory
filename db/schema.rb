@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131003140648) do
+ActiveRecord::Schema.define(:version => 20131008143642) do
 
   create_table "activities", :force => true do |t|
     t.string   "action"
@@ -76,6 +76,8 @@ ActiveRecord::Schema.define(:version => 20131003140648) do
     t.integer  "server_id"
     t.string   "device"
   end
+
+  add_index "file_systems", ["server_id", "mount_point"], :name => "index_file_systems_on_server_id_and_mount_point", :unique => true
 
   create_table "firmwares", :force => true do |t|
     t.string   "model"
@@ -257,11 +259,11 @@ ActiveRecord::Schema.define(:version => 20131003140648) do
   create_table "san_infras", :force => true do |t|
     t.string   "infra",      :limit => 15
     t.string   "fabric",     :limit => 15
-    t.string   "switch",     :limit => 15
+    t.string   "switch",     :limit => 30
     t.string   "port",       :limit => 10
     t.string   "speed",      :limit => 5
     t.string   "status",     :limit => 15
-    t.string   "portname",   :limit => 15
+    t.string   "portname",   :limit => 30
     t.string   "mode",       :limit => 15
     t.datetime "created_at",               :null => false
     t.datetime "updated_at",               :null => false
@@ -278,6 +280,8 @@ ActiveRecord::Schema.define(:version => 20131003140648) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
+
+  add_index "server_attributes", ["server_id", "name"], :name => "index_server_attributes_on_server_id_and_name", :unique => true
 
   create_table "server_versions", :force => true do |t|
     t.string   "item_type",      :null => false

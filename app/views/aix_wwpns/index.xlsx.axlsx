@@ -14,21 +14,26 @@ wb.add_worksheet(name: 'wwpns') do |sheet|
   sheet.add_row
   sheet.add_row [ 'wwpns list' ], :style => title
   sheet.add_row
-  sheet.add_row [ 'wwpn', 'customer', 'hostname', 'os version', 'driver', 'switch','portname','port' ], :style => header
+  sheet.add_row [ 'wwpn', 'customer', 'hostname', 'run date', 'os version', 'adapter', 'sdd_driver', 'infra', 'fabric', 'switch', 'port', 'speed', 'status', 'portname', 'mode' ], :style => header
+
   @wwpns.each do |wwpn|
-    if wwpn.softwares.where(:name => "sdd driver").first.nil?
-      driver="N/F"
-    else
-      driver=wwpn.softwares.where(:name => "sdd driver").first.version
-    end
-    sheet.add_row [wwpn.wwpn,
-                  wwpn.customer,
-                  wwpn.hostname,
-                  wwpn.os_version,
-                  driver,
-                  wwpn.switch,
-                  wwpn.portname,
-                  wwpn.port], :style => data_fmt
+    sheet.add_row [
+      wwpn.wwpn,
+      wwpn.get_server("customer"),
+      wwpn.get_server("hostname"),
+      wwpn.get_server("run_date").to_s,
+      wwpn.get_server("os_version"),
+      wwpn.get_aix_port("name"),
+      wwpn.get_server_attribute("sdd_driver"),
+      wwpn.get_san_infra("infra"),
+      wwpn.get_san_infra("fabric"),
+      wwpn.get_san_infra("switch"),
+      wwpn.get_san_infra("port"),
+      wwpn.get_san_infra("speed"),
+      wwpn.get_san_infra("status"),
+      wwpn.get_san_infra("portname"),
+      wwpn.get_san_infra("mode"),
+    ], :style => data_fmt
     sheet.column_widths 16, 16, 16, 16, 16, 16, 16, 16
     sheet.merge_cells "A2:I2"
   end

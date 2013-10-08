@@ -19,7 +19,7 @@ class AixPort < ActiveRecord::Base
 
   # validations
   validates_presence_of :name
-  validates_uniqueness_of :name
+  #validates_uniqueness_of :name
 
   UNRANSACKABLE_ATTRIBUTES = ["created_at", "updated_at", "id"]
 
