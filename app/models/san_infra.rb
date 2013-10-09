@@ -20,6 +20,7 @@ class SanInfra < ActiveRecord::Base
   validates_presence_of :fabric, :infra, :mode, :port, :portname, :speed, :status, :switch
   validates :port, uniqueness: { scope: :switch  }
   has_many :wwpn, :autosave => true
+  has_many :activities, as: :trackable, :autosave => true, :dependent => :destroy
 
   UNRANSACKABLE_ATTRIBUTES = ["created_at", "updated_at", "id"]
 

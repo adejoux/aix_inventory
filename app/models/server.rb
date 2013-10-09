@@ -119,40 +119,42 @@ class Server < ActiveRecord::Base
   def add_or_update_attribute(name, value)
     attr = server_attributes.find_or_initialize_by_name(name)
     attr.update_attributes(output: value, category: "inv")
-    #attr.activities.find_or_initialize_by_action("update").touch
+    attr.activities.find_or_initialize_by_action("update").touch
   end
 
   def add_or_update_vg(name, size, free)
     vg = volume_groups.find_or_initialize_by_name(name)
     vg.update_attributes(vg_size: size, free_size: free)
-    #vg.activities.find_or_initialize_by_action("update").touch
+    vg.activities.find_or_initialize_by_action("update").touch
   end
 
   def add_or_update_fs(mount_point, device, size, free)
     fs = file_systems.find_or_initialize_by_mount_point(mount_point)
     fs.update_attributes(size: size, device: device, free: free)
-    #fs.activities.find_or_initialize_by_action("update").touch
+    fs.activities.find_or_initialize_by_action("update").touch
   end
 
   def add_or_update_secfix(name, rhsa, category, severity)
     fix = linux_security_fixes.find_or_initialize_by_name(name)
     fix.update_attributes(rhsa: rhsa, category: category, severity: severity)
-    #fix.activities.find_or_initialize_by_action("update").touch
+    fix.activities.find_or_initialize_by_action("update").touch
   end
 
   def add_or_update_linux_port(name, brand, model, card_type, speed, slot, driver, wwpn, firmware)
-    wwn = Wwpn.find_or_create_by_wwpn(wwpn)
-    puts "LINUX : #{self.id}"
-    wwn.server_id =self.id
-    puts "LINUX wwn : #{wwn.server_id}"
+    wwn = Wwpn.find_by_wwpn(wwpn)
+    if wwn.nil?
+      wwn=wwpns.build(wwpn: wwpn)
+    end
+    unless wwn.server_id == self.id
+      wwpns << wwn
+    end
+
     begin
       wwn.linux_port.update_attributes(name: name, brand: brand, card_model: model, card_type: card_type, speed: speed, slot: slot, driver: driver, firmware: firmware)
     rescue
       wwn.build_linux_port(name: name, brand: brand, card_model: model, card_type: card_type, speed: speed, slot: slot, driver: driver, firmware: firmware)
     end
-    wwn.save
-
-    #wwn.activities.find_or_initialize_by_action("update").touch
+    wwn.activities.find_or_initialize_by_action("update").touch
   end
 
   def add_or_update_aix_port(name, wwpn)
@@ -169,12 +171,12 @@ class Server < ActiveRecord::Base
     rescue
       wwn.build_aix_port(name: name)
     end
-    #wwn.activities.find_or_initialize_by_action("update").touch
+    wwn.activities.find_or_initialize_by_action("update").touch
   end
 
   def add_or_update_ip_address(address, subnet, mac_address)
     ip = ip_addresses.find_or_initialize_by_address(address)
     ip.update_attributes(subnet: subnet, mac_address: mac_address)
-    #ip.activities.find_or_initialize_by_action("update").touch
+    ip.activities.find_or_initialize_by_action("update").touch
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131008143642) do
+ActiveRecord::Schema.define(:version => 20131009093015) do
 
   create_table "activities", :force => true do |t|
     t.string   "action"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(:version => 20131008143642) do
     t.datetime "updated_at",     :null => false
   end
 
+  add_index "activities", ["trackable_id", "trackable_type"], :name => "index_activities_on_trackable_id_and_trackable_type"
   add_index "activities", ["trackable_id"], :name => "index_activities_on_trackable_id"
 
   create_table "aix_alerts", :force => true do |t|
@@ -51,6 +52,8 @@ ActiveRecord::Schema.define(:version => 20131008143642) do
     t.integer  "wwpn_id"
   end
 
+  add_index "aix_ports", ["wwpn_id"], :name => "index_aix_ports_on_wwpn_id"
+
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
     t.integer  "attempts",   :default => 0
@@ -78,6 +81,7 @@ ActiveRecord::Schema.define(:version => 20131008143642) do
   end
 
   add_index "file_systems", ["server_id", "mount_point"], :name => "index_file_systems_on_server_id_and_mount_point", :unique => true
+  add_index "file_systems", ["server_id"], :name => "index_file_systems_on_server_id"
 
   create_table "firmwares", :force => true do |t|
     t.string   "model"
@@ -105,6 +109,8 @@ ActiveRecord::Schema.define(:version => 20131008143642) do
     t.datetime "updated_at",  :null => false
     t.text     "info"
   end
+
+  add_index "health_checks", ["server_id"], :name => "index_health_checks_on_server_id"
 
   create_table "healthcheck_versions", :force => true do |t|
     t.string   "item_type",      :null => false
@@ -147,6 +153,8 @@ ActiveRecord::Schema.define(:version => 20131008143642) do
     t.datetime "updated_at",  :null => false
   end
 
+  add_index "ip_addresses", ["server_id"], :name => "index_ip_addresses_on_server_id"
+
   create_table "linux_ports", :force => true do |t|
     t.string   "name"
     t.string   "brand"
@@ -161,6 +169,8 @@ ActiveRecord::Schema.define(:version => 20131008143642) do
     t.string   "firmware"
   end
 
+  add_index "linux_ports", ["wwpn_id"], :name => "index_linux_ports_on_wwpn_id"
+
   create_table "linux_security_fixes", :force => true do |t|
     t.string   "name"
     t.string   "severity"
@@ -170,6 +180,8 @@ ActiveRecord::Schema.define(:version => 20131008143642) do
     t.datetime "updated_at", :null => false
     t.integer  "server_id"
   end
+
+  add_index "linux_security_fixes", ["server_id"], :name => "index_linux_security_fixes_on_server_id"
 
   create_table "lparstat_versions", :force => true do |t|
     t.string   "item_type",      :null => false
@@ -232,6 +244,8 @@ ActiveRecord::Schema.define(:version => 20131008143642) do
     t.string   "lpar_type"
   end
 
+  add_index "lparstats", ["server_id"], :name => "index_lparstats_on_server_id"
+
   create_table "report_fields", :force => true do |t|
     t.string   "association_type"
     t.string   "select_attribute"
@@ -239,6 +253,8 @@ ActiveRecord::Schema.define(:version => 20131008143642) do
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
   end
+
+  add_index "report_fields", ["report_id"], :name => "index_report_fields_on_report_id"
 
   create_table "reports", :force => true do |t|
     t.string   "name"
@@ -282,6 +298,7 @@ ActiveRecord::Schema.define(:version => 20131008143642) do
   end
 
   add_index "server_attributes", ["server_id", "name"], :name => "index_server_attributes_on_server_id_and_name", :unique => true
+  add_index "server_attributes", ["server_id"], :name => "index_server_attributes_on_server_id"
 
   create_table "server_versions", :force => true do |t|
     t.string   "item_type",      :null => false
@@ -307,6 +324,7 @@ ActiveRecord::Schema.define(:version => 20131008143642) do
   end
 
   add_index "servers", ["customer", "hostname"], :name => "index_servers_on_customer_and_hostname", :unique => true
+  add_index "servers", ["hardware_id"], :name => "index_servers_on_hardware_id"
 
   create_table "software_deployment_versions", :force => true do |t|
     t.string   "item_type",      :null => false
@@ -405,6 +423,8 @@ ActiveRecord::Schema.define(:version => 20131008143642) do
     t.datetime "updated_at", :null => false
   end
 
+  add_index "volume_groups", ["server_id"], :name => "index_volume_groups_on_server_id"
+
   create_table "wwpns", :force => true do |t|
     t.string   "wwpn"
     t.datetime "created_at",   :null => false
@@ -412,5 +432,8 @@ ActiveRecord::Schema.define(:version => 20131008143642) do
     t.integer  "server_id"
     t.integer  "san_infra_id"
   end
+
+  add_index "wwpns", ["san_infra_id"], :name => "index_wwpns_on_san_infra_id"
+  add_index "wwpns", ["server_id"], :name => "index_wwpns_on_server_id"
 
 end

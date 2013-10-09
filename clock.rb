@@ -10,10 +10,10 @@ include Clockwork
 #   HcConfImportWorker.perform_async
 # end
 
-# every 1.days, 'Server import' do
-#   XmlServerImportWorker.perform_async
-#   CsvServerImportWorker.perform_async
-# end
+every 1.days, 'Server import' do
+  XmlServerImportWorker.perform_async
+  CsvServerImportWorker.perform_async
+end
 
 every 10.minutes, 'SAN import' do
   CsvSanImportWorker.perform_async
