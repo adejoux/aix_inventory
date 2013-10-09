@@ -11,6 +11,7 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
+//= require jquery-ui
 //= require jquery_ujs
 //= require raphael
 //= require morris
@@ -19,5 +20,5 @@
 //= require dataTables/jquery.dataTables.bootstrap
 //= require jquery-fileupload/basic
 //= require jquery-fileupload/vendor/tmpl
-//= require turbolinks 
+//= require turbolinks
 //= require_tree .

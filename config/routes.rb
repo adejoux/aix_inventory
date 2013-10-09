@@ -1,6 +1,10 @@
 # -*- encoding : utf-8 -*-
 AixInventory::Application.routes.draw do
 
+  get "san_reports/index"
+
+  get "san_reports/show"
+
   resources :reports
 
   resources :import_reports
