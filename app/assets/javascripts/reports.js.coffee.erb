@@ -15,16 +15,18 @@ ready =->
     fnRowCallback: (nRow, aData, iDisplayIndex, iDisplayIndexFull) ->
                      $('td:eq(0)', nRow).html( '<a href="<%= web_root + url.quick_search_servers_path %>?type=hostname&search=' + aData[0]  + '">' + aData[0] + '</a>' )
     sAjaxSource: $('#report_datatable').data('source')
-  $('.draggable').draggable
-    appendTo: "body"
-    helper: "clone"
-  $( "#report_fields ol" ).droppable
+  $(document).on 'mouseover', '.draggable', ->
+    $(this).draggable
+      appendTo: "body"
+      helper: "clone"
+  $(document).on 'mouseover', '#report_fields ol', ->
+    $(this).droppable
       activeClass: "ui-state-default"
       hoverClass: "ui-state-hover"
       accept: ":not(.ui-sortable-helper)"
       drop: ( event, ui ) ->
         $( this ).find( ".placeholder" ).remove()
-        $( "<li id=" + ui.draggable.attr('id') + "></li>" ).text( ui.draggable.text() ).appendTo( this )
+        $( "<li id=" + ui.draggable.attr('id') + ' class="label label-success" ></li>' ).text( ui.draggable.text() ).appendTo( this )
         $("#report_selected_fields").val(field_values)
     .sortable
       items: "li:not(.placeholder)"

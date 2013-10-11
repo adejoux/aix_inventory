@@ -1,0 +1,17 @@
+%h1 select fields in reports
+%ul
+  %h2 server
+  - for column in Server.column_names - ['id', "created_at", "hardware_id", "updated_at" ]
+    %il{ id: "server[#{column}]", style: "cursor:move", class: "draggable label"}= column
+  %h2 server attributes
+  - ServerAttribute.group(:name).select(:name).map { |srv_attr| srv_attr.name}.each do |column|
+    %il{ id: "server_attribute[#{column}]", style: "cursor:move", class: "draggable label"}= column
+  %h2
+#report_fields
+  %h1.ui-widget-header
+    report fields
+  .ui-widget-content
+    %ol
+      %li.placeholder
+        %b Drag the fields you want here
+      %li.label.label-success server

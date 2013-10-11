@@ -19,7 +19,7 @@ class WwpnsController < ApplicationController
       return
     end
 
-    @search = Wwpn.server_type("Linux").joins(:san_infra).joins(:linux_port).customer_scope(current_user.customer_scope).search(session[:last_query])
+    @search = Wwpn.server_type("Linux").includes(:san_infra).includes(:linux_port).customer_scope(current_user.customer_scope).search(session[:last_query])
     @total_records = Wwpn.server_type("Linux").customer_scope(current_user.customer_scope).count
 
     @wwpns = @search.result

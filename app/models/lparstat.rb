@@ -57,6 +57,7 @@ class Lparstat < ActiveRecord::Base
   attr_accessible :active_cpus_in_pool, :active_physical_cpus_in_system, :capacity_increment, :desired_capacity, :desired_memory, :desired_variable_capacity_weight, :desired_virtual_cpus, :entitled_capacity, :entitled_capacity_of_pool, :hypervisor_page_size, :maximum_capacity, :maximum_capacity_of_pool, :maximum_memory, :maximum_physical_cpus_in_system, :maximum_virtual_cpus, :memory_group_id_of_lpar, :memory_mode, :memory_pool, :minimum_capacity, :minimum_memory, :minimum_virtual_cpus, :node_name, :online_memory, :online_virtual_cpus, :partition_group, :partition_name, :partition_number, :physical_cpu_percentage, :physical_memory_in_the_pool, :power_saving_mode, :server_id, :shared_physical_cpus_in_system, :shared_pool, :target_memory_expansion_factor, :target_memory_expansion_size, :unallocated_capacity, :unallocated_io_memory_entitlement, :unallocated_variable_memory_capacity_weight, :unallocated_weight, :variable_capacity_weight, :variable_memory_capacity_weight, :mode, :type, :total_io_memory_entitlement
 
   validates_presence_of :partition_name, :mode
+
   has_many :activities, as: :trackable, :autosave => true
 
   has_paper_trail :class_name => 'LparstatVersion'

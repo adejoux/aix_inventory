@@ -2,33 +2,20 @@
 .span6.offset4
   %div#form_report
     .page-header
-      %h1 Create san report
+      %h1 Create report
     = simple_form_for @report do |f|
       = f.input :name
       = f.input :description
-      = f.hidden_field :selected_fields, value: "tbd"
-      %ul
-        %h2 server
-        - for column in Server.column_names - ['id', "created_at", "hardware_id", "updated_at" ]
-          %il{ id: "server[#{column}]", style: "cursor:move", class: "draggable label"}= column
-        %h2 server attributes
-        - ServerAttribute.group(:name).select(:name).map { |srv_attr| srv_attr.name}.each do |column|
-          %il{ id: "server_attribute[#{column}]", style: "cursor:move", class: "draggable label"}= column
-        %h2 san infra
-        - for column in SanInfra.column_names - ['id', "server_id", "created_at", "updated_at" ]
-          %il{ id: "san_infra[#{column}]", style: "cursor:move", class: "draggable label"}= column
-        %h2
-      #report_fields
-        %h1.ui-widget-header
-          report fields
-        .ui-widget-content
-          %ol
-            %li.placeholder
-              %b Drag the fields you want here
-            %li wwpn
+      = f.hidden_field :selected_fields
+      #report_type
+        %h1 select report type
+        = link_to "server report", load_form_report_path("server"),  {:remote => true,  :class => 'btn btn-lg btn-primary'}
+        = link_to "san report", load_form_report_path("san"),  {:remote => true,  :class => 'btn btn-lg btn-primary'}
+      #form_report_fields
       %br
       = f.submit
       = link_to "back", reports_path, class: "btn btn-warning"
+
 
 
 

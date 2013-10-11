@@ -1,11 +1,9 @@
 # -*- encoding : utf-8 -*-
 AixInventory::Application.routes.draw do
 
-  get "san_reports/index"
-
-  get "san_reports/show"
-
   resources :reports
+
+  match "/reports/load_form/:form" => "reports#load_form", as: "load_form_report"
 
   resources :import_reports
 

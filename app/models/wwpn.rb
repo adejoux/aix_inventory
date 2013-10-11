@@ -71,6 +71,6 @@ class Wwpn < ActiveRecord::Base
   end
 
   def self.server_type(type)
-      joins(:server).where("servers.os_type = ?", type)
+    includes(:server => :server_attributes).where("servers.os_type = ?", type)
   end
 end

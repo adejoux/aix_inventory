@@ -1,0 +1,21 @@
+%h1 select fields in reports
+= hidden_field_tag "report['report_type']", 'san'
+%ul
+  %h2 server
+  - for column in Server.column_names - ['id', "created_at", "hardware_id", "updated_at" ]
+    %il{ id: "server[#{column}]", style: "cursor:move", class: "draggable label"}= column
+  %h2 server attributes
+  - ServerAttribute.group(:name).select(:name).map { |srv_attr| srv_attr.name}.each do |column|
+    %il{ id: "server_attribute[#{column}]", style: "cursor:move", class: "draggable label"}= column
+  %h2 san infra
+  - for column in SanInfra.column_names - ['id', "server_id", "created_at", "updated_at" ]
+    %il{ id: "san_infra[#{column}]", style: "cursor:move", class: "draggable label"}= column
+  %h2
+#report_fields
+  %h1.ui-widget-header
+    report fields
+  .ui-widget-content
+    %ol
+      %li.placeholder
+        %b Drag the fields you want here
+      %li wwpn
