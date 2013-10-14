@@ -6,7 +6,7 @@ class Report < ActiveRecord::Base
   validates_presence_of :name
 
   TYPES = %w[server san]
-  FIELD_TYPES = %w[server_attribute server san_infra]
+  FIELD_TYPES = %w[server_attribute server san_infra hardware lparstat]
 
   def selected_fields
     report_fields
@@ -15,12 +15,22 @@ class Report < ActiveRecord::Base
   def selected_fields=(fields)
     fields.split(',').each do |value|
       match_results=value.match(/(\S+)\[(\S+)\]/)
+      next if match_results.nil?
       field_type=match_results[1]
       attribute=match_results[2]
       next unless FIELD_TYPES.include? field_type
       report_fields.build(association_type: field_type, select_attribute: attribute)
     end
     report_fields
+  end
+
+  def request
+    case report_type
+      when "server"
+        Server
+      when "san"
+        Wwpn
+    end
   end
 
 end

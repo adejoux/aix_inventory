@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131009093015) do
+ActiveRecord::Schema.define(:version => 20131014155053) do
 
   create_table "activities", :force => true do |t|
     t.string   "action"
@@ -53,6 +53,13 @@ ActiveRecord::Schema.define(:version => 20131009093015) do
   end
 
   add_index "aix_ports", ["wwpn_id"], :name => "index_aix_ports_on_wwpn_id"
+
+  create_table "customers", :force => true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -245,6 +252,13 @@ ActiveRecord::Schema.define(:version => 20131009093015) do
   end
 
   add_index "lparstats", ["server_id"], :name => "index_lparstats_on_server_id"
+
+  create_table "operating_system_types", :force => true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
 
   create_table "report_fields", :force => true do |t|
     t.string   "association_type"

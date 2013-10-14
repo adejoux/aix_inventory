@@ -3,7 +3,8 @@ AixInventory::Application.routes.draw do
 
   resources :reports
 
-  match "/reports/load_form/:form" => "reports#load_form", as: "load_form_report"
+  match "/reports/load_form/:form" => "reports#load_form", as: "load_form_report", :via => [:get]
+  match "/reports/server_search/:id" => "reports#show", as: "server_search_report", :via => [:post]
 
   resources :import_reports
 

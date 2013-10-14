@@ -1,8 +1,24 @@
-.row
+.row-fluid
   .span12
-    %h1= @report.name
-    = link_to "back", reports_path, class: "btn btn-danger"
-    = link_to "Excel Export", report_path(@report, :format => :xlsx), :class => "btn btn-warning"
+    %h1
+      = @report.name
+      #search_toggle.btn.btn-primary
+        search
+      #action_toggle.btn.btn-primary
+        actions
+    #action_menu
+      %h2 Actions
+      = link_to "back", reports_path, class: "btn btn-danger"
+      = link_to "Excel Export", report_path(@report, :format => :xlsx), :class => "btn btn-warning"
+    #search_menu
+      %h2 Advanced search
+      = search_form_for @search, :url=> server_search_report_path(@report), method: :post do |f|
+        = f.condition_fields do |c|
+          = render "condition_fields", f: c
+        = link_to_add_fields "Add Conditions", f, :condition
+        .form-actions
+          =f.submit "Search", :class => "btn btn-success"
+          = link_to "Reset", report_path(@report, {:clear => 'yes'}), :class => "btn btn-primary"
     %table{ :id => "report_datatable", :class => "table table-striped", :data => { :source => "#{ report_url(format: "json") }" } }
       %thead
         %tr
@@ -10,6 +26,8 @@
           - @columns.each do |column|
             %th=column
       %tbody
+  .span3
+
 
 
 

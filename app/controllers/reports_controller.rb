@@ -5,15 +5,29 @@ class ReportsController < ApplicationController
   end
 
   def show
+    if params[:clear].present?
+      params[:q] = nil
+      params[:sSearch]=nil
+      session[:last_query] = nil
+    end
+
+    if params[:q].present?
+      session[:last_query] = params[:q]
+    elsif session[:last_query].present?
+      params.merge( session[:last_query] )
+    end
+
+    @search = Server.customer_scope(current_user.customer_scope).search(session[:last_query])
     @report = Report.find(params[:id])
     @columns=@report.report_fields.select("select_attribute").map { |rq| rq.select_attribute }
     @total_records = Server.customer_scope(current_user.customer_scope).count
+    @search.build_condition
 
     respond_to do |format|
-      format.html # show.html.haml
+      format.html
       format.json {
         @secho = params[:sEcho].to_i
-        @data=datatable_data }
+        @data = datatable_data }
       format.xlsx { @data=xlsx_data }
     end
   end
@@ -81,13 +95,15 @@ class ReportsController < ApplicationController
 
   private
   def datatable_data
-    server_list=Server.customer_scope(current_user.customer_scope).page(page).per_page(per_page)
+    server_list=@search.result.page(page).per_page(per_page)
+    @search.build_condition
     build_rows(server_list)
   end
 
   def xlsx_data
-    server_list=Server.customer_scope(current_user.customer_scope)
+    server_list=@search.result
     @first_header="server"
+    @search.build_condition
     build_rows(server_list)
   end
 
@@ -100,6 +116,17 @@ class ReportsController < ApplicationController
           ServerAttribute.where(name: field.select_attribute).joins(:server).find_all_by_server_id(server_list.map { |srv| srv.id }).map { |res| results[res.server.hostname][res.name]=res.output }
         when "server"
           Server.find(server_list.map { |srv| srv.id}).map { |res| results[res.hostname][field.select_attribute]=res.send(field.select_attribute)}
+        when "hardware"
+          Server.joins(:hardware).find(server_list.map { |srv| srv.id}).map { |res| results[res.hostname][field.select_attribute]=res.hardware.send(field.select_attribute)}
+        when "lparstat"
+          Server.includes(:lparstat).find(server_list.map { |srv| srv.id}).map do |res|
+            begin
+              res_value=res.lparstat.send(field.select_attribute)
+            rescue
+              res_value="N/F"
+            end
+            results[res.hostname][field.select_attribute]=res_value
+          end
       end
     end
 

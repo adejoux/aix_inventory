@@ -1,4 +1,4 @@
-.row
+.row-fluid
   .span3.bs-docs-sidebar
     %h2 Views
     %ul.nav.nav-list.bs-docs-sidenav
@@ -15,7 +15,7 @@
         =f.submit "Search", :class => "btn btn-success"
         = link_to "Excel Export", servers_path(:format => :xlsx), :class => "btn btn-warning"
         = link_to "Reset", servers_path({:clear => 'yes'}), :class => "btn btn-primary"
-.row
+.row-fluid
   .span12
     %table{ :id => "srv_datatable", :class => "table table-striped", :data => { :source => "#{ servers_url(format: "json") }" } }
       %thead

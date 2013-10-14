@@ -1,4 +1,9 @@
-%h1 select fields in reports
+%h1 select report scope
+
+%h2 os type
+= select("report", "os_type", Server.uniq.pluck(:os_type), class: "span1")
+
+%h1 Select fields to add in report
 %ul
   %h2 server
   - for column in Server.column_names - ['id', "created_at", "hardware_id", "updated_at" ]
@@ -6,6 +11,12 @@
   %h2 server attributes
   - ServerAttribute.group(:name).select(:name).map { |srv_attr| srv_attr.name}.each do |column|
     %il{ id: "server_attribute[#{column}]", style: "cursor:move", class: "draggable label"}= column
+  %h2 hardware
+  - for column in Hardware.column_names - ['id', "created_at", "updated_at" ]
+    %il{ id: "hardware[#{column}]", style: "cursor:move", class: "draggable label"}= column
+  %h2 lparstats
+  - for column in Lparstat.column_names - ['id', "created_at", "updated_at" ]
+    %il{ id: "lparstat[#{column}]", style: "cursor:move", class: "draggable label"}= column
   %h2
 #report_fields
   %h1.ui-widget-header

@@ -1,6 +1,6 @@
-.field.input-small
+.field
   = f.attribute_fields do |a|
-    = a.attribute_select associations: [:health_checks, :server_attributes],  class: "input-small"
+    = a.attribute_select associations: [:health_checks, :server_attributes]
   = f.predicate_select only: [:cont, :not_cont, :eq, :not_eq], compounds: false
   = f.value_fields do |v|
     = v.text_field :value

@@ -32,6 +32,13 @@ ready =->
       items: "li:not(.placeholder)"
       sort:
         $( this ).removeClass( "ui-state-default" )
+  $('#search_toggle').click ->
+    $('#search_menu').toggle()
+    #$(this).html (if ($("#search_toggle").text() is "Show search") then "Hide search" else "Show search")
+  $('#action_toggle').click ->
+    $('#action_menu').toggle()
+    #$(this).html (if ($("#action_toggle").text() is "Show actions") then "Hide actions" else "Show actions")
+
 
 field_values =->
    $('#report_fields li').map( (i,n) ->
