@@ -1,5 +1,5 @@
 class Report < ActiveRecord::Base
-  attr_accessible :name, :description, :report_type, :report_fields_attributes, :selected_fields
+  attr_accessible :name, :description, :report_type, :os_type, :report_fields_attributes, :selected_fields
   has_many :report_fields
   accepts_nested_attributes_for :report_fields
 
@@ -24,12 +24,17 @@ class Report < ActiveRecord::Base
     report_fields
   end
 
-  def request
+  def make_request
     case report_type
       when "server"
-        Server
+        Server.includes(:operating_system_type)
+              .includes(:operating_system)
+              .includes(:customer)
       when "san"
-        Wwpn
+        Wwpn.includes(:san_infra)
+            .includes(:linux_port)
+            .includes(:aix_port)
+            .includes(:server)
     end
   end
 

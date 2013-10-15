@@ -28,8 +28,14 @@ class XmlServerImportWorker
     servers.each do |srv|
       ActiveRecord::Base.transaction do
 
-        customer=File.basename(filename).sub(/.xml/, '')
-        server=Server.find_or_initialize_by_hostname(hostname: srv["name"].downcase, customer: customer)
+        tscm_customer=File.basename(filename).sub(/.xml/, '')
+
+        customer=CUSTOMER_RENAMING[tscm_customer] || tscm_customer
+
+        server=Server.find_or_initialize_by_hostname(hostname: srv["name"].downcase)
+        server.customer=Customer.where(name: customer).first || Customer.create(name: customer)
+        server.add_or_update_attribute("tscm_customer", tscm_customer)
+
         result=Hardware.find_by_serial(srv["sys_id"])
         if result.nil?
           server.build_hardware
@@ -43,6 +49,18 @@ class XmlServerImportWorker
         srv.except!("firmware")
         srv.except!("sys_id")
         srv.except!("sys_model")
+
+        unless srv["os_type"].nil?
+          os_type=srv["os_type"]
+          server.operating_system_type=OperatingSystemType.where(name: os_type).first || OperatingSystemType.create(name: os_type)
+          srv.except!("os_type")
+        end
+
+        unless srv["os_version"].nil?
+          os_version=srv["os_version"]
+          server.operating_system=OperatingSystem.where(release: os_version).first || OperatingSystem.create( release: os_version, operating_system_type_id: server.operating_system_type.id)
+          srv.except!("os_version")
+        end
 
         srv.each_key do |attr|
           if srv[attr].is_a?(String)
@@ -158,55 +176,7 @@ class XmlServerImportWorker
 
   private
   def lparstat_to_sym(stat)
-    convert_name = {
-      "ActiveCPUsinPool"=> "active_cpus_in_pool",
-      "ActivePhysicalCPUsinsystem" =>"active_physical_cpus_in_system",
-      "CapacityIncrement" =>"capacity_increment",
-      "DesiredCapacity" =>"desired_capacity",
-      "DesiredMemory" =>"desired_memory",
-      "DesiredVariableCapacityWeight" =>"desired_variable_capacity_weight",
-      "DesiredVirtualCPUs" =>"desired_virtual_cpus",
-      "EntitledCapacity" =>"entitled_capacity",
-      "EntitledCapacityofPool" =>"entitled_capacity_of_pool",
-      "HypervisorPageSize" =>"hypervisor_page_size",
-      "MaximumCapacity" =>"maximum_capacity",
-      "MaximumCapacityofPool" =>"maximum_capacity_of_pool",
-      "MaximumMemory" =>"maximum_memory",
-      "MaximumPhysicalCPUsinsystem" =>"maximum_physical_cpus_in_system",
-      "MaximumVirtualCPUs" =>"maximum_virtual_cpus",
-      "MemoryGroupIDofLPAR" =>"memory_group_id_of_lpar",
-      "MemoryMode" =>"memory_mode",
-      "MemoryPoolID" =>"memory_pool",
-      "MinimumCapacity" =>"minimum_capacity",
-      "MinimumMemory" =>"minimum_memory",
-      "MinimumVirtualCPUs" =>"minimum_virtual_cpus",
-      "Mode" =>"mode",
-      "NodeName" =>"node_name",
-      "OnlineMemory" =>"online_memory",
-      "OnlineVirtualCPUs" =>"online_virtual_cpus",
-      "PartitionGroup-ID" =>"partition_group",
-      "PartitionName" =>"partition_name",
-      "PartitionNumber" =>"partition_number",
-      "PhysicalCPUPercentage" =>"physical_cpu_percentage",
-      "PhysicalMemoryinthePool" =>"physical_memory_in_the_pool",
-      "PowerSavingMode" =>"power_saving_mode",
-      "SharedPhysicalCPUsinsystem" =>"shared_physical_cpus_in_system",
-      "SharedPoolID" =>"shared_pool",
-      "TargetMemoryExpansionFactor" =>"target_memory_expansion_factor",
-      "TargetMemoryExpansionSize" =>"target_memory_expansion_size",
-      "TotalI/OMemoryEntitlement" =>"total_io_memory_entitlement",
-      "Type" =>"lpar_type",
-      "UnallocatedCapacity" =>"unallocated_capacity",
-      "UnallocatedI/OMemoryentitlement" =>"unallocated_io_memory_entitlement",
-      "UnallocatedVariableMemoryCapacityWeight" =>"unallocated_variable_memory_capacity_weight",
-      "UnallocatedWeight" =>"unallocated_weight",
-      "VariableCapacityWeight" =>"variable_capacity_weight",
-      "VariableMemoryCapacityWeight" =>"variable_memory_capacity_weight"}
-      unless convert_name[stat].nil?
-        convert_name[stat].to_sym
-      else
-        stat
-      end
-    end
+    FIELD_RENAMING[stat] || stat
+  end
 
 end

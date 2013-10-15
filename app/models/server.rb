@@ -34,19 +34,23 @@ class Server < ActiveRecord::Base
   has_many :san_infras, :through => :wwpns
   accepts_nested_attributes_for :softwares
   belongs_to :hardware
+  belongs_to :operating_system_type
+  belongs_to :operating_system
+  belongs_to :customer
   has_many :activities, as: :trackable, :autosave => true, :dependent => :destroy
 
-  attr_accessible :customer, :hostname, :os_type, :os_version, :properties
+  attr_accessible  :hostname, :os_type, :os_version
+
 
   # validations
-  validates_presence_of :customer, :hostname
+  validates_presence_of :customer_id, :hostname
 
-  validates :hostname, uniqueness: { scope: :customer  }
+  validates :hostname, uniqueness: { scope: :customer_id  }
 
   has_paper_trail :class_name => 'ServerVersion', :ignore => [:run_date]
 
   # List of attributes we don't want in ransack search
-  UNRANSACKABLE_ATTRIBUTES = ["created_at", "updated_at", "id"]
+  UNRANSACKABLE_ATTRIBUTES = ["created_at", "updated_at", "hardware_id", "operating_system_id", "operating_system_type_id", "customer_id", "id"]
 
   # Remove UNRANSACKABLE_ATTRIBUTES from ransack search
   def self.ransackable_attributes auth_object = nil
@@ -178,5 +182,13 @@ class Server < ActiveRecord::Base
     ip = ip_addresses.find_or_initialize_by_address(address)
     ip.update_attributes(subnet: subnet, mac_address: mac_address)
     ip.activities.find_or_initialize_by_action("update").touch
+  end
+
+  def os_type
+    operating_system_type.name
+  end
+
+  def os_version
+    operating_system.release
   end
 end

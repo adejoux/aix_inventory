@@ -17,8 +17,10 @@ class ReportsController < ApplicationController
       params.merge( session[:last_query] )
     end
 
-    @search = Server.customer_scope(current_user.customer_scope).search(session[:last_query])
     @report = Report.find(params[:id])
+
+    @search = @report.make_request.search(session[:last_query])
+
     @columns=@report.report_fields.select("select_attribute").map { |rq| rq.select_attribute }
     @total_records = Server.customer_scope(current_user.customer_scope).count
     @search.build_condition
@@ -115,7 +117,7 @@ class ReportsController < ApplicationController
         when "server_attribute"
           ServerAttribute.where(name: field.select_attribute).joins(:server).find_all_by_server_id(server_list.map { |srv| srv.id }).map { |res| results[res.server.hostname][res.name]=res.output }
         when "server"
-          Server.find(server_list.map { |srv| srv.id}).map { |res| results[res.hostname][field.select_attribute]=res.send(field.select_attribute)}
+          Server.find(server_list.map { |srv| srv.id}).map { |res| results[res.hostname][field.select_attribute]=res.send(field.select_attribute).to_s}
         when "hardware"
           Server.joins(:hardware).find(server_list.map { |srv| srv.id}).map { |res| results[res.hostname][field.select_attribute]=res.hardware.send(field.select_attribute)}
         when "lparstat"

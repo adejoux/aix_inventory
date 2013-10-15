@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131014155053) do
+ActiveRecord::Schema.define(:version => 20131015130642) do
 
   create_table "activities", :force => true do |t|
     t.string   "action"
@@ -260,6 +260,15 @@ ActiveRecord::Schema.define(:version => 20131014155053) do
     t.datetime "updated_at",  :null => false
   end
 
+  create_table "operating_systems", :force => true do |t|
+    t.string   "release"
+    t.integer  "operating_system_type_id"
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
+  end
+
+  add_index "operating_systems", ["operating_system_type_id"], :name => "index_operating_systems_on_operating_system_type_id"
+
   create_table "report_fields", :force => true do |t|
     t.string   "association_type"
     t.string   "select_attribute"
@@ -327,18 +336,19 @@ ActiveRecord::Schema.define(:version => 20131014155053) do
   add_index "server_versions", ["item_type", "item_id"], :name => "index_server_versions_on_item_type_and_item_id"
 
   create_table "servers", :force => true do |t|
-    t.string   "customer"
     t.string   "hostname"
-    t.string   "os_type"
-    t.string   "os_version"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
     t.date     "run_date"
     t.integer  "hardware_id"
+    t.integer  "customer_id"
+    t.integer  "operating_system_type_id"
+    t.integer  "operating_system_id"
   end
 
-  add_index "servers", ["customer", "hostname"], :name => "index_servers_on_customer_and_hostname", :unique => true
   add_index "servers", ["hardware_id"], :name => "index_servers_on_hardware_id"
+  add_index "servers", ["hostname"], :name => "index_servers_on_customer_and_hostname", :unique => true
+  add_index "servers", ["operating_system_id"], :name => "index_servers_on_operating_system_id"
 
   create_table "software_deployment_versions", :force => true do |t|
     t.string   "item_type",      :null => false
