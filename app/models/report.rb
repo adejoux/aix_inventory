@@ -23,19 +23,4 @@ class Report < ActiveRecord::Base
     end
     report_fields
   end
-
-  def make_request
-    case report_type
-      when "server"
-        Server.includes(:operating_system_type)
-              .includes(:operating_system)
-              .includes(:customer)
-      when "san"
-        Wwpn.includes(:san_infra)
-            .includes(:linux_port)
-            .includes(:aix_port)
-            .includes(:server)
-    end
-  end
-
 end
