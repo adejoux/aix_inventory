@@ -1,15 +1,18 @@
 class SanReportBuilder < ReportBuilder
 
   def build_query
-    Wwpn.includes(:san_infra)
-        .includes(:linux_port)
-        .includes(:aix_port)
-        .includes(:server => :server_attributes)
+    Wwpn
+    if @report.operating_system_types.nil?
+      Wwpn
+    else
+      Wwpn.joins(server: :operating_system_type)
+          .where(operating_system_types: { id: @report.operating_system_type_ids })
+    end
   end
 
   def datatable_data(page, per_page)
-    server_list=search_result.page(page).per_page(per_page)
-    build_rows(server_list)
+    @wwpn_list=search_result.page(page).per_page(per_page).select("wwpns.id").map { |wwpn| wwpn.id }
+    build_rows
   end
 
   def total_records
@@ -17,44 +20,76 @@ class SanReportBuilder < ReportBuilder
   end
 
   def xlsx_data
-    wwpn_list=search_result
-    build_rows(server_list)
+    @wwpn_list=search_result.select("wwpns.id").map { |wwpn| wwpn.id }
+    build_rows
   end
+
 
   def first_header
     "wwpn"
   end
 
-  def build_rows(wwpn_list)
+  def server_request(field)
+    Wwpn.joins(:server).find_all_by_id(@wwpn_list).map  do |wwpn|
+      begin
+        result=wwpn.server.send(field.select_attribute).to_s
+      rescue
+        result=""
+      end
+      @results[wwpn.wwpn][field.select_attribute]=result
+    end
+  end
+
+  def san_infra_request(field)
+    Wwpn.joins(:san_infra).find_all_by_id(@wwpn_list).map  do |wwpn|
+      begin
+        result=wwpn.san_infra.send(field.select_attribute).to_s
+      rescue
+        result=""
+      end
+      @results[wwpn.wwpn][field.select_attribute]=result
+    end
+  end
+
+  def linux_port_request(field)
+    Wwpn.joins(:linux_port).find_all_by_id(@wwpn_list).map  do |wwpn|
+      begin
+        result=wwpn.linux_port.send(field.select_attribute).to_s
+      rescue
+        result=""
+      end
+      @results[wwpn.wwpn][field.select_attribute]=result
+    end
+  end
+
+  def server_attribute_request(field)
+    Wwpn.joins(server: :server_attributes)
+              .where(server_attributes: {name: field.select_attribute })
+              .select("wwpn, server_attributes.output AS output")
+              .find_all_by_id(@wwpn_list)
+              .map do |wwpn|
+                begin
+                  result=wwpn.output.to_s
+                rescue
+                  result=""
+                end
+                @results[wwpn.wwpn][field.select_attribute]=result
+              end
+  end
+
+  def build_rows
     #build result array
-    results=Hash.new{|hash, key| hash[key] = Hash.new}
     report.report_fields.each do |field|
-      case field.association_type
-        when "server_attribute"
-          ServerAttribute.where(name: field.select_attribute).joins(:server).find_all_by_server_id(server_list.map { |srv| srv.id }).map { |res| results[res.server.hostname][res.name]=res.output }
-        when "server"
-          Server.find(server_list.map { |srv| srv.id}).map { |res| results[res.hostname][field.select_attribute]=res.send(field.select_attribute).to_s}
-        when "hardware"
-          Server.joins(:hardware).find(server_list.map { |srv| srv.id}).map { |res| results[res.hostname][field.select_attribute]=res.hardware.send(field.select_attribute)}
-        when "lparstat"
-          Server.includes(:lparstat).find(server_list.map { |srv| srv.id}).map do |res|
-            begin
-              res_value=res.lparstat.send(field.select_attribute)
-            rescue
-              res_value="N/F"
-            end
-            results[res.hostname][field.select_attribute]=res_value
-          end
-      end
+      send("#{field.association_type}_request",field)
     end
 
-    servers=results.keys
+    servers=@results.keys
 
-    server_list.map do |server|
+    Wwpn.select(:wwpn).find(@wwpn_list).map do |wwpn|
       row=[]
-      row << server.hostname
+      row << wwpn.wwpn
       columns.each do |column|
-        entry = results[server.hostname][column] || ""
+        entry = @results[wwpn.wwpn][column] || ""
         row << entry
       end
       row
@@ -65,60 +100,5 @@ class SanReportBuilder < ReportBuilder
 
 
 
-  def columns
-    @report.report_fields.select("select_attribute").map { |rq| rq.select_attribute }
-  end
 
-  def datatable_data
-    server_list=@search.result.page(page).per_page(per_page)
-    @search.build_condition
-    build_rows(server_list)
-  end
-
-  def total_records
-    Server.customer_scope(current_user.customer_scope).count
-  end
-
-  def xlsx_data
-    server_list=@search.result
-    @first_header="server"
-    @search.build_condition
-    build_rows(server_list)
-  end
-
-  def build_rows(server_list)
-    #build result array
-    results=Hash.new{|hash, key| hash[key] = Hash.new}
-    report_fields.each do |field|
-      case field.association_type
-        when "server_attribute"
-          ServerAttribute.where(name: field.select_attribute).joins(:server).find_all_by_server_id(server_list.map { |srv| srv.id }).map { |res| results[res.server.hostname][res.name]=res.output }
-        when "server"
-          Server.find(server_list.map { |srv| srv.id}).map { |res| results[res.hostname][field.select_attribute]=res.send(field.select_attribute).to_s}
-        when "hardware"
-          Server.joins(:hardware).find(server_list.map { |srv| srv.id}).map { |res| results[res.hostname][field.select_attribute]=res.hardware.send(field.select_attribute)}
-        when "lparstat"
-          Server.includes(:lparstat).find(server_list.map { |srv| srv.id}).map do |res|
-            begin
-              res_value=res.lparstat.send(field.select_attribute)
-            rescue
-              res_value="N/F"
-            end
-            results[res.hostname][field.select_attribute]=res_value
-          end
-      end
-    end
-
-    servers=results.keys
-
-    server_list.map do |server|
-      row=[]
-      row << server.hostname
-      @columns.each do |column|
-        entry = results[server.hostname][column] || ""
-        row << entry
-      end
-      row
-    end
-  end
 end

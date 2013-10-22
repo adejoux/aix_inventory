@@ -147,7 +147,7 @@ class Server < ActiveRecord::Base
   def add_or_update_linux_port(name, brand, model, card_type, speed, slot, driver, wwpn, firmware)
     wwn = Wwpn.find_by_wwpn(wwpn)
     if wwn.nil?
-      wwn=wwpns.build(wwpn: wwpn)
+      wwn=wwpns.create!(wwpn: wwpn)
     end
     unless wwn.server_id == self.id
       wwpns << wwn
@@ -156,7 +156,7 @@ class Server < ActiveRecord::Base
     begin
       wwn.linux_port.update_attributes(name: name, brand: brand, card_model: model, card_type: card_type, speed: speed, slot: slot, driver: driver, firmware: firmware)
     rescue
-      wwn.build_linux_port(name: name, brand: brand, card_model: model, card_type: card_type, speed: speed, slot: slot, driver: driver, firmware: firmware)
+      wwn.create_linux_port(name: name, brand: brand, card_model: model, card_type: card_type, speed: speed, slot: slot, driver: driver, firmware: firmware)
     end
     wwn.activities.find_or_initialize_by_action("update").touch
   end
@@ -164,7 +164,7 @@ class Server < ActiveRecord::Base
   def add_or_update_aix_port(name, wwpn)
     wwn = Wwpn.find_by_wwpn(wwpn)
     if wwn.nil?
-      wwn=wwpns.build(wwpn: wwpn)
+      wwn=wwpns.create!(wwpn: wwpn)
     end
 
     unless wwn.server_id == self.id
@@ -173,7 +173,7 @@ class Server < ActiveRecord::Base
     begin
       wwn.aix_port.name=name
     rescue
-      wwn.build_aix_port(name: name)
+      wwn.create_aix_port(name: name)
     end
     wwn.activities.find_or_initialize_by_action("update").touch
   end
@@ -190,5 +190,9 @@ class Server < ActiveRecord::Base
 
   def os_version
     operating_system.release
+  end
+
+  def customer_name
+    customer.name
   end
 end

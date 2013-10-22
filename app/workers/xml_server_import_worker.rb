@@ -32,7 +32,7 @@ class XmlServerImportWorker
 
         customer=CUSTOMER_RENAMING[tscm_customer] || tscm_customer
 
-        server=Server.find_or_initialize_by_hostname(hostname: srv["name"].downcase)
+        server=Server.find_or_create_by_hostname(hostname: srv["name"].downcase)
         server.customer=Customer.where(name: customer).first || Customer.create(name: customer)
         server.add_or_update_attribute("tscm_customer", tscm_customer)
 
@@ -72,6 +72,10 @@ class XmlServerImportWorker
           srv.except!(attr)
           end
         end
+
+        srv.except!("lspath")
+        srv.except!("powerpath")
+        srv.except!("pcmpath")
 
         unless srv["lssecfixes"].nil?
           ['overdue', 'list'].each do |category|
@@ -120,15 +124,16 @@ class XmlServerImportWorker
           srv.except!("wwpn")
         end
 
-        unless srv["lparstat"].nil?
+        unless srv["lparstat"].nil? or  srv["lparstat"]["stat"].nil?
           lparstat = server.lparstat || server.build_lparstat
-          srv["lparstat"]["stat"].each do |stat|
-            begin
-              attribute=lparstat_to_sym(stat["name"])
-              lparstat.send("#{attribute}=", stat["value"])
-            rescue
+          begin
+            srv["lparstat"]["stat"].each do |stat|
+                attribute=lparstat_to_sym(stat["name"])
+                lparstat.send("#{attribute}=", stat["value"])
             end
+          rescue
           end
+          srv.except!("lparstat")
         end
 
         srv.each_key do |attr|
@@ -142,8 +147,6 @@ class XmlServerImportWorker
           end
           srv.except!(attr)
         end
-
-
 
         begin
           server.save!

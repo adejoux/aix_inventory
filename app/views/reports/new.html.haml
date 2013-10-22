@@ -8,7 +8,6 @@
           = f.input_field :name, placeholder: "Name"
           = f.input_field :description, placeholder: "Description"
         = f.hidden_field :selected_fields
-        = f.hidden_field :report_type, value: "server"
         #report_type
           %h1 select report type
           = link_to "server report", load_form_report_path("server"),  {:remote => true,  :class => 'btn btn-lg btn-primary'}

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131015130642) do
+ActiveRecord::Schema.define(:version => 20131022123447) do
 
   create_table "activities", :force => true do |t|
     t.string   "action"
@@ -269,6 +269,16 @@ ActiveRecord::Schema.define(:version => 20131015130642) do
 
   add_index "operating_systems", ["operating_system_type_id"], :name => "index_operating_systems_on_operating_system_type_id"
 
+  create_table "report_customers", :force => true do |t|
+    t.integer  "report_id"
+    t.integer  "customer_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "report_customers", ["customer_id"], :name => "index_report_customers_on_customer_id"
+  add_index "report_customers", ["report_id"], :name => "index_report_customers_on_report_id"
+
   create_table "report_fields", :force => true do |t|
     t.string   "association_type"
     t.string   "select_attribute"
@@ -278,6 +288,16 @@ ActiveRecord::Schema.define(:version => 20131015130642) do
   end
 
   add_index "report_fields", ["report_id"], :name => "index_report_fields_on_report_id"
+
+  create_table "report_operating_system_types", :force => true do |t|
+    t.integer  "report_id"
+    t.integer  "operating_system_type_id"
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
+  end
+
+  add_index "report_operating_system_types", ["operating_system_type_id"], :name => "index_report_operating_system_types_on_operating_system_type_id"
+  add_index "report_operating_system_types", ["report_id"], :name => "index_report_operating_system_types_on_report_id"
 
   create_table "reports", :force => true do |t|
     t.string   "name"

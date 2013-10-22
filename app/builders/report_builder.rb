@@ -2,6 +2,7 @@ class ReportBuilder
 
   def initialize(report, search_params)
     @report=report
+    @results=Hash.new{|hash, key| hash[key] = Hash.new}
     @search_params=search_params
     @type = "#{report.report_type}_report_builder".camelize.to_sym
   end

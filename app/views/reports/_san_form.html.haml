@@ -1,8 +1,14 @@
+%h1 select report scope
+%h2 os type
+- OperatingSystemType.all.each do |os_type|
+  = check_box_tag "report[operating_system_type_ids][]", os_type.id
+  = os_type.name
+
 %h1 select fields in reports
-= hidden_field_tag "report['report_type']", 'san'
+= hidden_field_tag "report[report_type]", 'san'
 %ul
   %h2 server
-  - for column in Server.column_names - ['id', "created_at", "hardware_id", "updated_at" ]
+  - for column in Server.column_names - ['id', "created_at", "hardware_id", "operating_system_id", "operating_system_type_id", "customer_id", "updated_at" ] + ['os_type', 'os_version', 'customer_name']
     %il{ id: "server[#{column}]", style: "cursor:move", class: "draggable label"}= column
   %h2 server attributes
   - ServerAttribute.group(:name).select(:name).map { |srv_attr| srv_attr.name}.each do |column|
@@ -10,6 +16,9 @@
   %h2 san infra
   - for column in SanInfra.column_names - ['id', "server_id", "created_at", "updated_at" ]
     %il{ id: "san_infra[#{column}]", style: "cursor:move", class: "draggable label"}= column
+  %h2 linux ports
+  - for column in LinuxPort.column_names - ['id', "wwpn_id", "created_at", "updated_at" ]
+    %il{ id: "linux_port[#{column}]", style: "cursor:move", class: "draggable label"}= column
   %h2
 #report_fields
   %h1.ui-widget-header

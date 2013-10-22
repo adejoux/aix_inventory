@@ -10,11 +10,7 @@ col_header = styles.add_style :bg_color => "FFDFDEDF", :b => true, :alignment =>
 data_fmt = styles.add_style :alignment => {:indent => 1}
 standard = styles.add_style :b => true, :alignment => {:horizontal => :center}
 
-wb.add_worksheet(name: 'servers') do |sheet|
-  sheet.add_row
-  sheet.add_row [ 'Servers list' ], :style => title
-  sheet.add_row
-
+wb.add_worksheet(name: @report.report_type) do |sheet|
   @columns.unshift("server")
   sheet.add_row @columns, :style => header
   @data.each do |row|

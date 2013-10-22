@@ -9,7 +9,7 @@ class CsvSanImportWorker
     log.success_count=0
     log.error_count=0
 
-    total_chunks = SmarterCSV.process(filename, :chunk_size => 500, :col_sep => ":", :key_mapping => { :scm_manager=> nil, :scm_alias => nil }) do |chunk|
+    total_chunks = SmarterCSV.process(filename, :chunk_size => 500, :col_sep => ":") do |chunk|
       ActiveRecord::Base.transaction do
         chunk.each do |csv_line|
           next if csv_line[:wwpn].nil?
@@ -36,18 +36,15 @@ class CsvSanImportWorker
             log.error_count += 1
           end
 
-          begin
-            csv_line[:wwpn].to_s.split(',').each do |wwpn_id|
-              wwpn_id=wwpn_id.to_s.upcase.gsub(':', '')
-              wwpn = Wwpn.find_by_wwpn(wwpn_id)
-              if wwpn.nil?
-                san_infra.wwpns.create!( :wwpn => wwpn_id )
-              else
-                wwpn.san_infra_id=san_infra.id
-                wwpn.save!
-              end
+          csv_line[:wwpn].to_s.split(',').each do |wwpn_id|
+            wwpn_id=wwpn_id.to_s.upcase.gsub(':', '')
+            wwpn = Wwpn.find_by_wwpn(wwpn_id)
+            if wwpn.nil?
+              san_infra.wwpns.create!( :wwpn => wwpn_id )
+            else
+              wwpn.san_infra_id=san_infra.id
+              wwpn.save!
             end
-          rescue
           end
         end
       end

@@ -34,8 +34,8 @@ class ReportsController < ApplicationController
         @total_display_records = @report_builder.total_display_records
       }
       format.xlsx {
-        @first_header= @report_builder.first_header
-        @data=xlsx_data
+        @first_header = @report_builder.first_header
+        @data = @report_builder.xlsx_data
       }
     end
   end

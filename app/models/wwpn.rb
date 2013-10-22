@@ -5,6 +5,7 @@ class Wwpn < ActiveRecord::Base
   has_one :aix_port, :dependent => :destroy, :autosave => true
   has_one :linux_port, :dependent => :destroy, :autosave => true
   belongs_to :server
+  delegate :server_attributes, :to => :server
   belongs_to :san_infra
   has_many :activities, as: :trackable, :autosave => true
 

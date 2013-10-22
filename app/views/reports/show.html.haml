@@ -14,8 +14,8 @@
       %h2 Advanced search
       = search_form_for @search, :url=> server_search_report_path(@report), method: :post do |f|
         = f.condition_fields do |c|
-          = render "condition_fields", f: c
-        = link_to_add_fields "Add Conditions", f, :condition
+          = render @report.report_type + "_condition_fields", f: c
+        = link_to_add_fields "Add Conditions", f, :condition, "#{@report.report_type}_condition"
         .form-actions
           =f.submit "Search", :class => "btn btn-success"
           = link_to "Reset", report_path(@report, {:clear => 'yes'}), :class => "btn btn-primary"
