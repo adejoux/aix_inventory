@@ -47,43 +47,10 @@ AixInventory::Application.routes.draw do
 
   get :contacts, to: "contacts#index"
 
-  resources :servers, :only => [:index]
-  resources :lparstats, :only => [:index]
-
   resources :san_infras, :only => [:index, :show] do
     collection do
       post :search, to: 'san_infras#index'
       get :view_wwpns, to:'san_infras#view_wwpns'
-    end
-  end
-
-  resources :wwpns, :only => [:index] do
-    collection do
-      post :search, to: 'wwpns#index'
-    end
-  end
-
-  resources :aix_wwpns, :only => [:index] do
-    collection do
-      post :search, to: 'wwpns#index'
-    end
-  end
-  resources :servers, :only => [:edit, :update, :show] do
-    collection do
-      post :search, to: 'servers#index'
-      get :quick_search, to:'servers#quick_search'
-    end
-  end
-
-  resources :hardwares, :only => [:index] do
-    collection do
-      post :search, to: 'hardwares#index'
-    end
-  end
-
-  resources :lparstats, :only => [:index] do
-    collection do
-      post :search, to: 'lparstats#index'
     end
   end
 

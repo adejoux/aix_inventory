@@ -1,40 +1,6 @@
 # -*- encoding : utf-8 -*-
 class ServersController < ApplicationController
   load_and_authorize_resource
-  # GET /servers
-  # GET /servers.json
-  def index
-    if params[:clear].present?
-      params[:q] = nil
-      params[:sSearch]=nil
-      session[:last_query] = nil
-    end
-
-    if params[:q].present?
-      session[:last_query] = params[:q]
-    elsif session[:last_query].present?
-      params.merge( session[:last_query] )
-    end
-
-    @search = Server.customer_scope(current_user.customer_scope).search(session[:last_query])
-    @total_records = Server.customer_scope(current_user.customer_scope).count
-
-    @servers = @search.result
-
-    @servers = @servers.order("#{sort_column} #{sort_direction}")
-    @search.build_condition
-
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json {
-        @secho = params[:sEcho].to_i
-        @total_display_records = @servers.count
-        @data = datatable_data
-        }
-      format.xlsx
-    end
-  end
 
   # GET /servers/1
   # GET /servers/1.json
@@ -73,22 +39,5 @@ class ServersController < ApplicationController
         format.json { render json: @server.errors, status: :unprocessable_entity }
       end
     end
-  end
-  private
-  def datatable_data
-    @servers.page(page).per_page(per_page).map do |server|
-      [
-        server.customer,
-        server.hostname,
-        server.os_type || "NF",
-        server.os_version || "NF",
-        server.run_date.to_s
-      ]
-    end
-  end
-
-  def sort_column
-    columns = %w[customer hostname os_type os_version run_date]
-    columns[params[:iSortCol_0].to_i]
   end
 end

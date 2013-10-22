@@ -112,14 +112,6 @@ class Server < ActiveRecord::Base
   #     search: search)
   # end
 
-  def self.customer_scope(customer)
-    unless customer.nil? or customer.empty?
-      where("servers.customer = ?", customer)
-    else
-      scoped
-    end
-  end
-
   def add_or_update_attribute(name, value)
     attr = server_attributes.find_or_initialize_by_name(name)
     attr.update_attributes(output: value, category: "inv")

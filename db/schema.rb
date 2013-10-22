@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131022123447) do
+ActiveRecord::Schema.define(:version => 20131022165527) do
 
   create_table "activities", :force => true do |t|
     t.string   "action"
@@ -381,23 +381,6 @@ ActiveRecord::Schema.define(:version => 20131022123447) do
   end
 
   add_index "software_deployment_versions", ["item_type", "item_id"], :name => "index_software_deployment_versions_on_item_type_and_item_id"
-
-  create_table "software_deployments", :force => true do |t|
-    t.integer  "software_id"
-    t.integer  "server_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
-
-  add_index "software_deployments", ["server_id"], :name => "index_software_deployments_on_server_id"
-  add_index "software_deployments", ["software_id"], :name => "index_software_deployments_on_software_id"
-
-  create_table "softwares", :force => true do |t|
-    t.string   "name"
-    t.string   "version"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
 
   create_table "switch_ports", :force => true do |t|
     t.string   "fabric"
