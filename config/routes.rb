@@ -10,11 +10,6 @@ AixInventory::Application.routes.draw do
 
   resources :activities
 
-  resources :server_attributes
-
-
-  get "wwpns/index"
-
   devise_for :users, :controllers => {:registrations => "users/registrations"}
 
   resources :users do
@@ -37,8 +32,6 @@ AixInventory::Application.routes.draw do
 
   resources :san_alerts
 
-  get "hardwares/index"
-
   get "statistics/general"
 
   get "statistics/customer"
@@ -47,36 +40,7 @@ AixInventory::Application.routes.draw do
 
   get :contacts, to: "contacts#index"
 
-  resources :san_infras, :only => [:index, :show] do
-    collection do
-      post :search, to: 'san_infras#index'
-      get :view_wwpns, to:'san_infras#view_wwpns'
-    end
-  end
-
-  resources :health_checks, :only => [:index, :show] do
-    collection do
-      post :search, to: 'health_checks#index'
-    end
-    member do
-      get :history
-    end
-  end
-
-  resources :server_attributes, :only => [:index, :show] do
-    collection do
-      post :search, to: 'server_attributes#index'
-    end
-    member do
-      get :history
-    end
-  end
-
   resources :aix_alerts
   root to: 'statistics#general'
 
-  require 'sidekiq/web'
-  authenticate :user, lambda { |u| u.role == "admin" } do
-    mount Sidekiq::Web => '/sidekiq'
-  end
 end

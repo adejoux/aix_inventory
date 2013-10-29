@@ -73,14 +73,8 @@ gem 'axlsx_rails'
 gem 'devise'
 gem 'cancan'
 gem 'annotate'
-gem 'workflow'
 gem 'paper_trail'
 gem 'turbolinks'
-
-# adding sidekiq
-gem 'sidekiq'
-gem 'sinatra', require: false
-gem 'slim'
 
 gem "clockwork"
 gem 'sanitize'

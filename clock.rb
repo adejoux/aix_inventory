@@ -11,14 +11,14 @@ include Clockwork
 # end
 
 every 1.days, 'Server import' do
-  XmlServerImportWorker.perform_async
-  CsvServerImportWorker.perform_async
+  Delayed::Job.enqueue XmlServerImportWorker.new
+  Delayed::Job.enqueue CsvServerImportWorker.new
 end
 
 every 10.minutes, 'SAN import' do
-  CsvSanImportWorker.perform_async
+  Delayed::Job.enqueue CsvSanImportWorker.new
 end
-# every 1.minutes, "clean up old data" do
-#   CleanDataWorker.perform_async
-# end
+every 1.days, "clean up old data" do
+  Delayed::Job.enqueue  CleanDataWorker.new
+end
 

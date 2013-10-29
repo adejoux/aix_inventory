@@ -1,8 +1,6 @@
 class CsvSanImportWorker
-  include Sidekiq::Worker
-  sidekiq_options retry: false
 
-  def process_server(filename)
+  def process(filename)
     log=ImportReport.new
     log.filename=filename
     log.output=""
@@ -61,7 +59,7 @@ class CsvSanImportWorker
     files = Dir.entries(new_path).select{|x| x.end_with?("csv")}
     files.each do |file|
       puts "processing file #{file}\n"
-      process_server([new_path,file].join('/'))
+      process([new_path,file].join('/'))
       File.rename([new_path,file].join('/'), [done_path,file+Time.new.to_formatted_s(:number)].join('/'))
     end
   end

@@ -49,24 +49,18 @@ Global.DisplayStats =->
       sPaginationType: "bootstrap"
       sDom: 'T<"clear"><"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix"lfr>t<"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"ip>'
       aaSorting: [[1, "desc"]]
-      fnRowCallback: (nRow, aData, iDisplayIndex, iDisplayIndexFull) -> 
-          $('td:eq(0)', nRow).html( '<a href="<%= web_root + url.quick_search_servers_path %>?type=customer&search=' + aData[0]  + '">' + aData[0] + '</a>' )
 
     $('#release_datatable').dataTable
       bJQueryUI: true
       sPaginationType: "bootstrap"
       sDom: 'T<"clear"><"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix"lfr>t<"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"ip>'
       aaSorting: [[1, "desc"]]
-      fnRowCallback: (nRow, aData, iDisplayIndex, iDisplayIndexFull) -> 
-          $('td:eq(0)', nRow).html( '<a href="<%= web_root + url.quick_search_servers_path %>?type=os_version&search=' + aData[0]  + '">' + aData[0] + '</a>' )
           
     $('#model_datatable').dataTable
       bJQueryUI: true
       sPaginationType: "bootstrap"
       sDom: 'T<"clear"><"fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix"lfr>t<"fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"ip>'
       aaSorting: [[1, "desc"]]
-      fnRowCallback: (nRow, aData, iDisplayIndex, iDisplayIndexFull) -> 
-          $('td:eq(0)', nRow).html( '<a href="<%= web_root + url.quick_search_servers_path %>?type=sys_model&search=' + aData[0]  + '">' + aData[0] + '</a>' )
 
 ready =->          
   Global.DisplayStats()

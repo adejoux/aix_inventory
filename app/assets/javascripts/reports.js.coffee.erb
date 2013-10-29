@@ -13,8 +13,6 @@ ready =->
     bServerSide: true
     iDisplayLength: 25
     bFilter: false
-    fnRowCallback: (nRow, aData, iDisplayIndex, iDisplayIndexFull) ->
-                     $('td:eq(0)', nRow).html( '<a href="<%= web_root + url.quick_search_servers_path %>?type=hostname&search=' + aData[0]  + '">' + aData[0] + '</a>' )
     sAjaxSource: $('#report_datatable').data('source')
   $(document).on 'mouseover', '.draggable', ->
     $(this).draggable
