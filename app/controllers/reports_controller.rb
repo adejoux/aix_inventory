@@ -1,7 +1,7 @@
 class ReportsController < ApplicationController
   load_and_authorize_resource
   def index
-    @reports=Report.all
+    @reports=Report.where(user_id: [ User.where( role: "admin").pluck(:id), current_user.id ] )
   end
 
   def show
@@ -51,6 +51,7 @@ class ReportsController < ApplicationController
 
   def create
     @report = Report.new(params[:report])
+    @report.user_id = current_user.id
 
     respond_to do |format|
       if @report.save

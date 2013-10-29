@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131022165527) do
+ActiveRecord::Schema.define(:version => 20131029140229) do
 
   create_table "activities", :force => true do |t|
     t.string   "action"
@@ -76,6 +76,30 @@ ActiveRecord::Schema.define(:version => 20131022165527) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
+
+  create_table "devices", :force => true do |t|
+    t.string   "name"
+    t.string   "status"
+    t.string   "location"
+    t.string   "description"
+    t.integer  "server_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "devices", ["server_id"], :name => "index_devices_on_server_id"
+
+  create_table "file_system_versions", :force => true do |t|
+    t.string   "item_type",      :null => false
+    t.integer  "item_id",        :null => false
+    t.string   "event",          :null => false
+    t.string   "whodunnit"
+    t.text     "object"
+    t.text     "object_changes"
+    t.datetime "created_at"
+  end
+
+  add_index "file_system_versions", ["item_type", "item_id"], :name => "index_file_system_versions_on_item_type_and_item_id"
 
   create_table "file_systems", :force => true do |t|
     t.string   "mount_point"
@@ -305,7 +329,10 @@ ActiveRecord::Schema.define(:version => 20131022165527) do
     t.datetime "updated_at",  :null => false
     t.string   "description"
     t.string   "report_type"
+    t.integer  "user_id"
   end
+
+  add_index "reports", ["user_id"], :name => "index_reports_on_user_id"
 
   create_table "san_alerts", :force => true do |t|
     t.string   "alert_type"
@@ -327,6 +354,18 @@ ActiveRecord::Schema.define(:version => 20131022165527) do
     t.datetime "created_at",               :null => false
     t.datetime "updated_at",               :null => false
   end
+
+  create_table "server_attribute_versions", :force => true do |t|
+    t.string   "item_type",      :null => false
+    t.integer  "item_id",        :null => false
+    t.string   "event",          :null => false
+    t.string   "whodunnit"
+    t.text     "object"
+    t.text     "object_changes"
+    t.datetime "created_at"
+  end
+
+  add_index "server_attribute_versions", ["item_type", "item_id"], :name => "index_server_attribute_versions_on_item_type_and_item_id"
 
   create_table "server_attributes", :force => true do |t|
     t.string   "name"

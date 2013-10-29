@@ -1,6 +1,4 @@
 class XmlServerImportWorker
-  include Sidekiq::Worker
-  sidekiq_options retry: false
 
   def process_server(filename)
     log=ImportReport.new
@@ -76,7 +74,7 @@ class XmlServerImportWorker
         srv.except!("lspath")
         srv.except!("powerpath")
         srv.except!("pcmpath")
-
+        srv.except!("adapters")
         unless srv["lssecfixes"].nil?
           ['overdue', 'list'].each do |category|
             begin

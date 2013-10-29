@@ -3,6 +3,7 @@ class ServerReportBuilder < ReportBuilder
   def build_query
     Server.joins(:operating_system_type)
           .where(operating_system_types: { id: @report.operating_system_type_ids } )
+          .where(customers: {id: @report.customer_ids} )
           .includes(:operating_system)
           .includes(:customer)
   end

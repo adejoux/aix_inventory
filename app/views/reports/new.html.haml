@@ -1,18 +1,20 @@
 .row-fluid
   .span12
+  = simple_form_for @report do |f|
     %div#form_report
       .page-header
-        %h1 Create report
-      = simple_form_for @report do |f|
-        = f.input :name, label: false do
-          = f.input_field :name, placeholder: "Name"
-          = f.input_field :description, placeholder: "Description"
-        = f.hidden_field :selected_fields
-        #report_type
-          %h1 select report type
-          = link_to "server report", load_form_report_path("server"),  {:remote => true,  :class => 'btn btn-lg btn-primary'}
-          = link_to "san report", load_form_report_path("san"),  {:remote => true,  :class => 'btn btn-lg btn-primary'}
-        #form_report_fields
+        %h1
+          = f.input :name, label: false do
+            = f.input_field :name, placeholder: "Name"
+            = f.input_field :description, placeholder: "Description"
+            = f.submit
+          = f.hidden_field :selected_fields
+      #report_type
+        %h1 select report type
+        = link_to "server report", load_form_report_path("server"),  {:remote => true,  :class => 'btn btn-lg btn-primary'}
+        = link_to "san report", load_form_report_path("san"),  {:remote => true,  :class => 'btn btn-lg btn-primary'}
+      #form_report_fields
         %br
-        = f.submit
-        = link_to "back", reports_path, class: "btn btn-warning"
+    = link_to "back", reports_path, class: "btn btn-warning"
+
+

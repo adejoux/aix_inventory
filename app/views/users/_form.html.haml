@@ -7,11 +7,6 @@
     = f.label :email, :class => 'control-label'
     .controls
       = f.text_field :email, :class => 'text_field'
-  .control_group
-    .control-label
-      customer
-    .controls
-      =f.collection_select :customer_scope, Server.group(:customer).select("customer"), :customer, :customer, :prompt => true, :include_blank => true
   .control-group
     .control-label
       Approval
@@ -24,12 +19,12 @@
         Role
       .controls
         = f.collection_select :role, User::ROLES, :to_s, :humanize
-  
-  - if @current_method == "new" 
+
+  - if @current_method == "new"
     .control-group
       = f.label :password, :class => 'control-label'
       .controls
-        = f.password_field :password 
+        = f.password_field :password
     .control-group
       = f.label :password_confirmation, :class => 'control-label'
       .controls

@@ -1,6 +1,4 @@
 class CsvServerImportWorker
-  include Sidekiq::Worker
-  sidekiq_options retry: false
 
   def process_ip(filename)
     servers=Server.select(:hostname).map { |s| s.hostname }
