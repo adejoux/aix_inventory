@@ -25,7 +25,7 @@ ready =->
       accept: ":not(.ui-sortable-helper)"
       drop: ( event, ui ) ->
         $( this ).find( ".placeholder" ).remove()
-        $( "<li id=" + ui.draggable.attr('id') + ' class="label label-success" ></li>' ).text( ui.draggable.text() ).appendTo( this )
+        $( "<li id=" + ui.draggable.attr('id') + ' class="label label-success"></li>' ).html( ui.draggable.text() + "<i class='icon-remove'></i>").appendTo( this )
         $("#report_selected_fields").val(field_values)
     .sortable
       items: "li:not(.placeholder)"
@@ -35,6 +35,9 @@ ready =->
     $('#search_menu').toggle()
   $('#action_toggle').click ->
     $('#action_menu').toggle()
+  $('.icon-remove').click ->
+    $( this ).parent().remove()
+    $("#report_selected_fields").val(field_values)
   $(document).on 'click', '#check_all', ->
     $('#customers input[type="checkbox"]').click()
 

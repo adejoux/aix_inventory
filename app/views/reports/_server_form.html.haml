@@ -1,51 +1,20 @@
-= hidden_field_tag "report[report_type]", 'server'
+= simple_form_for @report do |f|
+  = hidden_field_tag "report[report_type]", 'server'
+  = render partial: 'form_header', locals: {f: f}
 
-%h1 Select report scope
-.row-fluid
-  .span4
-    %h2.ui-widget-header os type
-    .ui-widget-content
-      %ul
-        - OperatingSystemType.all.each do |os_type|
-          %li
-            = check_box_tag "report[operating_system_type_ids][]", os_type.id, checked: true
-            = os_type.name
-  .span8
-    %h2.ui-widget-header customers
-    #customers.ui-widget-content
-      #check_all.btn Check / Uncheck All
-      %ul.inline
-        - Customer.all.each do |customer|
-          %li
-            = check_box_tag "report[customer_ids][]", customer.id
-            = customer.name
-%h1 Select fields to add in report
-.row-fluid
-  .span4
-    #report_fields
+  = render partial: 'report_scope', locals: { report: @report}
+  %h1 Fields in report
+  .row-fluid
+    .span4
+      = render partial: 'report_fields', locals: {report: @report}
+    .span8
       %h2.ui-widget-header
-        report fields
+        available fields
       .ui-widget-content
-        %ol
-          %li.placeholder
-            %b Drag the fields you want here
-          %li.label.label-success server
-  .span8
-    %h2.ui-widget-header
-      available fields
-    .ui-widget-content
-      %ul
-        %h2 server
-        - for column in Server.column_names - ['id', "created_at", "hardware_id", "operating_system_id", "operating_system_type_id", "customer_id", "updated_at" ] + ['os_type', 'os_version', 'customer_name']
-          %il{ id: "server[#{column}]", style: "cursor:move", class: "draggable label"}= column
-        %h2 server attributes
-        - ServerAttribute.group(:name).select(:name).map { |srv_attr| srv_attr.name}.each do |column|
-          %il{ id: "server_attribute[#{column}]", style: "cursor:move", class: "draggable label"}= column
-        %h2 hardware
-        - for column in Hardware.column_names - ['id', "created_at", "updated_at" ]
-          %il{ id: "hardware[#{column}]", style: "cursor:move", class: "draggable label"}= column
-        %h2 lparstats
-        - for column in Lparstat.column_names - ['id', "created_at", "updated_at" ]
-          %il{ id: "lparstat[#{column}]", style: "cursor:move", class: "draggable label"}= column
-        %h2
+        %ul
+          = render partial: 'server_columns'
+          = render partial: 'server_attribute_columns'
+          = render partial: 'hardware_columns'
+          = render partial: 'lparstat_columns'
+= link_to "back", reports_path, class: "btn btn-warning"
 

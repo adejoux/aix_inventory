@@ -1,12 +1,16 @@
 class SanReportBuilder < ReportBuilder
 
   def build_query
-    Wwpn
-    if @report.operating_system_types.nil?
-      Wwpn
-    else
-      Wwpn.joins(server: :operating_system_type)
-          .where(operating_system_types: { id: @report.operating_system_type_ids })
+    wwpn=Wwpn
+
+    unless @report.operating_system_type_ids.empty?
+      wwpn=Wwpn.joins(server: :operating_system_type)
+               .where(operating_system_types: { id: @report.operating_system_type_ids })
+    end
+
+    unless @report.customer_ids.empty?
+      wwpn.joins(server: :customer)
+          .where(customers: { id: @report.customer_ids } )
     end
   end
 
@@ -82,8 +86,6 @@ class SanReportBuilder < ReportBuilder
     report.report_fields.each do |field|
       send("#{field.association_type}_request",field)
     end
-
-    servers=@results.keys
 
     Wwpn.select(:wwpn).find(@wwpn_list).map do |wwpn|
       row=[]

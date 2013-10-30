@@ -1,0 +1,3 @@
+%h2 lparstats
+- for column in Lparstat.column_names - ['id', "created_at", "updated_at", "server_id" ]
+  %il{ id: "lparstat[#{column}]", style: "cursor:move", class: "draggable label"}= column

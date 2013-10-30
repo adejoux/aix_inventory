@@ -1,0 +1,3 @@
+%h2 server attributes
+- ServerAttribute.group(:name).select(:name).map { |srv_attr| srv_attr.name}.each do |column|
+  %il{ id: "server_attribute[#{column}]", style: "cursor:move", class: "draggable label"}= column

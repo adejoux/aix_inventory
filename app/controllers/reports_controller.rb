@@ -41,11 +41,13 @@ class ReportsController < ApplicationController
   end
 
   def new
-    @report=Report.new
+
+    render status: 403 unless Report::TYPES.include? params[:report_type]
+    @report=Report.new(report_type: params[:report_type])
+
 
     respond_to do |format|
-      format.html # new.html.haml
-      format.json { render json: @report }
+      format.html
     end
   end
 
@@ -76,7 +78,7 @@ class ReportsController < ApplicationController
 
     respond_to do |format|
       if @report.update_attributes(params[:report])
-        format.html { redirect_to @report, notice: 'Firmware was successfully updated.' }
+        format.html { redirect_to @report, notice: 'Report was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -97,10 +99,7 @@ class ReportsController < ApplicationController
     end
   end
 
-  def load_form
-    render status: 403 unless Report::TYPES.include? params[:form]
-    @form = params[:form] + "_form"
-  end
+
 end
 
 

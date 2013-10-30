@@ -1,0 +1,11 @@
+#report_fields
+  %h2.ui-widget-header
+    report fields
+  .ui-widget-content
+    %ol
+      %li.placeholder
+        %b Drag the fields you want here
+      - report.report_fields.each do |field|
+        %li{ id: "#{field.association_type}[#{field.select_attribute}]" ,class: "label label-success" }
+          = field.select_attribute
+          %i.icon-remove

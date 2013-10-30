@@ -39,11 +39,7 @@ class UsersController < ApplicationController
   def edit
     @user = User.find(params[:id])
   end
-  
-  def customer
-    @user = User.find(params[:id])
-  end
-  
+
   # POST /users
   # POST /users.xml
   def create

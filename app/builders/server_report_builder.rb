@@ -5,12 +5,12 @@ class ServerReportBuilder < ReportBuilder
           .where(operating_system_types: { id: @report.operating_system_type_ids } )
           .where(customers: {id: @report.customer_ids} )
           .includes(:operating_system)
-          .includes(:customer)
+          .joins(:customer)
   end
 
   def datatable_data(page, per_page)
-    server_list=search_result.page(page).per_page(per_page)
-    build_rows(server_list)
+    @server_list=search_result.page(page).per_page(per_page).select("servers.id").map { |server| server.id }
+    build_rows
   end
 
   def total_records
@@ -18,45 +18,78 @@ class ServerReportBuilder < ReportBuilder
   end
 
   def xlsx_data
-    server_list=search_result
-
-    build_rows(server_list)
+    @server_list=search_result.select("servers.id").map { |server| server.id }
+    build_rows
   end
 
   def first_header
     "server"
   end
 
-  def build_rows(server_list)
-    #build result array
-    results=Hash.new{|hash, key| hash[key] = Hash.new}
-    report.report_fields.each do |field|
-      case field.association_type
-        when "server_attribute"
-          ServerAttribute.where(name: field.select_attribute).joins(:server).find_all_by_server_id(server_list.map { |srv| srv.id }).map { |res| results[res.server.hostname][res.name]=res.output }
-        when "server"
-          Server.find(server_list.map { |srv| srv.id}).map { |res| results[res.hostname][field.select_attribute]=res.send(field.select_attribute).to_s}
-        when "hardware"
-          Server.joins(:hardware).find(server_list.map { |srv| srv.id}).map { |res| results[res.hostname][field.select_attribute]=res.hardware.send(field.select_attribute)}
-        when "lparstat"
-          Server.includes(:lparstat).find(server_list.map { |srv| srv.id}).map do |res|
+  def server_attribute_request(field)
+    Server.joins(:server_attributes)
+          .where(server_attributes: {name: field.select_attribute })
+          .select("hostname, server_attributes.output AS output")
+          .find_all_by_id(@server_list)
+          .map do |server|
             begin
-              res_value=res.lparstat.send(field.select_attribute)
+              result=server.output.to_s
             rescue
-              res_value="N/F"
+              result=""
             end
-            results[res.hostname][field.select_attribute]=res_value
+            @results[server.hostname][field.select_attribute]=result
           end
-      end
+  end
+
+  def server_request(field)
+    Server.find_all_by_id(@server_list)
+          .map do |server|
+            begin
+              result=server.send(field.select_attribute).to_s
+            rescue
+              result=""
+            end
+            @results[server.hostname][field.select_attribute]=result
+          end
+  end
+
+  def hardware_request(field)
+    Server.joins(:hardware)
+          .find_all_by_id(@server_list)
+          .map do |server|
+            begin
+              result=server.hardware.send(field.select_attribute).to_s
+            rescue
+              result=""
+            end
+            @results[server.hostname][field.select_attribute]=result
+          end
+  end
+
+  def lparstat_request(field)
+    Server.joins(:lparstat)
+          .find_all_by_id(@server_list)
+          .map do |server|
+            begin
+              result=server.lparstat.send(field.select_attribute).to_s
+            rescue
+              result=""
+            end
+            @results[server.hostname][field.select_attribute]=result
+          end
+  end
+
+  def build_rows
+    #build result array
+    report.report_fields.each do |field|
+      send("#{field.association_type}_request",field)
     end
 
-    servers=results.keys
-
-    server_list.map do |server|
+    Server.select(:hostname).find(@server_list).map do |server|
       row=[]
       row << server.hostname
       columns.each do |column|
-        entry = results[server.hostname][column] || ""
+        entry = @results[server.hostname][column] || ""
         row << entry
       end
       row

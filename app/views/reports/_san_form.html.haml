@@ -1,30 +1,20 @@
-%h1 select report scope
-%h2 os type
-- OperatingSystemType.all.each do |os_type|
-  = check_box_tag "report[operating_system_type_ids][]", os_type.id
-  = os_type.name
+= simple_form_for @report do |f|
+  = hidden_field_tag "report[report_type]", 'san'
+  = render partial: 'form_header', locals: {f: f}
 
-%h1 select fields in reports
-= hidden_field_tag "report[report_type]", 'san'
-%ul
-  %h2 server
-  - for column in Server.column_names - ['id', "created_at", "hardware_id", "operating_system_id", "operating_system_type_id", "customer_id", "updated_at" ] + ['os_type', 'os_version', 'customer_name']
-    %il{ id: "server[#{column}]", style: "cursor:move", class: "draggable label"}= column
-  %h2 server attributes
-  - ServerAttribute.group(:name).select(:name).map { |srv_attr| srv_attr.name}.each do |column|
-    %il{ id: "server_attribute[#{column}]", style: "cursor:move", class: "draggable label"}= column
-  %h2 san infra
-  - for column in SanInfra.column_names - ['id', "server_id", "created_at", "updated_at" ]
-    %il{ id: "san_infra[#{column}]", style: "cursor:move", class: "draggable label"}= column
-  %h2 linux ports
-  - for column in LinuxPort.column_names - ['id', "wwpn_id", "created_at", "updated_at" ]
-    %il{ id: "linux_port[#{column}]", style: "cursor:move", class: "draggable label"}= column
-  %h2
-#report_fields
-  %h1.ui-widget-header
-    report fields
-  .ui-widget-content
-    %ol
-      %li.placeholder
-        %b Drag the fields you want here
-      %li wwpn
+  = render partial: 'report_scope', locals: { report: @report}
+
+  %h1 Fields in report
+  .row-fluid
+    .span4
+      = render partial: 'report_fields', locals: {report: @report}
+    .span8
+      %h2.ui-widget-header
+        available fields
+      .ui-widget-content
+        %ul
+          = render partial: 'server_columns'
+          = render partial: 'server_attribute_columns'
+          = render partial: 'san_infra_columns'
+          = render partial: 'linux_port_columns'
+= link_to "back", reports_path, class: "btn btn-warning"

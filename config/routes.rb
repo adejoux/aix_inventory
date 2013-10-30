@@ -3,7 +3,6 @@ AixInventory::Application.routes.draw do
 
   resources :reports
 
-  match "/reports/load_form/:form" => "reports#load_form", as: "load_form_report", :via => [:get]
   match "/reports/server_search/:id" => "reports#show", as: "server_search_report", :via => [:post]
 
   resources :import_reports
@@ -12,11 +11,7 @@ AixInventory::Application.routes.draw do
 
   devise_for :users, :controllers => {:registrations => "users/registrations"}
 
-  resources :users do
-    member do
-      get :customer
-    end
-  end
+  resources :users
 
   resources :uploads do
     member do
@@ -24,8 +19,6 @@ AixInventory::Application.routes.draw do
       get :view_logs
     end
   end
-
-  resources :firmwares
 
   get "alerts/san_alerts"
   get "alerts/aix_alerts"

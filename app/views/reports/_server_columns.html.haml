@@ -1,0 +1,3 @@
+%h2 server
+- for column in Server.column_names - ['id', "created_at", "hardware_id", "operating_system_id", "operating_system_type_id", "customer_id", "updated_at" ] + ['os_type', 'os_version', 'customer_name']
+  %il{ id: "server[#{column}]", style: "cursor:move", class: "draggable label"}= column

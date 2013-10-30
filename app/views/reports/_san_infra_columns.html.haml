@@ -1,0 +1,3 @@
+%h2 san infra
+- for column in SanInfra.column_names - ['id', "server_id", "created_at", "updated_at" ]
+  %il{ id: "san_infra[#{column}]", style: "cursor:move", class: "draggable label"}= column

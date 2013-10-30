@@ -1,0 +1,10 @@
+.row-fluid
+  .span12
+    %div#form_report
+      .page-header
+        %h1
+          = f.input :name, label: false do
+            = f.input_field :name, placeholder: "Name"
+            = f.input_field :description, placeholder: "Description"
+            = f.submit
+          = f.hidden_field :selected_fields

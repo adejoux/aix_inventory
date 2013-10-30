@@ -1,0 +1,7 @@
+%h2.ui-widget-header os type
+.ui-widget-content
+  %ul
+    - OperatingSystemType.all.each do |os_type|
+      %li
+        = check_box_tag "report[operating_system_type_ids][]", os_type.id, report.operating_system_type_ids.include?(os_type.id)
+        = os_type.name

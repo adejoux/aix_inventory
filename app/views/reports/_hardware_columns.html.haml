@@ -1,0 +1,3 @@
+%h2 hardware
+- for column in Hardware.column_names - ['id', "created_at", "updated_at" ]
+  %il{ id: "hardware[#{column}]", style: "cursor:move", class: "draggable label"}= column
