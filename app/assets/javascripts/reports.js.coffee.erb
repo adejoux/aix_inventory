@@ -13,6 +13,9 @@ ready =->
     bServerSide: true
     iDisplayLength: 25
     bFilter: false
+    fnRowCallback: (nRow, aData, iDisplayIndex, iDisplayIndexFull) ->
+      if $('#server_report').length
+        $('td:eq(0)', nRow).html( '<a href='+ $(location).attr('href') + '/server_link/'+ aData[0]  + '>' + aData[0] + '</a>' )
     sAjaxSource: $('#report_datatable').data('source')
   $(document).on 'mouseover', '.draggable', ->
     $(this).draggable

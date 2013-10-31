@@ -2,6 +2,7 @@
   .span12
     %h1
       = @report.name
+      %div{:id => "#{@report.report_type}_report"}
       #search_toggle.btn.btn-primary
         search
       #action_toggle.btn.btn-primary
@@ -13,7 +14,7 @@
       = link_to "Excel Export", report_path(@report, :format => :xlsx), :class => "btn btn-warning"
     #search_menu
       %h2 Advanced search
-      = search_form_for @search, :url=> server_search_report_path(@report), method: :post do |f|
+      = search_form_for @search, :url=> search_report_path(@report), method: :post do |f|
         = f.condition_fields do |c|
           = render @report.report_type + "_condition_fields", f: c
         = link_to_add_fields "Add Conditions", f, :condition, "#{@report.report_type}_condition"

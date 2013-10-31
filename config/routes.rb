@@ -3,8 +3,8 @@ AixInventory::Application.routes.draw do
 
   resources :reports
 
-  match "/reports/server_search/:id" => "reports#show", as: "server_search_report", :via => [:post]
-
+  match "/reports/report_search/:id" => "reports#show", as: "search_report", :via => [:post]
+  match "/reports/:id/server_link/:name" => "reports#server_link", as: "server_link_report", :via => [:get]
   resources :import_reports
 
   resources :activities
@@ -13,17 +13,13 @@ AixInventory::Application.routes.draw do
 
   resources :users
 
+  resources :servers, :only => [:show, :edit]
   resources :uploads do
     member do
       get :import
       get :view_logs
     end
   end
-
-  get "alerts/san_alerts"
-  get "alerts/aix_alerts"
-
-  resources :san_alerts
 
   get "statistics/general"
 
@@ -33,7 +29,6 @@ AixInventory::Application.routes.draw do
 
   get :contacts, to: "contacts#index"
 
-  resources :aix_alerts
-  root to: 'statistics#general'
+  root to: 'reports#index'
 
 end

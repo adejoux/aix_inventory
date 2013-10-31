@@ -5,19 +5,11 @@ class ServersController < ApplicationController
   # GET /servers/1
   # GET /servers/1.json
   def show
-    @server = Server.includes(:health_checks).includes(:softwares).find(params[:id])
+    @server = Server.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @server }
-    end
-  end
-
-  def quick_search
-    if params[:type] == "hostname"
-      redirect_to(Server.where(:hostname => params[:search]).select("id").first)
-    else
-      redirect_to servers_path( :q => {"c" => {"0" =>{"a" =>{"0" =>{"name"=> params[:type] }}, "p"=>"eq", "v" =>{"0"=>{"value" => params[:search] }}}}})
     end
   end
 

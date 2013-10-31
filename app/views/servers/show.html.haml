@@ -10,13 +10,12 @@
         %li=link_to "volume groups", "#volume_groups" unless @server.volume_groups.nil?
         %li=link_to "filesystems", "#filesystems" unless @server.file_systems.nil?
         %li=link_to "ip addresses", "#ip_addresses" unless @server.ip_addresses.empty?
-        %li=link_to "softwares", "#softwares" unless @server.softwares.empty?
         %li=link_to "hardware", "#hardware"
         %li=link_to "san", "#san" unless @server.wwpns.nil?
         %li=link_to "properties", "#properties"
         %li=link_to "security", "#security" unless @server.linux_security_fixes.nil?
       %br
-      = link_to 'back', servers_path, :class => "btn btn-primary"
+      = link_to 'back', reports_path, :class => "btn btn-primary"
       - if current_user.role == "admin"
         = link_to 'edit', edit_server_path(@server), :class => "btn btn-danger"
   .span9
@@ -30,8 +29,6 @@
       =render 'filesystems'
     #ip_addresses
       =render 'ip_address'
-    #softwares
-      =render 'softwares'
     #hardware
       =render 'hardware'
     #san

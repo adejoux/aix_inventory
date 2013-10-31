@@ -70,6 +70,10 @@ class ReportsController < ApplicationController
     @firmware = Report.find(params[:id])
   end
 
+  def server_link
+    server=Server.find_by_hostname(params[:name])
+    redirect_to server_path(server)
+  end
 
   # PUT /report/1
   # PUT /report/1.json
