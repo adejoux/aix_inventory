@@ -1,39 +1,38 @@
 .row-fluid
-  .span3.bs-docs-sidebar
+  .span2.bs-docs-sidebar
     #sidemenu.affix
       %h2= @server.hostname
       %span.label.label-info run date
       %strong= @server.run_date
       %ul.nav.nav-list.bs-docs-sidenav
-        %li=link_to "Release", "#release"
-        %li=link_to "lpar", "#lpar" unless @server.lparstat.nil?
-        %li=link_to "volume groups", "#volume_groups" unless @server.volume_groups.nil?
-        %li=link_to "filesystems", "#filesystems" unless @server.file_systems.nil?
-        %li=link_to "ip addresses", "#ip_addresses" unless @server.ip_addresses.empty?
-        %li=link_to "hardware", "#hardware"
-        %li=link_to "san", "#san" unless @server.wwpns.nil?
-        %li=link_to "properties", "#properties"
-        %li=link_to "security", "#security" unless @server.linux_security_fixes.nil?
+
       %br
-      = link_to 'back', reports_path, :class => "btn btn-primary"
+      = link_to 'back', :back, :class => "btn btn-primary"
       - if current_user.role == "admin"
         = link_to 'edit', edit_server_path(@server), :class => "btn btn-danger"
-  .span9
-    #release
-      =render 'release'
-    #lpar
-      =render 'lpar'
-    #volume_groups
-      =render 'volume_groups'
-    #filesystems
-      =render 'filesystems'
-    #ip_addresses
-      =render 'ip_address'
-    #hardware
-      =render 'hardware'
-    #san
-      =render 'san'
-    #properties
-      =render 'properties'
-    #security
-      =render 'linux_sec_fix'
+  .span10
+    %ul.nav.nav-tabs
+      %li.tabtext.active=link_to "Release", load_tab_server_path(id: @server, tab: "release"), :remote => true
+      - unless @server.lparstat.blank?
+        %li.tabtext=link_to "lpar", load_tab_server_path(id: @server, tab: "lpar"), :remote => true
+      - unless @server.volume_groups.blank?
+        %li.tabtext=link_to "volume groups", load_tab_server_path(id: @server, tab: "volume_groups"), :remote => true
+      - unless @server.file_systems.blank?
+        %li.tabtext=link_to "filesystems", load_tab_server_path(id: @server, tab: "filesystems"), :remote => true
+      - unless @server.ip_addresses.blank?
+        %li.tabtext=link_to "ip addresses", load_tab_server_path(id: @server, tab: "ip_address"), :remote => true
+      %li.tabtext=link_to "hardware", load_tab_server_path(id: @server, tab: "hardware"), :remote => true
+      - unless @server.wwpns.blank?
+        %li.tabtext=link_to "san", load_tab_server_path(id: @server, tab: "san"), :remote => true
+      %li.tabtext=link_to "properties", load_tab_server_path(id: @server, tab: "properties"), :remote => true
+      - unless @server.linux_security_fixes.blank?
+        %li.tabtext=link_to "security", load_tab_server_path(id: @server, tab: "linux_sec_fix"), :remote => true
+    #tab-content
+      = render partial: 'release_tab'
+
+
+
+
+
+
+

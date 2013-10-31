@@ -18,3 +18,14 @@
         %td= @server.lparstat.online_virtual_cpus
         %td= @server.lparstat.entitled_capacity
         %td= @server.lparstat.online_memory
+  %h2 detailed
+  %table.table.table-bordered
+    %thead
+      %tr
+        %th name
+        %th value
+    %tbody
+      - for column in Lparstat.column_names - ['id', "created_at", "updated_at", "server_id" ]
+        %tr
+          %td=column
+          %td=@server.lparstat.send(column)

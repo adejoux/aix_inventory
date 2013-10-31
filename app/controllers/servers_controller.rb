@@ -32,4 +32,14 @@ class ServersController < ApplicationController
       end
     end
   end
+
+  def load_tab
+    @server = Server.find(params[:id])
+    tab="#{params[:tab]}_tab"
+
+    respond_to do |format|
+      format.json { render :json => {:success => true, :html => (render_to_string(partial: "#{tab}", layout: false, :formats => :html ))} }
+      format.html { }
+    end
+  end
 end

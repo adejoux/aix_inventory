@@ -5,6 +5,9 @@ AixInventory::Application.routes.draw do
 
   match "/reports/report_search/:id" => "reports#show", as: "search_report", :via => [:post]
   match "/reports/:id/server_link/:name" => "reports#server_link", as: "server_link_report", :via => [:get]
+  match "/reports/report_search/:id/server_link/:name" => "reports#server_link", as: "server_link_report", :via => [:get]
+  match "/servers/:id/load_tab/:tab"  => "servers#load_tab", as: "load_tab_server", :via => [:get]
+
   resources :import_reports
 
   resources :activities
