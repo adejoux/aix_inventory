@@ -132,18 +132,19 @@ class Server < ActiveRecord::Base
   def add_or_update_aix_port(name, wwpn)
     wwn = Wwpn.find_by_wwpn(wwpn)
     if wwn.nil?
-      wwn=wwpns.create!(wwpn: wwpn)
+      wwn=wwpns.build(wwpn: wwpn)
+    else
+      unless wwn.server_id == self.id
+        wwpns << wwn
+      end
     end
 
-    unless wwn.server_id == self.id
-      wwpns << wwn
-    end
     begin
       wwn.aix_port.name=name
     rescue
-      wwn.create_aix_port(name: name)
+      wwn.build_aix_port(name: name)
     end
-    wwn.activities.find_or_create_by_action("update").touch
+    wwn.activities.find_or_initialize_by_action("update").touch
   end
 
   def add_or_update_ip_address(address, subnet, mac_address)

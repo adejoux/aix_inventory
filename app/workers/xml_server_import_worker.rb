@@ -108,7 +108,6 @@ class XmlServerImportWorker
         end
 
         unless srv["wwpn"].nil?
-          begin
             srv["wwpn"]["port"].each do |port|
               if port["name"].match(/host/)
                 server.add_or_update_linux_port(port["name"], port["brand"], port["model"], port["type"], port["speed"], port["slot"], port["driver"], port["wwn"], port["fwversion"])
@@ -117,8 +116,6 @@ class XmlServerImportWorker
                 server.add_or_update_aix_port(port["name"], port["wwn"])
               end
             end
-          rescue
-          end
           srv.except!("wwpn")
         end
 
@@ -164,7 +161,7 @@ class XmlServerImportWorker
   end
 
   def perform
-    ActiveRecord::Base.logger.level = 1
+    #ActiveRecord::Base.logger.level = 1
     new_path=Rails.root.join('import', 'new', 'server').to_s
     done_path=Rails.root.join('import', 'imported', 'server').to_s
     files = Dir.entries(new_path).select{|x| x.end_with?("xml")}

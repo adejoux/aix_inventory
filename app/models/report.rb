@@ -24,7 +24,9 @@ class Report < ActiveRecord::Base
       field_type=match_results[1]
       attribute=match_results[2]
       next unless FIELD_TYPES.include? field_type
-      report=report_fields.find_or_create_by_select_attribute(association_type: field_type, select_attribute: attribute)
+      puts "toto"
+      report=report_fields.find_or_initialize_by_select_attribute(association_type: field_type, select_attribute: attribute)
+      puts report.inspect
       report_ids << report.id
 
     end

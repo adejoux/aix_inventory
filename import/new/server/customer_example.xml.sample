@@ -1,0 +1,132 @@
+<servers>
+<server>
+  <name>example_server</name>
+  <version>2.6</version>
+  <run_date>2013/10/29 05:03</run_date>
+  <CPM></CPM>
+  <NTPd>ntp_example.com </NTPd>
+  <SSH>LogLevel</SSH>
+  <syslog>logrotate SUCCESS</syslog>
+  <TAD4D></TAD4D>
+  <TSM>N/I</TSM>
+  <firmware>6.00</firmware>
+  <global_image></global_image>
+  <install_date>2013-08-27 12:38:20</install_date>
+  <os_type>Linux</os_type>
+  <os_version>RHEL5 U9 x86_64 2.6.18-348.el5</os_version>
+  <ssh_version>OpenSSH_4.3p2, OpenSSL 0.9.8e-fips-rhel5 01 Jul 2008</ssh_version>
+  <sudo_version>Sudo version 1.7.2p1</sudo_version>
+  <sys_id>VMware-EXAMPLE</sys_id>
+  <sys_model><manufacturer>VMware</manufacturer><model>VMware-Virtual-Platform</model></sys_model>
+  <wwpn></wwpn>
+  <cluster>no</cluster>
+  <configsan><multipathing>device-mapper-multipath-0.4.7-54.el5</multipathing><sanboot>no</sanboot></configsan>
+  <lsdf><fs><name>/boot</name><device>/dev/sda1</device><size>255M</size><free>221M</free></fs></lsdf>
+  <lssecfixes>no /opt/rpmtools/lssecfixes command</lssecfixes>
+  <lsvg></lsvg>
+  <lvmfilter></lvmfilter>
+  <phyvm>Virtual</phyvm>
+  <ram>5071872kB</ram>
+  <swap>1566296kB</swap>
+  <uptime>62 days 16 hours 43 minutes</uptime>
+  <vmwaretools>8.6.11.20852 (build-1015158)</vmwaretools>
+</server>
+<server>
+  <name>example_lpar</name>
+  <version>2.6</version>
+  <run_date>2013/10/29 04:27</run_date>
+  <LDAP>LDAP host KO</LDAP>
+  <cluster>lslpp: Fileset cluster.es.server.rte not installed.</cluster>
+  <dapapath>N/A</dapapath>
+  <fibre_parameters></fibre_parameters>
+  <gpfs>lslpp: Fileset gpfs.base not installed.</gpfs>
+  <lparstat>    <stat><name>NodeName</name><value>example_lpar</value></stat>
+    <stat><name>PartitionName</name><value>example_lpar</value></stat>
+    <stat><name>PartitionNumber</name><value>41</value></stat>
+    <stat><name>Type</name><value>Shared-SMT-4</value></stat>
+    <stat><name>Mode</name><value>Uncapped</value></stat>
+    <stat><name>EntitledCapacity</name><value>1.00</value></stat>
+    <stat><name>PartitionGroup-ID</name><value>32809</value></stat>
+    <stat><name>SharedPoolID</name><value>0</value></stat>
+    <stat><name>OnlineVirtualCPUs</name><value>2</value></stat>
+    <stat><name>MaximumVirtualCPUs</name><value>8</value></stat>
+    <stat><name>MinimumVirtualCPUs</name><value>1</value></stat>
+    <stat><name>OnlineMemory</name><value>21504MB</value></stat>
+    <stat><name>MaximumMemory</name><value>32768MB</value></stat>
+    <stat><name>MinimumMemory</name><value>1024MB</value></stat>
+    <stat><name>VariableCapacityWeight</name><value>64</value></stat>
+    <stat><name>MinimumCapacity</name><value>0.10</value></stat>
+    <stat><name>MaximumCapacity</name><value>4.00</value></stat>
+    <stat><name>CapacityIncrement</name><value>0.01</value></stat>
+    <stat><name>MaximumPhysicalCPUsinsystem</name><value>256</value></stat>
+    <stat><name>ActivePhysicalCPUsinsystem</name><value>128</value></stat>
+    <stat><name>ActiveCPUsinPool</name><value>128</value></stat>
+    <stat><name>SharedPhysicalCPUsinsystem</name><value>128</value></stat>
+    <stat><name>MaximumCapacityofPool</name><value>12800</value></stat>
+    <stat><name>EntitledCapacityofPool</name><value>11720</value></stat>
+    <stat><name>UnallocatedCapacity</name><value>0.00</value></stat>
+    <stat><name>PhysicalCPUPercentage</name><value>50.00%</value></stat>
+    <stat><name>UnallocatedWeight</name><value>0</value></stat>
+    <stat><name>MemoryMode</name><value>Dedicated</value></stat>
+    <stat><name>TotalI/OMemoryEntitlement</name><value>-</value></stat>
+    <stat><name>VariableMemoryCapacityWeight</name><value>-</value></stat>
+    <stat><name>MemoryPoolID</name><value>-</value></stat>
+    <stat><name>PhysicalMemoryinthePool</name><value>-</value></stat>
+    <stat><name>HypervisorPageSize</name><value>-</value></stat>
+    <stat><name>UnallocatedVariableMemoryCapacityWeight</name><value>-</value></stat>
+    <stat><name>UnallocatedI/OMemoryentitlement</name><value>-</value></stat>
+    <stat><name>MemoryGroupIDofLPAR</name><value>-</value></stat>
+    <stat><name>DesiredVirtualCPUs</name><value>2</value></stat>
+    <stat><name>DesiredMemory</name><value>21504MB</value></stat>
+    <stat><name>DesiredVariableCapacityWeight</name><value>64</value></stat>
+    <stat><name>DesiredCapacity</name><value>1.00</value></stat>
+    <stat><name>TargetMemoryExpansionFactor</name><value>-</value></stat>
+    <stat><name>TargetMemoryExpansionSize</name><value>-</value></stat>
+    <stat><name>PowerSavingMode</name><value>StaticPowerSavings</value></stat></lparstat>
+  <lsdf><fs><name>/</name><device>/dev/hd4</device><size>384.00</size><free>139.55</free></fs>
+<fs><name>/usr</name><device>/dev/hd2</device><size>3328.00</size><free>427.57</free></fs>
+<fs><name>/var</name><device>/dev/hd9var</device><size>320.00</size><free>104.90</free></fs>
+<fs><name>/tmp</name><device>/dev/hd3</device><size>512.00</size><free>451.25</free></fs>
+<fs><name>/home</name><device>/dev/hd1</device><size>128.00</size><free>123.23</free></fs>
+<fs><name>/admin</name><device>/dev/hd11admin</device><size>128.00</size><free>127.63</free></fs>
+<fs><name>/opt</name><device>/dev/hd10opt</device><size>384.00</size><free>3.52</free></fs>
+<fs><name>/var/adm/ras/livedump</name><device>/dev/livedump</device><size>256.00</size><free>255.64</free></fs>
+<fs><name>/home/users</name><device>/dev/Lrootvg003</device><size>256.00</size><free>251.74</free></fs>
+<fs><name>/mksysb</name><device>/dev/Lrootvg002</device><size>128.00</size><free>127.10</free></fs>
+</lsdf>
+  <lsmcode><fw><name>sys0</name><version>system:AH730_099 (t) AH730_078 (p) AH730_099 (t)</version></fw></lsmcode>
+  <lspath><path><name>fscsi0</name><count>26</count></path><path><name>fscsi1</name><count>26</count></path><path><name>fscsi2</name><count>26</count></path><path><name>fscsi3</name><count>26</count></path></lspath>
+  <lsvg><vg><name>vg1</name><size>589728</size><free>89712</free></vg>
+<vg><name>vg2</name><size>16352</size><free>8144</free></vg>
+<vg><name>rootvg</name><size>16352</size><free>640</free></vg></lsvg>
+  <nim>NIM CLIENT</nim>
+  <pcmpath><path><id>0</id><name>fscsi0</name><state>NORMAL</state><mode>ACTIVE</mode></path>
+<path><id>1</id><name>fscsi1</name><state>NORMAL</state><mode>ACTIVE</mode></path>
+<path><id>2</id><name>fscsi2</name><state>NORMAL</state><mode>ACTIVE</mode></path>
+<path><id>3</id><name>fscsi3</name><state>NORMAL</state><mode>ACTIVE</mode></path></pcmpath>
+  <pconsole>R</pconsole>
+  <powermt>N/A</powermt>
+  <sdd_driver>SDDPCM:2.2.0.4</sdd_driver>
+  <timezone>CET-1CEST,M3.5.0,M10.5.0</timezone>
+  <xmdaily>R</xmdaily>
+  <zdump>CET-1CEST,M3.5.0,M10.5.0  Sun Mar 31 00:59:59 2013 UTC = Sun Mar 31 01:59:59 2013 CET isdst=0
+CET-1CEST,M3.5.0,M10.5.0  Sun Mar 31 01:00:00 2013 UTC = Sun Mar 31 03:00:00 2013 CEST isdst=1
+CET-1CEST,M3.5.0,M10.5.0  Sat Oct 26 23:59:59 2013 UTC = Sun Oct 27 01:59:59 2013 CEST isdst=1
+CET-1CEST,M3.5.0,M10.5.0  Sun Oct 27 00:00:00 2013 UTC = Sun Oct 27 01:00:00 2013 CET isdst=0</zdump>
+  <CPM>package ibm-cpm-linux is not installed</CPM>
+  <NTPd></NTPd>
+  <SSH>Match</SSH>
+  <TAD4D>N/I</TAD4D>
+  <TSM>N/C</TSM>
+  <syslog>N/E auth.log</syslog>
+  <firmware>AH730_099</firmware>
+  <global_image></global_image>
+  <install_date>Thu Oct 11 13:39:54 2012</install_date>
+  <os_type>AIX</os_type>
+  <os_version>6100-07-07-1316</os_version>
+  <ssh_version>OpenSSH_5.8p1, OpenSSL 0.9.8r 8 Feb 2011</ssh_version>
+  <sudo_version>Sudo version 1.8.6p8</sudo_version>
+  <sys_id>XXXXXXX</sys_id>
+  <sys_model>9119-FHB</sys_model>
+  <wwpn><port><name>fcs0</name><wwn>C05099999999999991</wwn></port><port><name>fcs1</name><wwn>C05099999999999992</wwn></port><port><name>fcs2</name><wwn>C05099999999999993</wwn></port><port><name>fcs3</name><wwn>C05099999999999994</wwn></port></wwpn>
+</server>

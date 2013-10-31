@@ -25,5 +25,6 @@ coverage/
 doc/app
 spec/reports/
 *atabase.yml
-import/
+import/*/*/*.xml
+import/imported
 config/customer_renaming_config.yml

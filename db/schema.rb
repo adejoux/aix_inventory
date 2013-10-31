@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131029140229) do
+ActiveRecord::Schema.define(:version => 20131031141804) do
 
   create_table "activities", :force => true do |t|
     t.string   "action"
@@ -23,14 +23,6 @@ ActiveRecord::Schema.define(:version => 20131029140229) do
 
   add_index "activities", ["trackable_id", "trackable_type"], :name => "index_activities_on_trackable_id_and_trackable_type"
   add_index "activities", ["trackable_id"], :name => "index_activities_on_trackable_id"
-
-  create_table "aix_alerts", :force => true do |t|
-    t.string   "alert_type"
-    t.string   "check"
-    t.string   "valid_status"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-  end
 
   create_table "aix_paths", :force => true do |t|
     t.string   "adapter"
@@ -334,14 +326,6 @@ ActiveRecord::Schema.define(:version => 20131029140229) do
 
   add_index "reports", ["user_id"], :name => "index_reports_on_user_id"
 
-  create_table "san_alerts", :force => true do |t|
-    t.string   "alert_type"
-    t.string   "fabric1"
-    t.string   "fabric2"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
   create_table "san_infras", :force => true do |t|
     t.string   "infra",      :limit => 15
     t.string   "fabric",     :limit => 15
@@ -408,32 +392,6 @@ ActiveRecord::Schema.define(:version => 20131029140229) do
   add_index "servers", ["hardware_id"], :name => "index_servers_on_hardware_id"
   add_index "servers", ["hostname"], :name => "index_servers_on_customer_and_hostname", :unique => true
   add_index "servers", ["operating_system_id"], :name => "index_servers_on_operating_system_id"
-
-  create_table "software_deployment_versions", :force => true do |t|
-    t.string   "item_type",      :null => false
-    t.integer  "item_id",        :null => false
-    t.string   "event",          :null => false
-    t.string   "whodunnit"
-    t.text     "object"
-    t.text     "object_changes"
-    t.datetime "created_at"
-  end
-
-  add_index "software_deployment_versions", ["item_type", "item_id"], :name => "index_software_deployment_versions_on_item_type_and_item_id"
-
-  create_table "switch_ports", :force => true do |t|
-    t.string   "fabric"
-    t.string   "domain"
-    t.string   "port"
-    t.string   "wwpn"
-    t.string   "port_alias"
-    t.integer  "aix_port_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
-
-  add_index "switch_ports", ["aix_port_id"], :name => "index_switch_ports_on_san_port_id"
-  add_index "switch_ports", ["wwpn"], :name => "index_switch_ports_on_wwpn"
 
   create_table "uploads", :force => true do |t|
     t.string   "upload_file_name"

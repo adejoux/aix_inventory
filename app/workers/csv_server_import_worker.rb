@@ -23,7 +23,7 @@ class CsvServerImportWorker
     files = Dir.entries(new_path).select{|x| x.end_with?("csv")}
     files.each do |x|
       process_ip([new_path,x].join('/'))
-      #File.rename([new_path,x].join('/'), [done_path,x+Time.new.to_formatted_s(:number)].join('/'))
+      File.rename([new_path,x].join('/'), [done_path,x+Time.new.to_formatted_s(:number)].join('/'))
     end
   end
 end
