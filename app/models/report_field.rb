@@ -11,6 +11,6 @@
 #
 
 class ReportField < ActiveRecord::Base
-  attr_accessible :association_type, :report_id, :select_attribute
+  attr_accessible :association_type, :select_attribute
   belongs_to :report
 end

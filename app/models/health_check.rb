@@ -15,7 +15,7 @@
 #
 
 class HealthCheck < ActiveRecord::Base
-  attr_accessible :description, :hc_errors, :name, :info, :output, :return_code, :server_id
+  attr_accessible :description, :hc_errors, :name, :info, :output, :return_code
   belongs_to :server
   has_many :activities, as: :trackable, :autosave => true, :dependent => :destroy
   has_paper_trail :only => [:description, :hc_errors, :info, :output]

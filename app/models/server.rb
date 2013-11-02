@@ -22,12 +22,9 @@ class Server < ActiveRecord::Base
   has_many :file_systems, :dependent => :destroy, :autosave => true
   has_many :ip_addresses, :dependent => :destroy, :autosave => true
   has_many :server_attributes, :dependent => :destroy, :autosave => true
-  has_many :software_deployments
   has_one :lparstat, :dependent => :destroy, :autosave => true
-  has_many :softwares, :through => :software_deployments
   has_many :wwpns, :autosave => true
   has_many :san_infras, :through => :wwpns
-  accepts_nested_attributes_for :softwares
   belongs_to :hardware
   belongs_to :operating_system_type
   belongs_to :operating_system

@@ -13,5 +13,5 @@
 #
 
 class ImportLog < ActiveRecord::Base
-  attr_accessible :content, :result, :upload_id
+  attr_accessible :content, :result
 end

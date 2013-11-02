@@ -11,7 +11,7 @@
 #
 
 class Wwpn < ActiveRecord::Base
-  attr_accessible :wwpn, :san_infra_id
+  attr_accessible :wwpn
   validates_uniqueness_of :wwpn
   validates_presence_of :wwpn
   has_one :aix_port, :dependent => :destroy, :autosave => true
