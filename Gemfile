@@ -24,9 +24,8 @@ platforms :jruby do
   gem "trinidad", require: false
   gem 'trinidad_daemon_extension', require: false
   gem 'trinidad_worker_extension', require: false
-  gem 'jruby-openssl'
-  gem 'activerecord-jdbcsqlite3-adapter'
-  gem 'activerecord-jdbcmysql-adapter'
+  gem 'trinidad_scheduler_extension'
+  gem 'activerecord-jdbcmysql-adapter','>= 1.3.2'
 end
 
 
@@ -81,3 +80,4 @@ gem 'sanitize'
 gem 'foreman', require: false
 
 gem 'simple_form'
+gem 'dotenv-rails'

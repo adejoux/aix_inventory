@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: health_checks
+#
+#  id          :integer          not null, primary key
+#  name        :string(255)
+#  description :text
+#  return_code :integer
+#  output      :text
+#  hc_errors   :text
+#  server_id   :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  info        :text
+#
+
 class HealthCheck < ActiveRecord::Base
   attr_accessible :description, :hc_errors, :name, :info, :output, :return_code, :server_id
   belongs_to :server

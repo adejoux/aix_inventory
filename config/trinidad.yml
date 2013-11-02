@@ -1,4 +1,4 @@
-address: localhost # set to 127.0.0.1 if Trinidad behind a web server such as Apache
+address: 127.0.0.1 # set to 127.0.0.1 if Trinidad behind a web server such as Apache
 port: 3000  # port where Trinidad is running
 http: # HTTP connector setup
 environment: production
@@ -10,6 +10,7 @@ root_dir: "." # system path where the application is located, by default is PWD
 rackup: config.ru # rackup script if you are running a (non-Rails) Rack application
 public: public # system path (relative to root) where your public files are located
 extensions:
+ scheduler:
  worker:
    delayed_job:
      thread_count: 1

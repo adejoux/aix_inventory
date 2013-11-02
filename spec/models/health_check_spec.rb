@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: health_checks
+#
+#  id          :integer          not null, primary key
+#  name        :string(255)
+#  description :text
+#  return_code :integer
+#  output      :text
+#  hc_errors   :text
+#  server_id   :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  info        :text
+#
+
 require 'spec_helper'
 
 describe HealthCheck do

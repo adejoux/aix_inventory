@@ -3,13 +3,14 @@
 # Table name: san_infras
 #
 #  id         :integer          not null, primary key
-#  infra      :string(20)
-#  fabric     :string(20)
-#  switch     :string(20)
-#  speed      :string(20)
-#  status     :string(20)
-#  portname   :string(20)
-#  mode       :string(20)
+#  infra      :string(15)
+#  fabric     :string(15)
+#  switch     :string(30)
+#  port       :string(10)
+#  speed      :string(5)
+#  status     :string(15)
+#  portname   :string(30)
+#  mode       :string(15)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #

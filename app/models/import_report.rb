@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: import_reports
+#
+#  id            :integer          not null, primary key
+#  filename      :string(255)
+#  result        :string(255)
+#  output        :text
+#  success_count :integer
+#  error_count   :integer
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
+
 class ImportReport < ActiveRecord::Base
   attr_accessible :error_count, :filename, :output, :result, :success_count
 

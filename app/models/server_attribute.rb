@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: server_attributes
+#
+#  id          :integer          not null, primary key
+#  name        :string(255)
+#  category    :string(255)
+#  description :text
+#  output      :text
+#  conf_errors :text
+#  return_code :integer
+#  server_id   :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
 class ServerAttribute < ActiveRecord::Base
   attr_accessible :category, :conf_errors, :description, :name, :output, :return_code, :server_id
   belongs_to :server

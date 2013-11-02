@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: reports
+#
+#  id          :integer          not null, primary key
+#  name        :string(255)
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  description :string(255)
+#  report_type :string(255)
+#  user_id     :integer
+#
+
 class Report < ActiveRecord::Base
   attr_accessible :name, :description, :report_type, :os_type, :report_fields_attributes, :selected_fields, :operating_system_type_ids, :customer_ids
   has_many :report_fields

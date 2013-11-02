@@ -28,3 +28,4 @@ spec/reports/
 import/*/*/*.xml
 import/imported
 config/customer_renaming_config.yml
+.env

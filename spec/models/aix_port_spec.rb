@@ -1,16 +1,15 @@
-# -*- encoding : utf-8 -*-
 # == Schema Information
 #
 # Table name: aix_ports
 #
 #  id         :integer          not null, primary key
-#  port       :string(255)
-#  wwpn       :string(255)
-#  server_id  :integer
+#  name       :string(255)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  wwpn_id    :integer
 #
 
+# -*- encoding : utf-8 -*-
 require 'spec_helper'
 
 describe AixPort do
