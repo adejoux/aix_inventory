@@ -14,18 +14,8 @@
 #
 
 class Upload < ActiveRecord::Base
-  include Workflow
   attr_accessible :upload, :import_type
-  has_attached_file :upload
+  has_attached_file :upload, :path => ":rails_root/import/new/:import_type/:filename"
 
-  TYPES = %w[server san sod]
-
-  def csv_file_content?
-    if upload_content_type.match(/csv/)
-      return true
-    else
-      return false
-    end
-  end
-
+  TYPES = %w[server san]
 end

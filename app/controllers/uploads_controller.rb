@@ -4,10 +4,7 @@ class UploadsController < ApplicationController
   # GET /uploads.json
   def index
     @uploads = Upload.all
-    Upload.imported_state.each do |upl|
-      upl.analyze_result
-    end
-    
+
     respond_to do |format|
       format.html # index.html.haml
     end
@@ -43,7 +40,6 @@ class UploadsController < ApplicationController
   # GET/uploads/import/1
   def import
     @upload = Upload.find(params[:id])
-    @upload.processing!
     redirect_to :uploads
   end
 
@@ -89,7 +85,7 @@ class UploadsController < ApplicationController
       Upload.destroy_all( {id: params[:upload_ids] } )
       redirect_to uploads_url, :notice => "uploaded files deleted"
     end
-    
+
     @upload = Upload.find(params[:id])
     @upload.destroy
 

@@ -6,4 +6,8 @@ else
   CUSTOMER_RENAMING={}
 end
 
+Paperclip.interpolates :import_type do |attachment, style|
+  attachment.instance.import_type
+end
+
 

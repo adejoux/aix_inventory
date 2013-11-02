@@ -1,12 +1,9 @@
 %tr
   %td= link_to upload.upload_file_name, upload.upload.url(:original)
   %td= upload.import_type
-  %td= upload.workflow_state
   %td
-    - if upload.uploaded?
-      = link_to "import", import_upload_path(upload), :class => 'btn btn-mini btn-warning'
-    - if upload.current_state >= :imported
-      = link_to "view_log", view_logs_upload_path(upload),  {:remote => true, :data => { :toggle => 'modal', :target => '#modal-window'},  :class => 'btn btn-mini btn-primary'}
+  %td
+    = link_to "import", import_upload_path(upload), :class => 'btn btn-mini btn-warning'
     = link_to "delete", upload_path(upload), :method => :delete, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, :class => 'btn btn-mini btn-danger'
-    
-  %td= check_box_tag "upload_ids[]", upload.id  
+
+  %td= check_box_tag "upload_ids[]", upload.id
