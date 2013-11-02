@@ -68,14 +68,7 @@ class Server < ActiveRecord::Base
   # * *Returns* :
   #   - returns a server count by system version
   def self.releases_data
-    group(:os_version).where(:os_type => "AIX").order("count_hostname DESC").count(:hostname)
-  end
-
-  # This return a server count grouped by hardware model
-  # * *Returns* :
-  #   - returns a server count by hardware version
-  def self.sys_models_data
-    select("sys_model, count(distinct sys_serial) as count_sys_serial").group(:sys_model).order("count_sys_serial DESC")
+    group(:operating_system).order("count_hostname DESC").count(:hostname)
   end
 
   # This method return every servers not found in both fabrics

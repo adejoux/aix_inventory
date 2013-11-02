@@ -17,6 +17,7 @@ AixInventory::Application.routes.draw do
   resources :users
 
   resources :servers, :only => [:show, :edit]
+
   resources :uploads do
     member do
       get :import
@@ -24,11 +25,8 @@ AixInventory::Application.routes.draw do
     end
   end
 
-  get "statistics/general"
-
-  get "statistics/customer"
-
-  get "statistics/render_stats"
+  resources :statistics, :only => [:index]
+  match "/statistics/reander_stats/:stats" => "statistics#render_stats", as: "render_stats", :via => [:get]
 
   get :contacts, to: "contacts#index"
 

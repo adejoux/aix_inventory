@@ -1,14 +1,11 @@
-%header.jumbotron.subhead#overview
-  %div.container
-    %h1 Getting started
-    %p.lead Overview of the project, its contents, and how to get started with a simple template
-%div.container
-  %div.row
-    %div.span3.bs-docs-sidebar
-      %ul.nav.nav-list.bs-docs-sidenav
-        %il 
-          %a toto
-        %il 
-          %a tata
-    %div.span9
-  
+.row
+  .span6.offset4
+    %h1 General statistics
+    %ul.nav.nav-tabs
+      %li.tab_text.active=link_to "customers", { :action => "render_stats", :stats => "customer_stats"}, :remote => true
+      %li.tab_text=link_to "releases", { :action => "render_stats", :stats => "release_stats"}, :remote => true
+      %li.tab_text=link_to "models", { :action => "render_stats", :stats => "model_stats"}, :remote => true
+.row
+  .span12
+    .stats
+      = render "customer_stats"
