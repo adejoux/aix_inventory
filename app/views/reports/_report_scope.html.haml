@@ -13,7 +13,7 @@
     #customers.ui-widget-content
       #check_all.btn Check / Uncheck All
       %ul.inline
-        - Customer.all.each do |customer|
+        - Customer.order("name ASC").all.each do |customer|
           %li
             = check_box_tag "report[customer_ids][]", customer.id, report.customer_ids.include?(customer.id)
             = customer.name

@@ -35,7 +35,7 @@ class Server < ActiveRecord::Base
 
 
   # validations
-  validates_presence_of :customer_id, :hostname
+  validates_presence_of :customer_id, :hostname, :operating_system_id, :operating_system_type_id
 
   validates :hostname, uniqueness: { scope: :customer_id  }
 
@@ -100,10 +100,11 @@ class Server < ActiveRecord::Base
   def add_or_update_linux_port(name, brand, model, card_type, speed, slot, driver, wwpn, firmware)
     wwn = Wwpn.find_by_wwpn(wwpn)
     if wwn.nil?
-      wwn=wwpns.create!(wwpn: wwpn)
-    end
-    unless wwn.server_id == self.id
-      wwpns << wwn
+      wwn=wwpns.build(wwpn: wwpn)
+    else
+      unless wwn.server_id == self.id
+        wwpns << wwn
+      end
     end
 
     begin

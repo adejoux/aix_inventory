@@ -21,7 +21,7 @@ class ServerAttribute < ActiveRecord::Base
 
   has_many :activities, as: :trackable, :autosave => true, :dependent => :destroy
 
-  UNRANSACKABLE_ATTRIBUTES = ["created_at", "updated_at", "id", "server_id"]
+  UNRANSACKABLE_ATTRIBUTES = ["conf_errors", "description", "category", "return_code", "created_at", "updated_at", "id", "server_id"]
 
   def self.ransackable_attributes auth_object = nil
     (column_names - UNRANSACKABLE_ATTRIBUTES) + _ransackers.keys

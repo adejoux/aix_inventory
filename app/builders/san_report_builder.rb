@@ -9,9 +9,10 @@ class SanReportBuilder < ReportBuilder
     end
 
     unless @report.customer_ids.empty?
-      wwpn.joins(server: :customer)
+      wwpn=wwpn.joins(server: :customer)
           .where(customers: { id: @report.customer_ids } )
     end
+    wwpn
   end
 
   def datatable_data(page, per_page)

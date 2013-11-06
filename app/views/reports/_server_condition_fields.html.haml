@@ -1,6 +1,6 @@
 .field
   = f.attribute_fields do |a|
-    = a.attribute_select associations: [:health_checks, :server_attributes, :customer]
+    = a.attribute_select associations: [:server_attributes, :customer, :operating_system, :operating_system_type]
   = f.predicate_select only: [:cont, :not_cont, :eq, :not_eq], compounds: false
   = f.value_fields do |v|
     = v.text_field :value

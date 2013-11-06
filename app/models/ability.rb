@@ -20,7 +20,7 @@ class Ability
          can :manage, Report
          can :show, Server
          can :load_tab, Server
-         can :general, Server
+         can :index, Server
          can :customer, Server
          can :render_stats, Server
          can :update, User, :id => user.id

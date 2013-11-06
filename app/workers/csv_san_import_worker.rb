@@ -32,15 +32,15 @@ class CsvSanImportWorker
             puts "#{e.message}\n"
             puts san_infra.inspect
             log.error_count += 1
+            next
           end
-
           csv_line[:wwpn].to_s.split(',').each do |wwpn_id|
             wwpn_id=wwpn_id.to_s.upcase.gsub(':', '')
             wwpn = Wwpn.find_by_wwpn(wwpn_id)
             if wwpn.nil?
               san_infra.wwpns.create!( :wwpn => wwpn_id )
             else
-              wwpn.san_infra_id=san_infra.id
+              wwpn.san_infra=san_infra
               wwpn.save!
             end
           end

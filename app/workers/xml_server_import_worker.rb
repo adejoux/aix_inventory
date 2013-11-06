@@ -25,13 +25,32 @@ class XmlServerImportWorker
     servers << data["servers"]["server"] if data["servers"]["server"].is_a?(Hash)
     servers.each do |srv|
       ActiveRecord::Base.transaction do
-
+        puts "server:  #{srv["name"]}"
         tscm_customer=File.basename(filename).sub(/.xml/, '')
 
         customer=CUSTOMER_RENAMING[tscm_customer] || tscm_customer
 
-        server=Server.find_or_create_by_hostname(hostname: srv["name"].downcase)
+        hostname=srv["name"].downcase.sub(/\..*/, '')
+        server=Server.find_or_initialize_by_hostname(hostname: hostname)
+        unless srv["os_type"].nil?
+          os_type=srv["os_type"]
+          server.operating_system_type=OperatingSystemType.where(name: os_type).first
+          if server.operating_system_type.nil?
+            server.operating_system_type=OperatingSystemType.create(name: os_type)
+          end
+          srv.except!("os_type")
+        end
+
+        unless srv["os_version"].nil?
+          os_version=srv["os_version"]
+          server.operating_system=OperatingSystem.where(release: os_version).first
+          if server.operating_system.nil?
+            server.operating_system=OperatingSystem.create( release: os_version)
+          end
+          srv.except!("os_version")
+        end
         server.customer=Customer.where(name: customer).first || Customer.create(name: customer)
+        server.save!
         server.add_or_update_attribute("tscm_customer", tscm_customer)
 
         result=Hardware.find_by_serial(srv["sys_id"])
@@ -48,17 +67,7 @@ class XmlServerImportWorker
         srv.except!("sys_id")
         srv.except!("sys_model")
 
-        unless srv["os_type"].nil?
-          os_type=srv["os_type"]
-          server.operating_system_type=OperatingSystemType.where(name: os_type).first || OperatingSystemType.create(name: os_type)
-          srv.except!("os_type")
-        end
 
-        unless srv["os_version"].nil?
-          os_version=srv["os_version"]
-          server.operating_system=OperatingSystem.where(release: os_version).first || OperatingSystem.create( release: os_version, operating_system_type_id: server.operating_system_type.id)
-          srv.except!("os_version")
-        end
 
         srv.each_key do |attr|
           if srv[attr].is_a?(String)
@@ -108,7 +117,10 @@ class XmlServerImportWorker
         end
 
         unless srv["wwpn"].nil?
-            srv["wwpn"]["port"].each do |port|
+          wwpns=[]
+          wwpns[0]=srv["wwpn"]["port"] if srv["wwpn"]["port"].is_a?(Hash)
+          wwpns=srv["wwpn"]["port"] if srv["wwpn"]["port"].is_a?(Array)
+            wwpns.each do |port|
               if port["name"].match(/host/)
                 server.add_or_update_linux_port(port["name"], port["brand"], port["model"], port["type"], port["speed"], port["slot"], port["driver"], port["wwn"], port["fwversion"])
               end
@@ -156,13 +168,13 @@ class XmlServerImportWorker
     end
     log.analyze_result
     log.save!
-    puts "#{log.filename} success : #{log.success_count}"
+    puts "#{log.filename} success : #{log.success_count} error: #{log.error_count}"
     Rails.cache.clear
   end
 
   def perform
-    #ActiveRecord::Base.logger.level = 1
-    new_path=Rails.root.join('import', 'new', 'server').to_s
+    ActiveRecord::Base.logger.level = 1
+    new_path=Rails.root.join('import', 'cleaned', 'server').to_s
     done_path=Rails.root.join('import', 'imported', 'server').to_s
     files = Dir.entries(new_path).select{|x| x.end_with?("xml")}
     files.each do |file|
