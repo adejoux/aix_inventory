@@ -1,7 +1,7 @@
 class CleanDataWorker
 
   def clean_servers
-    Activity.where(trackable_type: "Server").not_updated_since(Time.now - 3.days).each do |activity|
+    Activity.where(trackable_type: "Server").not_updated_since(Time.now - 3.days).find_each do |activity|
       begin
         activity.trackable.destroy
       rescue
@@ -10,7 +10,7 @@ class CleanDataWorker
   end
 
   def clean_server_datas
-    Activity.not_updated_since(Time.now - 3.days).each do |activity|
+    Activity.not_updated_since(Time.now - 3.days).find_each do |activity|
       begin
         activity.trackable.destroy
       rescue

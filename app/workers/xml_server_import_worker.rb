@@ -24,33 +24,36 @@ class XmlServerImportWorker
     servers=data["servers"]["server"] if data["servers"]["server"].is_a?(Array)
     servers << data["servers"]["server"] if data["servers"]["server"].is_a?(Hash)
     servers.each do |srv|
+      next if srv["os_type"].nil? or srv["os_version"].nil?
       ActiveRecord::Base.transaction do
         puts "server:  #{srv["name"]}"
-        tscm_customer=File.basename(filename).sub(/.xml/, '')
+        tscm_customer=File.basename(filename).sub(/-\d+.xml/, '')
 
         customer=CUSTOMER_RENAMING[tscm_customer] || tscm_customer
 
         hostname=srv["name"].downcase.sub(/\..*/, '')
         server=Server.find_or_initialize_by_hostname(hostname: hostname)
-        unless srv["os_type"].nil?
-          os_type=srv["os_type"]
-          server.operating_system_type=OperatingSystemType.where(name: os_type).first
-          if server.operating_system_type.nil?
-            server.operating_system_type=OperatingSystemType.create(name: os_type)
-          end
-          srv.except!("os_type")
+        os_type=srv["os_type"]
+        server.operating_system_type=OperatingSystemType.where(name: os_type).first
+        if server.operating_system_type.nil?
+          server.operating_system_type=OperatingSystemType.create(name: os_type)
         end
+        srv.except!("os_type")
 
-        unless srv["os_version"].nil?
-          os_version=srv["os_version"]
-          server.operating_system=OperatingSystem.where(release: os_version).first
-          if server.operating_system.nil?
-            server.operating_system=OperatingSystem.create( release: os_version)
-          end
-          srv.except!("os_version")
+        os_version=srv["os_version"]
+        server.operating_system=OperatingSystem.where(release: os_version).first
+        if server.operating_system.nil?
+          server.operating_system=OperatingSystem.create( release: os_version)
         end
+        srv.except!("os_version")
+
         server.customer=Customer.where(name: customer).first || Customer.create(name: customer)
-        server.save!
+        begin
+         server.save!
+        rescue Exception => e
+          log.output << "SAVE ERROR: #{e.message}\n"
+          log.error_count += 1
+        end
         server.add_or_update_attribute("tscm_customer", tscm_customer)
 
         result=Hardware.find_by_serial(srv["sys_id"])
@@ -179,8 +182,12 @@ class XmlServerImportWorker
     files = Dir.entries(new_path).select{|x| x.end_with?("xml")}
     files.each do |file|
       puts "processing file #{file}\n"
-      process_server([new_path,file].join('/'))
-      File.rename([new_path,file].join('/'), [done_path,file+Time.new.to_formatted_s(:number)].join('/'))
+      begin
+        process_server([new_path,file].join('/'))
+      rescue
+        puts "error in handling  #{file}\n"
+      end
+      File.unlink([new_path,file].join('/'))
     end
   end
 

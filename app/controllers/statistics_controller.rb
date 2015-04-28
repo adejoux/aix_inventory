@@ -1,6 +1,9 @@
 # -*- encoding : utf-8 -*-
 class StatisticsController < ApplicationController
   load_and_authorize_resource :server, :parent => false
+
+  caches_action :render_stats
+
   def general
   end
   

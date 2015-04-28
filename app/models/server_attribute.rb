@@ -17,7 +17,6 @@
 class ServerAttribute < ActiveRecord::Base
   attr_accessible :category, :conf_errors, :description, :name, :output, :return_code
   belongs_to :server
-  has_paper_trail :class_name => 'ServerAttributeVersion', :only => [:name, :description, :category, :conf_errors, :output, :return_code]
 
   has_many :activities, as: :trackable, :autosave => true, :dependent => :destroy
 

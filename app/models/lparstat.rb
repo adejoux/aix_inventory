@@ -60,8 +60,6 @@ class Lparstat < ActiveRecord::Base
 
   has_many :activities, as: :trackable, :autosave => true
 
-  has_paper_trail :class_name => 'LparstatVersion'
-
   UNRANSACKABLE_ATTRIBUTES = ["created_at", "updated_at", "id", "server_id"]
 
   def self.ransackable_attributes auth_object = nil

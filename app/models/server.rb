@@ -39,8 +39,6 @@ class Server < ActiveRecord::Base
 
   validates :hostname, uniqueness: { scope: :customer_id  }
 
-  has_paper_trail :class_name => 'ServerVersion', :ignore => [:run_date]
-
   # List of attributes we don't want in ransack search
   UNRANSACKABLE_ATTRIBUTES = ["created_at", "updated_at", "hardware_id", "operating_system_id", "operating_system_type_id", "customer_id", "id"]
 

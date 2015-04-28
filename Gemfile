@@ -22,9 +22,6 @@ end
 platforms :jruby do
   gem "therubyrhino", group: :assets
   gem "trinidad", require: false
-  gem 'trinidad_daemon_extension', require: false
-  gem 'trinidad_worker_extension', require: false
-  gem 'trinidad_scheduler_extension'
   gem 'activerecord-jdbcmysql-adapter','>= 1.3.2'
 end
 
@@ -75,7 +72,7 @@ gem 'annotate'
 gem 'paper_trail'
 gem 'turbolinks'
 
-gem "clockwork"
+gem "whenever"
 gem 'sanitize'
 gem 'foreman', require: false
 

@@ -76,13 +76,11 @@ GEM
     childprocess (0.3.9)
       ffi (~> 1.0, >= 1.0.11)
     choice (0.1.6)
+    chronic (0.10.2)
     ci_reporter (1.8.4)
       builder (>= 2.1.2)
     climate_control (0.0.3)
       activesupport (>= 3.0)
-    clockwork (0.5.2)
-      activesupport
-      tzinfo (~> 0.3.35)
     cocaine (0.5.1)
       climate_control (>= 0.0.3, < 1.0)
     coderay (1.0.9)
@@ -163,8 +161,6 @@ GEM
       jquery-rails
       railties (>= 3.1.0)
     jruby-rack (1.1.13.2)
-    jruby-rack-worker (0.10.0)
-      jruby-rack (>= 1.1.10)
     json (1.8.0)
     json (1.8.0-java)
     launchy (2.2.0)
@@ -322,14 +318,7 @@ GEM
     trinidad (1.4.5)
       jruby-rack (>= 1.1.13)
       trinidad_jars (>= 1.2.3)
-    trinidad_daemon_extension (0.4.0)
-      trinidad (>= 1.3.5)
     trinidad_jars (1.2.4)
-    trinidad_scheduler_extension (0.1.2)
-      trinidad_jars
-    trinidad_worker_extension (0.3.0)
-      jruby-rack-worker (>= 0.9)
-      trinidad (>= 1.4.4)
     turbolinks (1.0.0)
       coffee-rails
     tzinfo (0.3.37)
@@ -339,6 +328,8 @@ GEM
     warden (1.2.1)
       rack (>= 1.0)
     websocket (1.0.7)
+    whenever (0.9.4)
+      chronic (>= 0.6.3)
     will_paginate (3.0.4)
     xpath (1.0.0)
       nokogiri (~> 1.3)
@@ -359,7 +350,6 @@ DEPENDENCIES
   cancan
   capybara
   ci_reporter
-  clockwork
   coffee-rails (~> 3.2.1)
   delayed_job_active_record
   devise
@@ -396,9 +386,7 @@ DEPENDENCIES
   therubyrhino
   thin
   trinidad
-  trinidad_daemon_extension
-  trinidad_scheduler_extension
-  trinidad_worker_extension
   turbolinks
   uglifier (>= 1.0.3)
+  whenever
   will_paginate
